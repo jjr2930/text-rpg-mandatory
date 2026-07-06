@@ -55,4 +55,8 @@ void CharacterGenerationScreen::Run()
     cout << "HP: " << hp << "    MP: " << mp << endl;
     cout << "공격력: " << attack << "    방어력: " << defense << endl;
     cout << "===================================" << endl;
+
+    cout << "계속하려면 아무 키나 누르세요..." << endl;
+    cin.ignore();
+    cin.get();
 }
