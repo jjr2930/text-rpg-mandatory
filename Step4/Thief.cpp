@@ -1,4 +1,4 @@
-#include "Thief.h"
+﻿#include "Thief.h"
 #include "Const.h"
 #include <iostream>
 
@@ -9,10 +9,10 @@ Thief::Thief(std::string& name, int* stats)
 {
     power += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
 
-    cout << "* " << GetJobName() << "로 전직하였습니다. (공격력 + " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;
+    cout << "* " << GetJobName() << "濡??꾩쭅?섏??듬땲?? (怨듦꺽??+ " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;
 }
 
 void Thief::Attack()
 {
-    cout << "단검을 사용하여 적을 공격합니다. 공격력: " << power << endl;
+    cout << "?④????ъ슜?섏뿬 ?곸쓣 怨듦꺽?⑸땲?? 怨듦꺽?? " << power << endl;
 }

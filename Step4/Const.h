@@ -1,4 +1,4 @@
-#ifndef CONST_H
+﻿#ifndef CONST_H
 #define CONST_H
 
 namespace Const

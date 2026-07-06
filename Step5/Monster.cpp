@@ -1,4 +1,4 @@
-#include "Monster.h"
+﻿#include "Monster.h"
 #include <iostream>
 
 using namespace std;
@@ -19,7 +19,7 @@ void Monster::Damage(int damage, int* outRealDamage)
 
     hp -= *outRealDamage;
 
-    cout << name << "이(가) " << *outRealDamage << " 데미지를 입었습니다. (남은 HP: " << hp << ")" << endl;
+    cout << name << *outRealDamage << "데미지 입음" << endl;
 }
 
 std::string Monster::GetName() const
