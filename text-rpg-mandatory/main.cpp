@@ -1,4 +1,6 @@
-#include "Step1.h"
+#include "Step2.h"
+                                       
+using namespace Step2;
 
 int main() {
     CharacterGenerationScreen screen;

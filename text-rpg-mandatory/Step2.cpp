@@ -1,4 +1,5 @@
-﻿#include "Step1.h"
+﻿#include "Step2.h"
+#include "Const.h"
 
 /*
 ===========================================
@@ -20,7 +21,7 @@ HP: 80    MP: 60
 #include <iostream>
 
 using namespace std;
-using namespace Step1;
+using namespace Step2;
 
 CharacterGenerationScreen::CharacterGenerationScreen()
     : name(L"")
@@ -38,14 +39,39 @@ void CharacterGenerationScreen::Run()
     getline(wcin, name) ;
     cout << endl;
 
-    cout << "HP와 MP를 입력해주세요: ";
-    cin >> stat[(int)(StatType::HP)] >> stat[(int)(StatType::MP)];
+    while (true)
+    {
+        cout << "HP와 MP를 입력해주세요: ";
+        cin >> stat[(int)(StatType::HP)] >> stat[(int)(StatType::MP)];
+        cout << endl;
+
+        if(stat[(int)(StatType::HP)] > Const::MIN_STAT && stat[(int)(StatType::MP)] > Const::MIN_STAT)
+        {
+            break;
+        }
+        else
+        {
+            cout << "HP와 MP는 최소 " << Const::MIN_STAT << " 초과해야 합니다." << endl;
+        }
+    }
+    cout << "공격력과 방어력을 입력해주세요: ";
+
+    while (true)
+    {
+        cin >> stat[(int)(StatType::Attack)] >> stat[(int)(StatType::Defense)];
+        cout << endl;
+        if (stat[(int)(StatType::Attack)] > Const::MIN_STAT && stat[(int)(StatType::Defense)] > Const::MIN_STAT)
+        {
+            break;
+        }
+        else
+        {
+            cout << "공격력과 방어력은 최소 " << Const::MIN_STAT << " 초과해야 합니다." << endl;
+        }
+    }
+
     cout << endl;
 
-    cout << "공격력과 방어력을 입력해주세요: ";
-    cin >> stat[static_cast<int>(StatType::Attack)] >> stat[static_cast<int>(StatType::Defense)];
-    cout << endl;
-    
     printStatus(name, stat);
 
     cin.ignore();
