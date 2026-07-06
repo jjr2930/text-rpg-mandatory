@@ -3,5 +3,9 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="text-rpg-mandatory/text-rpg-mandatory.vcxproj" />
+  <Project Path="Step1/Step1.vcxproj" />
+  <Project Path="Step2/Step2.vcxproj" />
+  <Project Path="Step3/Step3.vcxproj" />
+  <Project Path="Step4/Step4.vcxproj" />
+  <Project Path="Step5/Step5.vcxproj" />
 </Solution>

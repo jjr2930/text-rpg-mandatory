@@ -1,0 +1,12 @@
+
+////////////////////////////////////////////////
+//  Step 2
+////////////////////////////////////////////////
+#include "Step2.h"
+using namespace Step2;
+
+int main() {
+    Menu screen;
+    screen.Run();
+    return 0;
+}
