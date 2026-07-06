@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{B13EAE26-E396-7748-E5AF-B3C31D752128}</ProjectGuid>
-    <RootNamespace>Step1</RootNamespace>
+    <ProjectGuid>{67595cd4-a706-43ac-ab04-f5ae51ed77fb}</ProjectGuid>
+    <RootNamespace>Step7</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,11 +139,32 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Step1.cpp" />
+    <ClInclude Include="Archer.h" />
+    <ClInclude Include="Const.h" />
+    <ClInclude Include="Enums.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Magician.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="AlchemyWorkshop.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Slime.h" />
+    <ClInclude Include="Thief.h" />
+    <ClInclude Include="Warrior.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Step1.h" />
+    <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Magician.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="AlchemyWorkshop.cpp" />
+    <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="Thief.cpp" />
+    <ClCompile Include="Warrior.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
