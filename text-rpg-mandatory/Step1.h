@@ -1,4 +1,4 @@
-#ifndef STEP1_H
+﻿#ifndef STEP1_H
 #define STEP1_H
 #include <string>
 
@@ -19,6 +19,14 @@ HP: 80    MP: 60
 ====================================
 */
 
+enum class StatType {
+    HP = 0,
+    MP,
+    Attack,
+    Defense,
+    Size
+};
+
 class CharacterGenerationScreen 
 {
 public :
@@ -28,10 +36,7 @@ public :
 
 private:
     std::wstring name;
-    int hp;
-    int mp;
-    int attack;
-    int defense;
+    int* stat;
 };
 #endif // STEP1_H
 
