@@ -44,18 +44,23 @@ void CharacterGenerationScreen::Run()
     cout << "공격력과 방어력을 입력해주세요: ";
     cin >> stat[static_cast<int>(StatType::Attack)] >> stat[static_cast<int>(StatType::Defense)];
     cout << endl;
+    
+    printStatus(name, stat);
 
+    cin.ignore();
+    cin.get();
+}
 
+void CharacterGenerationScreen::printStatus(std::wstring name, int stat[])
+{
     cout << "===================================" << endl; 
     wcout << name << " 의 현재 능력치" << endl;
     cout << "===================================" << endl;
-    cout << "HP: " << stat[static_cast<int>(StatType::HP)] 
-        << "    MP: " << stat[static_cast<int>(StatType::MP)] << endl;
-    cout << "공격력: " << stat[static_cast<int>(StatType::Attack)] 
-        << "    방어력: " << stat[static_cast<int>(StatType::Defense)] << endl;
+    cout << "HP: " << stat[(int)(StatType::HP)] 
+        << "    MP: " << stat[(int)(StatType::MP)] << endl;
+    cout << "공격력: " << stat[(int)(StatType::Attack)] 
+        << "    방어력: " << stat[(int)(StatType::Defense)] << endl;
     cout << "===================================" << endl;
 
     cout << "계속하려면 아무 키나 누르세요..." << endl;
-    cin.ignore();
-    cin.get();
 }

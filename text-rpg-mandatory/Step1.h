@@ -32,7 +32,7 @@ class CharacterGenerationScreen
 public :
     CharacterGenerationScreen();
     void Run();
-
+    void printStatus(std::wstring name, int stat[]);
 
 private:
     std::wstring name;
