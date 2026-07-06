@@ -10,4 +10,5 @@
   <Project Path="Step5/Step5.vcxproj" Id="ce45d914-a8af-466f-aeb3-986c60bc95ca" />
   <Project Path="Step6/Step6.vcxproj" Id="67d114d8-0688-450b-b58e-0f5045281a3c" />
   <Project Path="Step7/Step7.vcxproj" Id="67595cd4-a706-43ac-ab04-f5ae51ed77fb" />
+  <Project Path="Step8/Step8.vcxproj" Id="548793ff-8902-4256-b49e-d0f564284f82" />
 </Solution>
