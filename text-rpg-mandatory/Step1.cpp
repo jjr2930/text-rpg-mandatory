@@ -62,5 +62,5 @@ void CharacterGenerationScreen::printStatus(std::wstring name, int stat[])
         << "    방어력: " << stat[(int)(StatType::Defense)] << endl;
     cout << "===================================" << endl;
 
-    cout << "계속하려면 아무 키나 누르세요..." << endl;
+    cout << "계속하려면 아무 키나 누르세요..." << endl;                                                                                      
 }
