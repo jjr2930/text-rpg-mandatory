@@ -34,7 +34,7 @@ void CharacterGenerationScreen::Run()
     cout << "===========================================" << endl;
 
     cout << "용사의 이름을 입력해주세요: ";
-    wcin >> name;
+    getline(wcin, name) ;
     cout << endl;
 
     cout << "HP와 MP를 입력해주세요: ";
