@@ -7,5 +7,5 @@
   <Project Path="Step2/Step2.vcxproj" />
   <Project Path="Step3/Step3.vcxproj" />
   <Project Path="Step4/Step4.vcxproj" />
-  <Project Path="Step5/Step5.vcxproj" />
+  <Project Path="Step5/Step5.vcxproj" Id="ce45d914-a8af-466f-aeb3-986c60bc95ca" />
 </Solution>
