@@ -21,15 +21,14 @@ HP: 80    MP: 60
 #include <iostream>
 
 using namespace std;
-using namespace Step2;
 
-CharacterGenerationScreen::CharacterGenerationScreen()
+Step2::Menu::Menu()
     : name(L"")
-    , stat(new int[static_cast<int>(StatType::Size)] { 0, 0, 0, 0 })
+    , stat(new int[(int)(Step2::StatType::Size)] { 0, 0, 0, 0 })
 {
 }
 
-void CharacterGenerationScreen::Run()
+void Step2::Menu::Run()
 {         
     cout << "===========================================" << endl;
     cout << "[ 던전 탈출 텍스트 RPG ]" << endl;
@@ -72,21 +71,21 @@ void CharacterGenerationScreen::Run()
 
     cout << endl;
 
-    printStatus(name, stat);
+    PrintStatus(name, stat);
 
     cin.ignore();
     cin.get();
 }
 
-void CharacterGenerationScreen::printStatus(std::wstring name, int stat[])
+void Step2::Menu::PrintStatus(std::wstring name, int stat[])
 {
     cout << "===================================" << endl; 
     wcout << name << " 의 현재 능력치" << endl;
     cout << "===================================" << endl;
-    cout << "HP: " << stat[(int)(StatType::HP)] 
-        << "    MP: " << stat[(int)(StatType::MP)] << endl;
-    cout << "공격력: " << stat[(int)(StatType::Attack)] 
-        << "    방어력: " << stat[(int)(StatType::Defense)] << endl;
+    cout << "HP: " << stat[(int)(Step2::StatType::HP)] 
+        << "    MP: " << stat[(int)(Step2::StatType::MP)] << endl;
+    cout << "공격력: " << stat[(int)(Step2::StatType::Attack)] 
+        << "    방어력: " << stat[(int)(Step2::StatType::Defense)] << endl;
     cout << "===================================" << endl;
 
     cout << "계속하려면 아무 키나 누르세요..." << endl;                                                                                      

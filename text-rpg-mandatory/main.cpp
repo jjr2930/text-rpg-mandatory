@@ -1,9 +1,40 @@
-#include "Step2.h"
-                                       
-using namespace Step2;
+////////////////////////////////////////////////
+// Step 1 
+////////////////////////////////////////////////
+//#include "Step1.h"
+//using namespace Step2;
+//
+//int main() {
+//    Menu screen;
+//    screen.Run();
+//    return 0;
+//}
+
+
+////////////////////////////////////////////////
+//  Step 2
+////////////////////////////////////////////////
+//#include "Step2.h"
+//using namespace Step2;
+//
+//int main() {
+//    Menu screen;
+//    screen.Run();
+//    return 0;
+//}                                      
+
+
+////////////////////////////////////////////////
+//  Step 3
+////////////////////////////////////////////////
+#include "Step3.h"
+using namespace Step3;
 
 int main() {
-    CharacterGenerationScreen screen;
-    screen.Run();
+    Menu menu;
+    menu.Run();
+
+    CharacterUpgradeScreen upgradeScreen;
+    upgradeScreen.Run(menu);
     return 0;
 }

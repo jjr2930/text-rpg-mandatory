@@ -28,12 +28,12 @@ namespace Step2 {
         Size
     };
 
-    class CharacterGenerationScreen
+    class Menu
     {
     public:
-        CharacterGenerationScreen();
+        Menu();
         void Run();
-        void printStatus(std::wstring name, int stat[]);
+        void PrintStatus(std::wstring name, int stat[]);
 
     private:
         std::wstring name;
