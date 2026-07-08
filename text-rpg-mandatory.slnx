@@ -3,6 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="AsciiRPG/AsciiRPG.vcxproj" Id="e810a6e2-0f43-40ba-884a-51b6731e1cd0" />
   <Project Path="Step1/Step1.vcxproj" />
   <Project Path="Step2/Step2.vcxproj" />
   <Project Path="Step3/Step3.vcxproj" />
