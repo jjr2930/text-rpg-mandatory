@@ -10,6 +10,7 @@
 #include "Floor.h"
 #include "Monster.h"
 #include "Player.h"
+#include "VirtualDisplay.h"
 
 #include <string>
 #include <format>
@@ -93,4 +94,13 @@ shared_ptr<Entity> CreationUtil::CreateFloor(Vector2Int position)
     newFloorEntity->AddComponent<Floor>(std::make_shared<Component::ConstructionParamterBase>(newFloorEntity));
 
     return newFloorEntity;
+}
+
+shared_ptr<Entity> CreationUtil::CreateVirtualDisplay()
+{
+    auto newVirtualDisplayEntity = ObjectManager::GetInstance().CreateEntity();
+    newVirtualDisplayEntity->SetName("VirtualDisplay");
+    newVirtualDisplayEntity->AddComponent<VirtualDisplay>(std::make_shared<Component::ConstructionParamterBase>(newVirtualDisplayEntity));
+
+    return newVirtualDisplayEntity;
 }

@@ -11,13 +11,11 @@ void main()
     }
 
     GameManager gm;
-    VirtualDisplay vd;
 
     while (true)
     {
         gm.Update();
-        vd.Render();
-
-        Sleep(100);
+    
+        Sleep(16);
     }
 }

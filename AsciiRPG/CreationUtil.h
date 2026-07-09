@@ -18,6 +18,7 @@ namespace CreationUtil
     shared_ptr<Entity> CreateEntrance(Vector2Int position);
     shared_ptr<Entity> CreateExit(Vector2Int position);
     shared_ptr<Entity> CreateFloor(Vector2Int position);
+    shared_ptr<Entity> CreateVirtualDisplay();
 };
 
 #endif

@@ -12,6 +12,7 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     : Component(id, name, params)
     , currentExp(0)
     , playerLevel(1)
+    , currentDisplayMode(VirtualDisplay::DisplayMode::Ingame)
 {
     playerPosition = entity->GetComponent<Position>();
 
@@ -30,28 +31,14 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
             {
                 InputEventParameter* inputMessage = static_cast<InputEventParameter*>(message.get());
                 char inputChar = inputMessage->inputChar;
-                switch (inputChar)
+                switch (currentDisplayMode)
                 {
-                    case 'w':
-                        playerPosition->TryMoveYOnly(-1);
+                    case VirtualDisplay::DisplayMode::Ingame:
+                        ProcessIngameModeInput(inputChar);
                         break;
-
-                    case 's':
-                        playerPosition->TryMoveYOnly(1);
+                    case VirtualDisplay::DisplayMode::Inventory:
+                        ProcessInventoryModeInput(inputChar);
                         break;
-
-                    case 'a':
-                        playerPosition->TryMoveXOnly(-1);
-                        break;
-
-                    case 'd':
-                        playerPosition->TryMoveXOnly(1);
-                        break;
-
-                    case ' ':
-                        Attack();
-                        break;
-
                     default:
                         break;
                 }
@@ -105,6 +92,16 @@ int Player::GetAttack() const
 int Player::GetDefense() const
 {
     return defense;
+}
+
+int Player::GetInventoryElementCount() const
+{
+    return inventory.size();
+}
+
+int Player::GetInventoryCursorIndex() const
+{
+    return inventoryCursorIndex;
 }
 
 const vector<InventoryItem>& Player::GetInventory() const
@@ -177,4 +174,90 @@ bool Player::HasItem(const string& itemName, int* index) const
         }
     }
     return false;
+}
+
+void Player::ProcessIngameModeInput(char inputChar)
+{
+    switch (inputChar)
+    {
+        case 'w':
+            if (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                playerPosition->TryMoveYOnly(-1);
+            break;
+
+        case 's':
+            if (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                playerPosition->TryMoveYOnly(1);
+            break;
+
+        case 'a':
+            if (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                playerPosition->TryMoveXOnly(-1);
+            break;
+
+        case 'd':
+            if (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                playerPosition->TryMoveXOnly(1);
+            break;
+
+        case ' ':
+            if (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                Attack();
+            break;
+
+        case 'i':
+            currentDisplayMode = (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                ? VirtualDisplay::DisplayMode::Inventory
+                : VirtualDisplay::DisplayMode::Ingame;
+            break;
+
+        default:
+            break;
+    }
+}
+
+void Player::ProcessInventoryModeInput(char inputChar)
+{
+    switch (inputChar)
+    {
+        case 'w':
+            inventoryCursorIndex = max(0, inventoryCursorIndex - 1);
+            break;
+
+        case 's':
+            inventoryCursorIndex = min((int)inventory.size() - 1, inventoryCursorIndex + 1);
+            break;
+
+        case 'i':
+            currentDisplayMode = (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
+                ? VirtualDisplay::DisplayMode::Inventory
+                : VirtualDisplay::DisplayMode::Ingame;
+            break;
+
+        case ' ':
+            {
+                if (inventory.size() == 0)
+                    break;
+
+                InventoryItem& selectedItem = inventory[inventoryCursorIndex];
+                Logger::LogInfo(format("Used item: {0} x{1}", selectedItem.GetName(), selectedItem.GetQuantity()));
+                if (selectedItem.GetName() == "Potion")
+                {
+                    currentHp = min(maxHp, currentHp + 20);
+                    Logger::LogInfo(format("Restored 20 HP. Current HP: {0}/{1}", currentHp, maxHp));
+                }
+                selectedItem.AddQuantity(-1);
+                if (selectedItem.GetQuantity() <= 0)
+                {
+                    inventory.erase(inventory.begin() + inventoryCursorIndex);
+                    if (inventoryCursorIndex >= inventory.size())
+                    {
+                        inventoryCursorIndex = max(0, (int)inventory.size() - 1);
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+    }
 }

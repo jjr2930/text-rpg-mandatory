@@ -1,18 +1,22 @@
-#include "VirtualDisplay.h"
+﻿#include "VirtualDisplay.h"
 #include "ObjectManager.h"
 #include "Renderer.h"
 #include "Const.h"
 #include "Logger.h"
 #include "Player.h"
 #include "InventoryItem.h"
+#include "EventParameter.h"
+#include "Enums.h"
 
 #include <format>
 #include <iostream>
 
 using namespace std;
 
-VirtualDisplay::VirtualDisplay()
-    : currentBufferIndex(0)
+VirtualDisplay::VirtualDisplay(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
+    : Component(id, name, params)
+    , currentBufferIndex(0)
+    , currentDisplayMode(DisplayMode::Ingame)
 {
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -50,12 +54,130 @@ VirtualDisplay::~VirtualDisplay()
 
 void VirtualDisplay::Render()
 {
+    switch (currentDisplayMode)
+    {
+        case VirtualDisplay::DisplayMode::Ingame:
+            RenderIngame();
+            break;
+        case VirtualDisplay::DisplayMode::Inventory:
+            RenderInventory();
+            break;
+        default:
+            break;
+    }
+
+    FindDiff();
+
+    for (auto& d : diff)
+    {
+        DrawChar(d.position.x, d.position.y, d.character);
+    }
+
+    currentBufferIndex = (currentBufferIndex + 1) % 2;
+}
+
+void VirtualDisplay::DrawChar(int x, int y, char character)
+{
+    COORD pos = { static_cast<SHORT>(x), static_cast<SHORT>(y) };
+    SetConsoleCursorPosition(hConsole, pos);
+    printf("%c", character);
+}
+
+void VirtualDisplay::WriteString(int indexToWrite, int x, int y, const string& str)
+{
+    if (y >= HEIGHT || y < 0)
+    {
+        return;
+    }
+
+    char** bufferToWrite = buffer[indexToWrite];
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        if (x + i < WIDTH)
+        {
+            bufferToWrite[y][x + i] = str[i];
+        }
+    }
+}
+
+void VirtualDisplay::HandleEvent(shared_ptr<EventParameter> message)
+{
+    switch (message->eventType)
+    {
+        case EventType::KeyPressed:
+            {
+                InputEventParameter* inputMessage = static_cast<InputEventParameter*>(message.get());
+                char inputChar = inputMessage->inputChar;
+                switch (inputChar)
+                {
+                    case 'i':
+                        currentDisplayMode = (currentDisplayMode == DisplayMode::Ingame)
+                            ? DisplayMode::Inventory 
+                            : DisplayMode::Ingame;
+
+                        Logger::LogInfo(format("Display mode changed to {0}",
+                            (currentDisplayMode == DisplayMode::Ingame) ? "Ingame" : "Inventory"));
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+void VirtualDisplay::ClearBuffer(int index)
+{
+    char** bufferToClear = buffer[index];
+    for (int i = 0; i < HEIGHT; ++i)
+    {
+        for (int j = 0; j < WIDTH; ++j)
+        {
+            bufferToClear[i][j] = ' ';
+        }
+    }
+}
+
+void VirtualDisplay::Swap()
+{
+    currentBufferIndex = (currentBufferIndex + 1) % 2;
+}
+
+bool VirtualDisplay::FindDiff()
+{
+    diff.clear();
+    int nextIndex = (currentBufferIndex + 1) % 2;
+
+    char** currentBuffer = buffer[currentBufferIndex];
+    char** nextBuffer = buffer[nextIndex];
+
+    for (int i = 0; i < HEIGHT; ++i)
+    {
+        for (int j = 0; j < WIDTH; ++j)
+        {
+            if (currentBuffer[i][j] != nextBuffer[i][j])
+            {
+                diff.emplace_back(Vector2Int(j, i), nextBuffer[i][j]);
+            }
+        }
+    }
+
+    return diff.size() > 0;
+}
+
+void VirtualDisplay::RenderIngame()
+{
     vector<shared_ptr<Renderer>> renderer = ObjectManager::GetInstance().GetObjectsByType<Renderer>();
 
     char** currentBuffer = buffer[currentBufferIndex];
 
     int nextBufferIndex = (currentBufferIndex + 1) % 2;
-    
+
     ClearBuffer(nextBufferIndex);
 
     char** nextBuffer = buffer[nextBufferIndex];
@@ -113,77 +235,31 @@ void VirtualDisplay::Render()
         WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + 1 + count, format("{0} x {1}", item.GetName(), item.GetQuantity()));
         ++count;
     }
-
-    FindDiff();
-
-    for (auto& d : diff)
-    {
-        DrawChar(d.position.x, d.position.y, d.character);
-    }
-
-    currentBufferIndex = nextBufferIndex;
 }
 
-void VirtualDisplay::DrawChar(int x, int y, char character)
+void VirtualDisplay::RenderInventory()
 {
-    COORD pos = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
-    SetConsoleCursorPosition(hConsole, pos);
-    printf("%c", character);
-}
+    int nextBufferIndex = (currentBufferIndex + 1) % 2;
 
-void VirtualDisplay::WriteString(int indexToWrite, int x, int y, const string& str)
-{
-    if (y >= HEIGHT || y < 0)
-    {
-        return;
-    }
+    char** currenteBuffer = buffer[currentBufferIndex];
+    char** nextBuffer = buffer[nextBufferIndex];
 
-    char** bufferToWrite = buffer[indexToWrite];
-    for (size_t i = 0; i < str.size(); ++i)
+    ClearBuffer(nextBufferIndex);
+
+    shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectByType<Player>();
+    vector<InventoryItem> inventory = player->GetInventory();
+    int size = inventory.size();
+
+    WriteString(nextBufferIndex, 0, 0, INVENTORY_TITLE);
+    for (int i = 0; i < size; ++i)
     {
-        if (x + i < WIDTH)
+        if (player->GetInventoryCursorIndex() == i)
         {
-            bufferToWrite[y][x + i] = str[i];
+            WriteString(nextBufferIndex, 0, i + 1, format("> {0} x {1} <", inventory[i].GetName(), inventory[i].GetQuantity()));
+        }
+        else
+        {
+            WriteString(nextBufferIndex, 0, i + 1, format("  {0} x {1}  ", inventory[i].GetName(), inventory[i].GetQuantity()));
         }
     }
-}
-
-
-void VirtualDisplay::ClearBuffer(int index)
-{
-    char** bufferToClear = buffer[index];
-    for (int i = 0; i < HEIGHT; ++i)
-    {
-        for (int j = 0; j < WIDTH; ++j)
-        {
-            bufferToClear[i][j] = ' ';
-        }
-    }
-}
-
-void VirtualDisplay::Swap()
-{
-    currentBufferIndex = (currentBufferIndex + 1) % 2;
-}
-
-bool VirtualDisplay::FindDiff()
-{
-    diff.clear();
-    int nextIndex = (currentBufferIndex + 1) % 2;
-
-    char** currentBuffer = buffer[currentBufferIndex];
-    char** nextBuffer = buffer[nextIndex];
-
-    for (int i = 0; i < HEIGHT; ++i)
-    {
-        for (int j = 0; j < WIDTH; ++j)
-        {
-            if (currentBuffer[i][j] != nextBuffer[i][j])
-            {
-                diff.emplace_back(Vector2Int(j, i), nextBuffer[i][j]);
-            }
-        }
-    }
-
-    return diff.size() > 0;
 }

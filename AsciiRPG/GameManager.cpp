@@ -1,4 +1,4 @@
-#include "GameManager.h"
+﻿#include "GameManager.h"
 #include "Map.h"
 #include "ObjectManager.h"
 #include "Const.h"
@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "InputController.h"
 #include "CreationUtil.h"
+#include "VirtualDisplay.h"
 
 #include <memory>
 #include <vector>
@@ -53,6 +54,9 @@ GameManager::GameManager()
     auto playerEntity = CreationUtil::CreatePlayer(playerPos);
 
     map->AddEntityToCell(playerPos.x, playerPos.y, playerEntity);
+
+    auto virtualDisplayEntity = CreationUtil::CreateVirtualDisplay();
+    virtualDisplay = virtualDisplayEntity->GetComponent<VirtualDisplay>();
 }
 
 void GameManager::Update()
@@ -62,4 +66,7 @@ void GameManager::Update()
     {
         entity->Update();
     }
+
+    //TODO: 약간 억지 같음
+    virtualDisplay->Render();
 }

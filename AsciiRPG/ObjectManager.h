@@ -20,6 +20,7 @@ using namespace std;
 class EventParameter;
 class IConstructionParameter;
 class Entity;
+class VirtualDisplay;
 
 class ObjectManager
 {
@@ -63,6 +64,21 @@ public:
         }
 
         return result;
+    }
+
+    template <typename T,
+        typename = enable_if_t<is_base_of<Object, T>::value>>
+    shared_ptr<T> GetObjectByType()
+    {
+        for (const auto& pair : createdObjects)
+        {
+            if (auto castedObject = dynamic_pointer_cast<T>(pair.second))
+            {
+                return castedObject;
+            }
+        }
+
+        return nullptr;
     }
 
     template <typename T1, typename T2,

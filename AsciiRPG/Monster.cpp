@@ -15,7 +15,7 @@ Monster::Monster(int64_t id, const std::string& name, std::shared_ptr<IConstruct
     defense = constructionParams->defense;
     exp = constructionParams->exp;
     dropItems = constructionParams->dropItems;
-
+    attackDelay = constructionParams->attackDelay;
     monsterPosition = entity->GetComponent<Position>();
 }
 
@@ -72,7 +72,7 @@ void Monster::Update()
     {
         fistOverlap = true;
         nextAttackTime = DateTime::Now();
-        nextAttackTime.AddSeconds(1);
+        nextAttackTime.AddSeconds(attackDelay);
     }
 
     else if(DateTime::Now() >= nextAttackTime)
@@ -80,6 +80,6 @@ void Monster::Update()
         Logger::LogError(format("{} attacks player for {} damage", name, attack));
         player->TakeDamage(attack);
         nextAttackTime = DateTime::Now();
-        nextAttackTime.AddSeconds(1);
+        nextAttackTime.AddSeconds(attackDelay);
     }    
 }

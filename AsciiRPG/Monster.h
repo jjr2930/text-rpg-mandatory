@@ -45,6 +45,7 @@ private:
     int attack;
     int defense;
     int exp;
+    int attackDelay;
     bool fistOverlap;
     DateTime nextAttackTime;
 

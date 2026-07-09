@@ -9,6 +9,7 @@ using namespace std;
 class Object;
 class Map;
 class Entity;
+class VirtualDisplay;
 
 class GameManager
 {
@@ -17,8 +18,9 @@ public:
     void Update();
 
 private:
-    std::unordered_set<std::shared_ptr<Entity>> entities;
     std::shared_ptr<Map> map;
+
+    shared_ptr<VirtualDisplay> virtualDisplay;
 };
 
 #endif // !GAMEMANAGER_H

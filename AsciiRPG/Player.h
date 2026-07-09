@@ -3,6 +3,7 @@
 #include "EventParameter.h" 
 #include "DropItemData.h"
 #include "InventoryItem.h"
+#include "VirtualDisplay.h"
 
 class Position;
 
@@ -36,6 +37,8 @@ public:
     int GetMaxHp() const;
     int GetAttack() const;
     int GetDefense() const;
+    int GetInventoryElementCount() const;
+    int GetInventoryCursorIndex() const;
 
     const vector<InventoryItem>& GetInventory() const;
 
@@ -44,6 +47,9 @@ private:
     void AddItems(vector<DropItemData>& dropItems);
     void AddExp(int exp);
     bool HasItem(const string& itemName, int* index) const;
+
+    void ProcessIngameModeInput(char inputChar);
+    void ProcessInventoryModeInput(char inputChar);
 
 private:
     shared_ptr<Position> playerPosition;
@@ -55,5 +61,8 @@ private:
     int defense;
     int playerLevel;
     int currentExp;
+    int inventoryCursorIndex = 0;
+
+    VirtualDisplay::DisplayMode currentDisplayMode;
 };
 

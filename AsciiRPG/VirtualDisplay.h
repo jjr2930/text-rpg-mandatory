@@ -7,14 +7,21 @@
 #include <Windows.h>
 
 #include "Vector2Int.h"
-#include <string>
+#include "Component.h"
 
+#include <string>
 #include <vector>
 
 using namespace std;
 
-class VirtualDisplay
+class VirtualDisplay : public Component
 {
+public: enum class DisplayMode
+{
+    Ingame,
+    Inventory,
+};
+
 public:
     const Vector2Int LOG_POSITION = Vector2Int(0, 20);
     
@@ -40,22 +47,28 @@ public:
     };
 
 public: 
-    VirtualDisplay();
+    using Component::Component;
+    VirtualDisplay(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
     ~VirtualDisplay();
+
     void Render();
     void DrawChar(int x, int y, char character);
     void WriteString(int indexToWrite, int x, int y, const string& str);
+    void HandleEvent(shared_ptr<EventParameter> message) override;
 
 private:
     void ClearBuffer(int index);
     void Swap();
     bool FindDiff();
+    void RenderIngame();
+    void RenderInventory();
 
 private:
     //double buffering;
     char** buffer[2];
     int currentBufferIndex;
     vector<DiffElement> diff;
+    DisplayMode currentDisplayMode;
 
     HANDLE hConsole;
 };
