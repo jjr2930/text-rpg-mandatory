@@ -206,8 +206,8 @@ void VirtualDisplay::RenderIngame()
     for (int i = 0; i < size; ++i)
     {
         const string& log = *next(logs.begin(), i);
-        int x = LOG_POSITION.x;
-        int y = LOG_POSITION.y + i;
+        int x = INGAME_LOG_POSITION.x;
+        int y = INGAME_LOG_POSITION.y + i;
         if (y < 0 || y >= HEIGHT)
         {
             continue;
@@ -261,5 +261,18 @@ void VirtualDisplay::RenderInventory()
         {
             WriteString(nextBufferIndex, 0, i + 1, format("  {0} x {1}  ", inventory[i].GetName(), inventory[i].GetQuantity()));
         }
+    }
+
+    //write log
+    auto logs = Logger::GetInstance().GetRecentLogs();
+    size_t logSize = logs.size();
+    for (size_t i = 0; i < logSize; i++)
+    {
+        Vector2Int logPos = INVENTORY_LOG_POSITION;
+        logPos.y += i;
+
+        const string& log = *next(logs.begin(), i);
+
+        WriteString(nextBufferIndex, logPos.x, logPos.y, log);
     }
 }
