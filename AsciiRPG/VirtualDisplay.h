@@ -56,14 +56,12 @@ public:
     void Render();
     void DrawChar(int x, int y, char character);
     void WriteString(int indexToWrite, int x, int y, const string& str);
-    void HandleEvent(shared_ptr<EventParameter> message) override;
 
 private:
     void ClearBuffer(int index);
     void Swap();
     bool FindDiff();
     void RenderIngame();
-    void RenderInventory();
 
 private:
     //double buffering;

@@ -4,7 +4,10 @@
 #include "Monster.h"
 #include "MathUtility.h"
 #include "Logger.h"
+#include "FieldItem.h"
+
 #include <format>
+
 
 using namespace std;
 
@@ -21,6 +24,7 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     attack = constructionParams->attack;
     defense = constructionParams->defense;
     currentHp = maxHp;
+    inventoryCursorIndex = -1;
 }
 
 void Player::HandleEvent(shared_ptr<EventParameter> message)
@@ -61,6 +65,20 @@ void Player::TakeDamage(int damage)
     {
         currentHp = 0;
         Logger::LogInfo("Player is dead!");
+    }
+}
+
+void Player::AddItem(shared_ptr<FieldItem> fieldItemm)
+{
+    int foundIdex;
+    if (HasItem(fieldItemm->GetItemName(), &foundIdex))
+    {
+        Logger::LogInfo(format("Player already has item: {0}", fieldItemm->GetItemName()));
+        inventory[foundIdex].AddQuantity(fieldItemm->GetQuantity());
+    }
+    else
+    {
+        inventory.emplace_back(fieldItemm->GetItemName(), fieldItemm->GetQuantity());
     }
 }
 
@@ -206,9 +224,8 @@ void Player::ProcessIngameModeInput(char inputChar)
             break;
 
         case 'i':
-            currentDisplayMode = (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
-                ? VirtualDisplay::DisplayMode::Inventory
-                : VirtualDisplay::DisplayMode::Ingame;
+            currentDisplayMode = VirtualDisplay::DisplayMode::Inventory;
+            inventoryCursorIndex = 0;
             break;
 
         default:
@@ -229,9 +246,8 @@ void Player::ProcessInventoryModeInput(char inputChar)
             break;
 
         case 'i':
-            currentDisplayMode = (currentDisplayMode == VirtualDisplay::DisplayMode::Ingame)
-                ? VirtualDisplay::DisplayMode::Inventory
-                : VirtualDisplay::DisplayMode::Ingame;
+            currentDisplayMode = VirtualDisplay::DisplayMode::Ingame;
+            inventoryCursorIndex = -1;
             break;
 
         case ' ':
@@ -245,15 +261,17 @@ void Player::ProcessInventoryModeInput(char inputChar)
                 {
                     currentHp = min(maxHp, currentHp + 20);
                     Logger::LogInfo(format("Restored 20 HP. Current HP: {0}/{1}", currentHp, maxHp));
-                }
-                selectedItem.AddQuantity(-1);
-                if (selectedItem.GetQuantity() <= 0)
-                {
+                    selectedItem.AddQuantity(-1);
+
+                    if (selectedItem.GetQuantity() > 0)
+                        break;
+                    
                     inventory.erase(inventory.begin() + inventoryCursorIndex);
                     if (inventoryCursorIndex >= inventory.size())
                     {
                         inventoryCursorIndex = max(0, (int)inventory.size() - 1);
                     }
+                    
                 }
             }
             break;

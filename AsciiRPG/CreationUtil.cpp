@@ -11,6 +11,7 @@
 #include "Monster.h"
 #include "Player.h"
 #include "VirtualDisplay.h"
+#include "FieldItem.h"
 
 #include <string>
 #include <format>
@@ -103,4 +104,15 @@ shared_ptr<Entity> CreationUtil::CreateVirtualDisplay()
     newVirtualDisplayEntity->AddComponent<VirtualDisplay>(std::make_shared<Component::ConstructionParamterBase>(newVirtualDisplayEntity));
 
     return newVirtualDisplayEntity;
+}
+
+shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, const string& itemName, int quantity)
+{
+    auto newItemEntity = ObjectManager::GetInstance().CreateEntity();
+    newItemEntity->SetName(format("FieldItem {0} {1}", position.x, position.y));
+    newItemEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, newItemEntity));
+    newItemEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>('*', newItemEntity));
+    newItemEntity->AddComponent<FieldItem>(std::make_shared<FieldItem::ConstructionParameter>(newItemEntity, itemName, quantity));
+
+    return newItemEntity;
 }

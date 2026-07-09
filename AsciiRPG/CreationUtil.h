@@ -3,6 +3,7 @@
 
 #include "Vector2Int.h"
 
+#include <string>
 #include <memory>
 class Entity;
 
@@ -19,6 +20,7 @@ namespace CreationUtil
     shared_ptr<Entity> CreateExit(Vector2Int position);
     shared_ptr<Entity> CreateFloor(Vector2Int position);
     shared_ptr<Entity> CreateVirtualDisplay();
+    shared_ptr<Entity> CreateFieldItem(Vector2Int position, const string& itemName, int quantity);
 };
 
 #endif

@@ -150,6 +150,7 @@
     <ClCompile Include="IConstructionParameter.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="InventoryItem.cpp" />
+    <ClCompile Include="FieldItem.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="IConstructionParameter.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="InventoryItem.h" />
+    <ClInclude Include="FieldItem.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapCell.h" />

@@ -55,6 +55,15 @@ GameManager::GameManager()
 
     map->AddEntityToCell(playerPos.x, playerPos.y, playerEntity);
 
+    //make item
+    auto item1 = CreationUtil::CreateFieldItem(Vector2Int(13, 7), "Potion", 10);
+    auto item2 = CreationUtil::CreateFieldItem(Vector2Int(13, 8), "Gold", 100);
+    auto item3 = CreationUtil::CreateFieldItem(Vector2Int(5, 8), "Gold", 100);
+
+    map->AddEntityToCell(13, 7, item1);
+    map->AddEntityToCell(13, 8, item2);
+    map->AddEntityToCell(5, 8, item3);
+
     auto virtualDisplayEntity = CreationUtil::CreateVirtualDisplay();
     virtualDisplay = virtualDisplayEntity->GetComponent<VirtualDisplay>();
 }

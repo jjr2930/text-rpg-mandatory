@@ -29,8 +29,8 @@ Map::Map(int64_t id, const std::string& name, std::shared_ptr<IConstructionParam
         
         if (x > 0 && x < width - 1 && y > 0 && y < height - 1)
         {
-            auto newFloor = CreationUtil::CreateFloor(newCell->GetPosition());
-            newCell->AddEntity(newFloor);
+            //auto newFloor = CreationUtil::CreateFloor(newCell->GetPosition());
+            //newCell->AddEntity(newFloor);
         }
         else
         {
@@ -50,22 +50,6 @@ Map::Map(int64_t id, const std::string& name, std::shared_ptr<IConstructionParam
 
     entranceCellIndex = entrancePos;
     exitCellIndex = exitPos;
-
-    ////1. 랜덤으로 입구 지정
-    //MapCell* entranceCell = GetRandomCellWithoutBound();
-    //auto entranceEntity = CreationUtil::CreateEntrance(entranceCell->GetPosition());
-    //entranceCell->AddEntity(entranceEntity);
-    //entranceCellIndex = entranceCell->GetPosition();
-
-    ////2. 랜덤 출구 지정
-    //MapCell* exitCell = nullptr;
-    //while (!exitCell || exitCell == entranceCell)
-    //{
-    //    exitCell = GetRandomCellWithoutBound();
-    //}
-    //auto exitEntity = CreationUtil::CreateExit(exitCell->GetPosition());
-    //exitCell->AddEntity(exitEntity);
-    //exitCellIndex = exitCell->GetPosition();
 }
 
 Map::~Map()

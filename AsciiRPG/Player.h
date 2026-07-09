@@ -6,6 +6,7 @@
 #include "VirtualDisplay.h"
 
 class Position;
+class FieldItem;
 
 class Player : public Component
 {
@@ -30,6 +31,7 @@ public:
 
     void HandleEvent(shared_ptr<EventParameter> message) override;
     void TakeDamage(int damage);
+    void AddItem(shared_ptr<FieldItem> fieldItemm);
 
     int GetLevel() const;
     int GetExp() const;
@@ -43,8 +45,8 @@ public:
     const vector<InventoryItem>& GetInventory() const;
 
 private:
-    void Attack();
     void AddItems(vector<DropItemData>& dropItems);
+    void Attack();
     void AddExp(int exp);
     bool HasItem(const string& itemName, int* index) const;
 

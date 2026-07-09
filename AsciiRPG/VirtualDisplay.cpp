@@ -54,17 +54,7 @@ VirtualDisplay::~VirtualDisplay()
 
 void VirtualDisplay::Render()
 {
-    switch (currentDisplayMode)
-    {
-        case VirtualDisplay::DisplayMode::Ingame:
-            RenderIngame();
-            break;
-        case VirtualDisplay::DisplayMode::Inventory:
-            RenderInventory();
-            break;
-        default:
-            break;
-    }
+    RenderIngame();
 
     FindDiff();
 
@@ -99,38 +89,6 @@ void VirtualDisplay::WriteString(int indexToWrite, int x, int y, const string& s
         }
     }
 }
-
-void VirtualDisplay::HandleEvent(shared_ptr<EventParameter> message)
-{
-    switch (message->eventType)
-    {
-        case EventType::KeyPressed:
-            {
-                InputEventParameter* inputMessage = static_cast<InputEventParameter*>(message.get());
-                char inputChar = inputMessage->inputChar;
-                switch (inputChar)
-                {
-                    case 'i':
-                        currentDisplayMode = (currentDisplayMode == DisplayMode::Ingame)
-                            ? DisplayMode::Inventory 
-                            : DisplayMode::Ingame;
-
-                        Logger::LogInfo(format("Display mode changed to {0}",
-                            (currentDisplayMode == DisplayMode::Ingame) ? "Ingame" : "Inventory"));
-
-                        break;
-                    default:
-                        break;
-                }
-            }
-            break;
-
-        default:
-            break;
-    }
-}
-
-
 void VirtualDisplay::ClearBuffer(int index)
 {
     char** bufferToClear = buffer[index];
@@ -229,50 +187,19 @@ void VirtualDisplay::RenderIngame()
     //write inventory
     WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y, INVENTORY_TITLE);
 
-    int count = 0;
-    for (auto& item : player->GetInventory())
-    {
-        WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + 1 + count, format("{0} x {1}", item.GetName(), item.GetQuantity()));
-        ++count;
-    }
-}
-
-void VirtualDisplay::RenderInventory()
-{
-    int nextBufferIndex = (currentBufferIndex + 1) % 2;
-
-    char** currenteBuffer = buffer[currentBufferIndex];
-    char** nextBuffer = buffer[nextBufferIndex];
-
-    ClearBuffer(nextBufferIndex);
-
-    shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectByType<Player>();
     vector<InventoryItem> inventory = player->GetInventory();
-    int size = inventory.size();
-
-    WriteString(nextBufferIndex, 0, 0, INVENTORY_TITLE);
+    size = inventory.size();
     for (int i = 0; i < size; ++i)
     {
         if (player->GetInventoryCursorIndex() == i)
         {
-            WriteString(nextBufferIndex, 0, i + 1, format("> {0} x {1} <", inventory[i].GetName(), inventory[i].GetQuantity()));
+            WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + i + 1
+                , format("> {0} x {1} <", inventory[i].GetName(), inventory[i].GetQuantity()));
         }
         else
         {
-            WriteString(nextBufferIndex, 0, i + 1, format("  {0} x {1}  ", inventory[i].GetName(), inventory[i].GetQuantity()));
+            WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + i + 1
+                , format("  {0} x {1}  ", inventory[i].GetName(), inventory[i].GetQuantity()));
         }
-    }
-
-    //write log
-    auto logs = Logger::GetInstance().GetRecentLogs();
-    size_t logSize = logs.size();
-    for (size_t i = 0; i < logSize; i++)
-    {
-        Vector2Int logPos = INVENTORY_LOG_POSITION;
-        logPos.y += i;
-
-        const string& log = *next(logs.begin(), i);
-
-        WriteString(nextBufferIndex, logPos.x, logPos.y, log);
     }
 }
