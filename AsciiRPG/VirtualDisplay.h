@@ -7,6 +7,8 @@
 #include <Windows.h>
 
 #include "Vector2Int.h"
+#include <string>
+
 #include <vector>
 
 using namespace std;
@@ -14,9 +16,16 @@ using namespace std;
 class VirtualDisplay
 {
 public:
-    const Vector2Int LOG_POSITION = Vector2Int(60, 0);
+    const Vector2Int LOG_POSITION = Vector2Int(0, 20);
+    
+    const Vector2Int PLAYER_STATUS_POSITION = Vector2Int(50, 0);
+    const string PLAYER_STATUS_TITLE = "===== Player Status =====";
+
+    const Vector2Int INVENTORY_POSITION = Vector2Int(50, 10);
+    const string INVENTORY_TITLE = "===== Inventory =====";
+
     const int WIDTH = 80;
-    const int HEIGHT = 20;
+    const int HEIGHT = 30;
     const int SLEEP_TIME_MS = 16;
 
 public:
@@ -35,6 +44,7 @@ public:
     ~VirtualDisplay();
     void Render();
     void DrawChar(int x, int y, char character);
+    void WriteString(int indexToWrite, int x, int y, const string& str);
 
 private:
     void ClearBuffer(int index);

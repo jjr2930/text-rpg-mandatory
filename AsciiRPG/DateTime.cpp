@@ -25,6 +25,11 @@ DateTime::DateTime(int year, int month, int day, int hour, int minute, int secon
     timeInfo.tm_sec = second;
 }
 
+void DateTime::AddSeconds(int seconds)
+{
+    timeInfo.tm_sec += seconds;
+}
+
 int DateTime::GetYear() const
 {
     return timeInfo.tm_year + 1900;
@@ -63,4 +68,29 @@ string DateTime::GetYearMonthDayString() const
 string DateTime::GetHourMinuteSecondString() const
 {
     return format("{:02d}:{:02d}:{:02d}", GetHour(), GetMinute(), GetSeconds());
+}
+
+bool DateTime::operator==(const DateTime& other) const
+{
+    return std::mktime(const_cast<tm*>(&timeInfo)) < std::mktime(const_cast<tm*>(&other.timeInfo));
+}
+
+bool DateTime::operator<(const DateTime& other) const
+{
+    return std::mktime(const_cast<tm*>(&timeInfo)) < std::mktime(const_cast<tm*>(&other.timeInfo));
+}
+
+bool DateTime::operator>(const DateTime& other) const
+{
+    return std::mktime(const_cast<tm*>(&timeInfo)) > std::mktime(const_cast<tm*>(&other.timeInfo));
+}
+
+bool DateTime::operator<=(const DateTime& other) const
+{
+    return std::mktime(const_cast<tm*>(&timeInfo)) <= std::mktime(const_cast<tm*>(&other.timeInfo));
+}
+
+bool DateTime::operator>=(const DateTime& other) const
+{
+    return std::mktime(const_cast<tm*>(&timeInfo)) >= std::mktime(const_cast<tm*>(&other.timeInfo));
 }

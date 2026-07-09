@@ -14,6 +14,8 @@ public:
     DateTime();
     DateTime(int year, int month, int day, int hour, int minute, int second);
 
+    void AddSeconds(int seconds);
+
     int GetYear() const;
     int GetMonth() const;
     int GetDay() const;
@@ -22,6 +24,12 @@ public:
     int GetSeconds() const;
     string GetYearMonthDayString() const;
     string GetHourMinuteSecondString() const;
+
+    bool operator==(const DateTime& other) const;
+    bool operator<(const DateTime& other) const;
+    bool operator>(const DateTime& other) const;
+    bool operator<=(const DateTime& other) const;
+    bool operator>=(const DateTime& other) const;
 
 private:
     tm timeInfo;

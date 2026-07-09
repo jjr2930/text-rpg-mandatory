@@ -5,6 +5,11 @@
 
 void main()
 {
+    for (int i = 0; i < 20; ++i)
+    {
+        Logger::LogInfo("Test");
+    }
+
     GameManager gm;
     VirtualDisplay vd;
 

@@ -1,6 +1,10 @@
 #include "Monster.h"
 #include "ObjectManager.h"
 #include "Logger.h"
+#include "Player.h"
+#include "Position.h"
+#include "Entity.h"
+#include "MathUtility.h"
 
 Monster::Monster(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
@@ -9,8 +13,10 @@ Monster::Monster(int64_t id, const std::string& name, std::shared_ptr<IConstruct
     hp = constructionParams->hp;
     attack = constructionParams->attack;
     defense = constructionParams->defense;
-
+    exp = constructionParams->exp;
     dropItems = constructionParams->dropItems;
+
+    monsterPosition = entity->GetComponent<Position>();
 }
 
 void Monster::TakeDamage(int damage)
@@ -42,4 +48,38 @@ bool Monster::IsDead() const
 vector<DropItemData>& Monster::GetDropItems()
 {
     return dropItems;
+}
+
+void Monster::Update()
+{
+    auto components = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
+    if (components.size() != 1)
+    {
+        Logger::LogError("There should be exactly one player in the game.");
+        return;
+    }
+
+    Vector2Int myPosition = monsterPosition->GetPosition();
+
+    auto& [player, playerPosition] = components[0];
+    if (!MathUtility::IsOverlap(myPosition, playerPosition->GetPosition(), 1))
+    {
+        fistOverlap = false;
+        return;
+    }
+    
+    if(!fistOverlap)
+    {
+        fistOverlap = true;
+        nextAttackTime = DateTime::Now();
+        nextAttackTime.AddSeconds(1);
+    }
+
+    else if(DateTime::Now() >= nextAttackTime)
+    {
+        Logger::LogError(format("{} attacks player for {} damage", name, attack));
+        player->TakeDamage(attack);
+        nextAttackTime = DateTime::Now();
+        nextAttackTime.AddSeconds(1);
+    }    
 }

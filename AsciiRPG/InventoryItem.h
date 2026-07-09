@@ -17,6 +17,7 @@ public:
     //getter
     const string& GetName() const { return name; }
     int GetQuantity() const { return quantity; }
+    int AddQuantity(int amount) { quantity += amount; return quantity; }
 
 private:
     string name;

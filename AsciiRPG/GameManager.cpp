@@ -32,9 +32,21 @@ GameManager::GameManager()
     //createMonster
 
     Vector2Int monsterPos(7, 7);
-    shared_ptr<Entity> monsterEntity = CreationUtil::CreateMonster(monsterPos);
+    shared_ptr<Entity> monsterEntity1 = CreationUtil::CreateMonster(monsterPos);
 
-    map->AddEntityToCell(monsterPos.x, monsterPos.y, monsterEntity);
+    map->AddEntityToCell(monsterPos.x, monsterPos.y, monsterEntity1);
+
+    monsterPos = Vector2Int(10, 10);
+    shared_ptr<Entity> monsterEntity2 = CreationUtil::CreateMonster(monsterPos);
+    map->AddEntityToCell(monsterPos.x, monsterPos.y, monsterEntity2);
+
+    monsterPos = Vector2Int(13, 2);
+    shared_ptr<Entity> monsterEntity3 = CreationUtil::CreateMonster(monsterPos);
+    map->AddEntityToCell(monsterPos.x, monsterPos.y, monsterEntity3);
+
+    monsterPos = Vector2Int(12, 17);
+    shared_ptr<Entity> monsterEntity4 = CreationUtil::CreateMonster(monsterPos);
+    map->AddEntityToCell(monsterPos.x, monsterPos.y, monsterEntity4);
 
     //createPlayer
     Vector2Int playerPos(4, 4);

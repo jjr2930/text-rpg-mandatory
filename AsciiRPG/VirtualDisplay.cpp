@@ -3,7 +3,10 @@
 #include "Renderer.h"
 #include "Const.h"
 #include "Logger.h"
+#include "Player.h"
+#include "InventoryItem.h"
 
+#include <format>
 #include <iostream>
 
 using namespace std;
@@ -88,12 +91,29 @@ void VirtualDisplay::Render()
             continue;
         }
 
-        for (auto iter = log.begin(); iter != log.end() && x < WIDTH; ++iter, ++x)
-        {
-            nextBuffer[y][x] = *iter;
-        }
+        WriteString(nextBufferIndex, x, y, log);
     }
-    
+
+    //write player status
+    shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectsByType<Player>()[0];
+
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y, PLAYER_STATUS_TITLE);
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 1, format("LV : {0}", player->GetLevel()));
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 2, format("EXP : {0}", player->GetExp()));
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 3, format("HP : {0}/{1}", player->GetHp(), player->GetMaxHp()));
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 4, format("ATT : {0}", player->GetAttack()));
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 5, format("DEF : {0}", player->GetDefense()));
+
+    //write inventory
+    WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y, INVENTORY_TITLE);
+
+    int count = 0;
+    for (auto& item : player->GetInventory())
+    {
+        WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + 1 + count, format("{0} x {1}", item.GetName(), item.GetQuantity()));
+        ++count;
+    }
+
     FindDiff();
 
     for (auto& d : diff)
@@ -109,6 +129,23 @@ void VirtualDisplay::DrawChar(int x, int y, char character)
     COORD pos = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
     SetConsoleCursorPosition(hConsole, pos);
     printf("%c", character);
+}
+
+void VirtualDisplay::WriteString(int indexToWrite, int x, int y, const string& str)
+{
+    if (y >= HEIGHT || y < 0)
+    {
+        return;
+    }
+
+    char** bufferToWrite = buffer[indexToWrite];
+    for (size_t i = 0; i < str.size(); ++i)
+    {
+        if (x + i < WIDTH)
+        {
+            bufferToWrite[y][x + i] = str[i];
+        }
+    }
 }
 
 

@@ -28,17 +28,29 @@ public:
     Player(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
 
     void HandleEvent(shared_ptr<EventParameter> message) override;
+    void TakeDamage(int damage);
+
+    int GetLevel() const;
+    int GetExp() const;
+    int GetHp() const;
+    int GetMaxHp() const;
+    int GetAttack() const;
+    int GetDefense() const;
+
+    const vector<InventoryItem>& GetInventory() const;
 
 private:
     void Attack();
     void AddItems(vector<DropItemData>& dropItems);
     void AddExp(int exp);
+    bool HasItem(const string& itemName, int* index) const;
 
 private:
     shared_ptr<Position> playerPosition;
     vector<InventoryItem> inventory;
 
-    int initHp;
+    int maxHp;
+    int currentHp;
     int attack;
     int defense;
     int playerLevel;

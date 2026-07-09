@@ -16,9 +16,10 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     playerPosition = entity->GetComponent<Position>();
 
     auto constructionParams = std::static_pointer_cast<PlayerConstructionParameter>(params);
-    initHp = constructionParams->initHp;
+    maxHp = constructionParams->initHp;
     attack = constructionParams->attack;
     defense = constructionParams->defense;
+    currentHp = maxHp;
 }
 
 void Player::HandleEvent(shared_ptr<EventParameter> message)
@@ -55,9 +56,60 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
                         break;
                 }
             }
+            break;
+
         default:
             break;
     }
+}
+
+void Player::TakeDamage(int damage)
+{
+    int realDamage = damage - defense;
+    if (realDamage < 1)
+        realDamage = 1;
+    
+    currentHp -= realDamage;
+    if (currentHp <= 0)
+    {
+        currentHp = 0;
+        Logger::LogInfo("Player is dead!");
+    }
+}
+
+int Player::GetLevel() const
+{
+    return playerLevel;
+}
+
+int Player::GetExp() const
+{
+    return currentExp;
+}
+
+int Player::GetHp() const
+{
+    return currentHp;
+}
+
+int Player::GetMaxHp() const
+{
+    return maxHp;
+}
+
+int Player::GetAttack() const
+{
+    return attack;
+}
+
+int Player::GetDefense() const
+{
+    return defense;
+}
+
+const vector<InventoryItem>& Player::GetInventory() const
+{
+    return inventory;
 }
 
 void Player::Attack()
@@ -71,12 +123,15 @@ void Player::Attack()
             continue;
         
         Logger::LogInfo("ATTACK!!");
+
+        vector<DropItemData> dropItem = monster->GetDropItems();
+        int exp = monster->GetExp();
         monster->TakeDamage(attack);
         if (!monster->IsDead())
             continue;
 
-        AddItems(monster->GetDropItems());
-        AddExp(monster->GetExp());
+        AddItems(dropItem);
+        AddExp(exp);
     }
 }
 
@@ -84,10 +139,18 @@ void Player::AddItems(vector<DropItemData>& dropItems)
 {
     for (auto& dropItem : dropItems)
     {
+        int index;
+        if (HasItem(dropItem.GetItemName(), &index))
+        {
+            inventory[index].AddQuantity(dropItem.GetCount());
+            Logger::LogInfo(format("{} x{} added", dropItem.GetItemName(), dropItem.GetCount()));
+            continue;
+        }
+
         InventoryItem newItem(dropItem.GetItemName(), dropItem.GetCount());
         inventory.emplace_back(newItem);
 
-        Logger::LogInfo(format("{} {}개 추가됨", 
+        Logger::LogInfo(format("{} x{} added", 
             newItem.GetName(), newItem.GetQuantity()));
     }    
 }
@@ -96,5 +159,22 @@ void Player::AddExp(int exp)
 {
     this->currentExp += exp;
 
-    Logger::LogInfo(format("{} 경험치 획득", exp));
+    Logger::LogInfo(format("{} exp added", exp));
+}
+
+bool Player::HasItem(const string& itemName, int* index) const
+{
+    int count = inventory.size();
+    for (int i = 0; i < count; ++i)
+    {
+        if (inventory[i].GetName() == itemName)
+        {
+            if (index)
+            {
+                *index = i;
+            }
+            return true;
+        }
+    }
+    return false;
 }
