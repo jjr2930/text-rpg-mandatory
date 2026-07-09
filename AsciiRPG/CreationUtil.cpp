@@ -9,6 +9,7 @@
 #include "Exit.h"
 #include "Floor.h"
 #include "Monster.h"
+#include "Player.h"
 
 #include <string>
 #include <format>
@@ -26,6 +27,7 @@ shared_ptr<Entity> CreationUtil::CreatePlayer(Vector2Int position)
     newPlayerEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, newPlayerEntity));
     newPlayerEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>('P', newPlayerEntity));
     newPlayerEntity->AddComponent<InputController>(std::make_shared<Component::ConstructionParamterBase>(newPlayerEntity));
+    newPlayerEntity->AddComponent<Player>(std::make_shared<Player::PlayerConstructionParameter>(newPlayerEntity, 100, 10, 5));
 
     return newPlayerEntity;
     

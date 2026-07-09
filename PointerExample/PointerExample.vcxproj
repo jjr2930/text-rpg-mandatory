@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e810a6e2-0f43-40ba-884a-51b6731e1cd0}</ProjectGuid>
-    <RootNamespace>AsciiRPG</RootNamespace>
+    <ProjectGuid>{06ad9c0f-440f-4804-97c1-75cf8304280b}</ProjectGuid>
+    <RootNamespace>PointerExample</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,58 +139,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Entrance.cpp" />
-    <ClCompile Include="Exit.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="CreationUtil.cpp" />
-    <ClCompile Include="IConstructionParameter.cpp" />
-    <ClCompile Include="InputController.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapCell.cpp" />
-    <ClCompile Include="MathUtility.cpp" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Position.cpp" />
-    <ClCompile Include="Random.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Floor.cpp" />
-    <ClCompile Include="Vector2Int.cpp" />
-    <ClCompile Include="VirtualDisplay.cpp" />
-    <ClCompile Include="Wall.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Const.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Entrance.h" />
-    <ClInclude Include="Enums.h" />
-    <ClInclude Include="Exit.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="CreationUtil.h" />
-    <ClInclude Include="IConstructionParameter.h" />
-    <ClInclude Include="InputController.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="MapCell.h" />
-    <ClInclude Include="EventParameter.h" />
-    <ClInclude Include="MathUtility.h" />
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Position.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="SingletonMacro.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="Floor.h" />
-    <ClInclude Include="Vector2Int.h" />
-    <ClInclude Include="VirtualDisplay.h" />
-    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

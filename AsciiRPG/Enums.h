@@ -17,5 +17,10 @@ enum class Dicrection
     Right,
     Count,
 };
+
+enum class EventType
+{
+    KeyPressed,
+};
 #endif // !ENUMS_H
 

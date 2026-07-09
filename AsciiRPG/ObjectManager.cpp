@@ -11,18 +11,22 @@ shared_ptr<Entity> ObjectManager::CreateEntity()
     return entity;
 }
 
+void ObjectManager::BroadCastMessage(shared_ptr<EventParameter> message)
+{
+    for (auto& pair : createdObjects)
+    {
+        pair.second->HandleEvent(message);
+    }
+}
+
 void ObjectManager::DestroyObject(shared_ptr<Object> object)
 {
     this->createdObjects.erase(object->GetId());
-
-    if (auto entity = dynamic_pointer_cast<Entity>(object))
-    {
-        this->createdEntities.erase(entity);
-    }
 }
 
 void ObjectManager::DestroyEntity(shared_ptr<Entity> entity)
 {
+    this->DestroyObject(entity);
     this->createdEntities.erase(entity);
 }
 

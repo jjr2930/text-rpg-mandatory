@@ -9,12 +9,15 @@
 #include <vector>
 #include <memory>
 #include <unordered_set>
+#include <tuple>
 
 #include "Object.h"
 #include "Random.h"
+#include "Component.h"
 
 using namespace std;
 
+class EventParameter;
 class IConstructionParameter;
 class Entity;
 
@@ -45,7 +48,6 @@ public:
 
         return newOne;
     }
-    shared_ptr<Entity> CreateEntity();
     template <typename T,
         typename = enable_if_t<is_base_of<Object, T>::value>>
     vector<shared_ptr<T>> GetObjectsByType() 
@@ -63,6 +65,28 @@ public:
         return result;
     }
 
+    template <typename T1, typename T2,
+        typename = enable_if_t<is_base_of<Component, T1>::value>,
+        typename = enable_if_t<is_base_of<Component, T2>::value>>
+    vector<tuple<shared_ptr<T1>, shared_ptr<T2>>> GetComponentsWithTypes()
+    {
+        vector<tuple<shared_ptr<T1>, shared_ptr<T2>>> result;
+        for (const auto& entity : createdEntities)
+        {
+            auto component1 = entity->template GetComponent<T1>();
+            auto component2 = entity->template GetComponent<T2>();
+            if (component1 && component2)
+            {
+                result.emplace_back(component1, component2);
+            }
+        }
+        return result;
+    }
+
+    shared_ptr<Entity> CreateEntity();
+
+
+    void BroadCastMessage(shared_ptr<EventParameter> message);    
     void DestroyObject(shared_ptr<Object> object);
     void DestroyEntity(shared_ptr<Entity> entity);
 

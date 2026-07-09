@@ -1,6 +1,7 @@
 #include "InputController.h"
 #include "Entity.h"
 #include "Position.h"
+#include "EventParameter.h"
 
 #include <conio.h>
 
@@ -24,19 +25,11 @@ void InputController::Update()
     switch (input)
     {
         case 'w':
-            playerPositionComponent->TryMoveYOnly(-1);
-            break;
-
         case 's':
-            playerPositionComponent->TryMoveYOnly(1);
-            break;  
-
         case 'a':
-            playerPositionComponent->TryMoveXOnly(-1);
-            break;
-
         case 'd':
-            playerPositionComponent->TryMoveXOnly(1);
+        case ' ':
+            ObjectManager::GetInstance().BroadCastMessage(std::make_shared<InputEventParameter>(input));
             break;
 
         default:

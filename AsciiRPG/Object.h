@@ -8,6 +8,7 @@
 using namespace std;
 
 class IConstructionParameter;
+class EventParameter;
 
 class Object
 {
@@ -15,6 +16,8 @@ public:
     Object(int64_t id, const std::string& name);
     Object(int64_t id, const std::string& name, shared_ptr<IConstructionParameter> params);
     virtual ~Object();
+
+    virtual void HandleEvent(shared_ptr<EventParameter> message) {}
 
     //getter
     int64_t GetId() const;

@@ -26,6 +26,7 @@ public:
 public:
     using Object::Object;
     Component(int64_t id, const std::string& name, shared_ptr<IConstructionParameter> params);
+    virtual ~Component() = default;
 
     virtual void Start() {};
     virtual void Update() {};
