@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="DateTime.cpp" />
+    <ClCompile Include="DropItemData.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Entrance.cpp" />
     <ClCompile Include="Exit.cpp" />
@@ -147,6 +149,8 @@
     <ClCompile Include="CreationUtil.cpp" />
     <ClCompile Include="IConstructionParameter.cpp" />
     <ClCompile Include="InputController.cpp" />
+    <ClCompile Include="InventoryItem.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapCell.cpp" />
@@ -166,6 +170,8 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="Const.h" />
+    <ClInclude Include="DateTime.h" />
+    <ClInclude Include="DropItemData.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Entrance.h" />
     <ClInclude Include="Enums.h" />
@@ -174,6 +180,8 @@
     <ClInclude Include="CreationUtil.h" />
     <ClInclude Include="IConstructionParameter.h" />
     <ClInclude Include="InputController.h" />
+    <ClInclude Include="InventoryItem.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapCell.h" />
     <ClInclude Include="EventParameter.h" />

@@ -39,7 +39,10 @@ shared_ptr<Entity> CreationUtil::CreateMonster(Vector2Int position)
     newMonsterEntity->SetName(format("Monster {0} {1}", position.x, position.y));
     newMonsterEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, newMonsterEntity));
     newMonsterEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>('M', newMonsterEntity));
-    newMonsterEntity->AddComponent<Monster>(std::make_shared<Component::ConstructionParamterBase>(newMonsterEntity));
+    newMonsterEntity->AddComponent<Monster>(std::make_shared<Monster::MonsterConstructionParameter>(newMonsterEntity, 10, 5, 2, 10 ,vector<DropItemData> {
+        { "Gold", 10}, 
+        { "Potion", 1 }
+    }));
 
     return newMonsterEntity;
 }

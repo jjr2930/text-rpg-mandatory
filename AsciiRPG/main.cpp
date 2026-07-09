@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GameManager.h"
 #include "VirtualDisplay.h"
+#include "Logger.h"
 
 void main()
 {

@@ -13,7 +13,6 @@ Object::Object(int64_t id, const string & name, shared_ptr<IConstructionParamete
 
 Object::~Object()
 {
-    cout << "Object destroyed: " << name << " (ID: " << id << ")" << endl;
 }
 
 int64_t Object::GetId() const

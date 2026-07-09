@@ -2,6 +2,8 @@
 #include "ObjectManager.h"
 #include "Renderer.h"
 #include "Const.h"
+#include "Logger.h"
+
 #include <iostream>
 
 using namespace std;
@@ -18,10 +20,10 @@ VirtualDisplay::VirtualDisplay()
 
     for (int i = 0; i < 2; ++i)
     {
-        buffer[i] = new char* [Const::VirtualDisplay::HEIGHT];
-        for (int j = 0; j < Const::VirtualDisplay::HEIGHT; ++j)
+        buffer[i] = new char* [HEIGHT];
+        for (int j = 0; j < HEIGHT; ++j)
         {
-            buffer[i][j] = new char[Const::VirtualDisplay::WIDTH];
+            buffer[i][j] = new char[WIDTH];
         }
     }
 
@@ -35,7 +37,7 @@ VirtualDisplay::~VirtualDisplay()
 {
     for (int i = 0; i < 2; ++i)
     {
-        for (int j = 0; j < Const::VirtualDisplay::HEIGHT; ++j)
+        for (int j = 0; j < HEIGHT; ++j)
         {
             delete[] buffer[i][j];
         }
@@ -55,11 +57,12 @@ void VirtualDisplay::Render()
 
     char** nextBuffer = buffer[nextBufferIndex];
 
+    //write main game images;
     for (const auto& r : renderer)
     {
         Vector2Int pos = r->GetPosition();
 
-        if (pos.x < 0 || pos.x >= Const::VirtualDisplay::WIDTH || pos.y < 0 || pos.y >= Const::VirtualDisplay::HEIGHT)
+        if (pos.x < 0 || pos.x >= WIDTH || pos.y < 0 || pos.y >= HEIGHT)
         {
             continue;
         }
@@ -72,6 +75,25 @@ void VirtualDisplay::Render()
         nextBuffer[pos.y][pos.x] = r->GetToPrint();
     }
 
+    //write recently logged messages
+    auto logs = Logger::GetInstance().GetRecentLogs();
+    int size = logs.size();
+    for (int i = 0; i < size; ++i)
+    {
+        const string& log = *next(logs.begin(), i);
+        int x = LOG_POSITION.x;
+        int y = LOG_POSITION.y + i;
+        if (y < 0 || y >= HEIGHT)
+        {
+            continue;
+        }
+
+        for (auto iter = log.begin(); iter != log.end() && x < WIDTH; ++iter, ++x)
+        {
+            nextBuffer[y][x] = *iter;
+        }
+    }
+    
     FindDiff();
 
     for (auto& d : diff)
@@ -93,9 +115,9 @@ void VirtualDisplay::DrawChar(int x, int y, char character)
 void VirtualDisplay::ClearBuffer(int index)
 {
     char** bufferToClear = buffer[index];
-    for (int i = 0; i < Const::VirtualDisplay::HEIGHT; ++i)
+    for (int i = 0; i < HEIGHT; ++i)
     {
-        for (int j = 0; j < Const::VirtualDisplay::WIDTH; ++j)
+        for (int j = 0; j < WIDTH; ++j)
         {
             bufferToClear[i][j] = ' ';
         }
@@ -115,9 +137,9 @@ bool VirtualDisplay::FindDiff()
     char** currentBuffer = buffer[currentBufferIndex];
     char** nextBuffer = buffer[nextIndex];
 
-    for (int i = 0; i < Const::VirtualDisplay::HEIGHT; ++i)
+    for (int i = 0; i < HEIGHT; ++i)
     {
-        for (int j = 0; j < Const::VirtualDisplay::WIDTH; ++j)
+        for (int j = 0; j < WIDTH; ++j)
         {
             if (currentBuffer[i][j] != nextBuffer[i][j])
             {

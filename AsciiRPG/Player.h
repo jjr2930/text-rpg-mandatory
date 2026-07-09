@@ -1,6 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "Component.h"
 #include "EventParameter.h" 
+#include "DropItemData.h"
+#include "InventoryItem.h"
 
 class Position;
 
@@ -22,19 +24,24 @@ public:
         int defense;
     };
 public:
-    Player(int64_t id, const std::string& name);
+    using Component::Component;
     Player(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
 
     void HandleEvent(shared_ptr<EventParameter> message) override;
 
 private:
     void Attack();
+    void AddItems(vector<DropItemData>& dropItems);
+    void AddExp(int exp);
 
 private:
-    std::shared_ptr<Position> playerPosition;
+    shared_ptr<Position> playerPosition;
+    vector<InventoryItem> inventory;
 
     int initHp;
     int attack;
     int defense;
+    int playerLevel;
+    int currentExp;
 };
 

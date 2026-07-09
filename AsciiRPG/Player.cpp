@@ -1,21 +1,17 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "Position.h"
 #include "Entity.h"
-#include "Position.h"
 #include "Monster.h"
 #include "MathUtility.h"
+#include "Logger.h"
+#include <format>
 
-
-Player::Player(int64_t id, const std::string& name)
-    : Component(id, name, nullptr)
-    , initHp(0)
-    , attack(0)
-    , defense(0)
-{
-}
+using namespace std;
 
 Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
+    , currentExp(0)
+    , playerLevel(1)
 {
     playerPosition = entity->GetComponent<Position>();
 
@@ -71,11 +67,34 @@ void Player::Attack()
     for (auto& [monster, monsterPosition] : components)
     {
         Vector2Int monsterPos = monsterPosition->GetPosition();
-        if (MathUtility::IsOverlap(position, monsterPos, 1))
-        {
-            monster->TakeDamage(attack);
-        }
+        if (!MathUtility::IsOverlap(position, monsterPos, 1))
+            continue;
+        
+        Logger::LogInfo("ATTACK!!");
+        monster->TakeDamage(attack);
+        if (!monster->IsDead())
+            continue;
+
+        AddItems(monster->GetDropItems());
+        AddExp(monster->GetExp());
     }
 }
 
+void Player::AddItems(vector<DropItemData>& dropItems)
+{
+    for (auto& dropItem : dropItems)
+    {
+        InventoryItem newItem(dropItem.GetItemName(), dropItem.GetCount());
+        inventory.emplace_back(newItem);
 
+        Logger::LogInfo(format("{} {}개 추가됨", 
+            newItem.GetName(), newItem.GetQuantity()));
+    }    
+}
+
+void Player::AddExp(int exp)
+{
+    this->currentExp += exp;
+
+    Logger::LogInfo(format("{} 경험치 획득", exp));
+}

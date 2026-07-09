@@ -14,6 +14,12 @@ using namespace std;
 class VirtualDisplay
 {
 public:
+    const Vector2Int LOG_POSITION = Vector2Int(60, 0);
+    const int WIDTH = 80;
+    const int HEIGHT = 20;
+    const int SLEEP_TIME_MS = 16;
+
+public:
     class DiffElement 
     {
     public:

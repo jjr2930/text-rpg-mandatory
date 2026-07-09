@@ -1,6 +1,10 @@
 #include "ObjectManager.h"
 #include "Object.h"
 #include "Entity.h"
+#include "Logger.h"
+#include <format>
+
+using namespace std;
 
 SINGLETON_INITIALIZER(ObjectManager)
 
@@ -26,6 +30,7 @@ void ObjectManager::DestroyObject(shared_ptr<Object> object)
 
 void ObjectManager::DestroyEntity(shared_ptr<Entity> entity)
 {
+    entity->OnDestroy();
     this->DestroyObject(entity);
     this->createdEntities.erase(entity);
 }
