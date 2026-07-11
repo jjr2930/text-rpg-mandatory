@@ -7,19 +7,19 @@
 using namespace std;
 
 class Object;
-class Map;
 class Entity;
 class VirtualDisplay;
+class EventParameter;
 
 class GameManager
 {
 public: 
     GameManager();
     void Update();
+    void HandleEvent(shared_ptr<EventParameter> message);
+    void CreateNewMap();
 
 private:
-    std::shared_ptr<Map> map;
-
     shared_ptr<VirtualDisplay> virtualDisplay;
 };
 

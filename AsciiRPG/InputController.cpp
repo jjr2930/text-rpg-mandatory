@@ -30,7 +30,7 @@ void InputController::Update()
         case 'd':
         case ' ':
         case 'i':
-            ObjectManager::GetInstance().BroadCastMessage(std::make_shared<InputEventParameter>(input));
+            ObjectManager::GetInstance().BroadcastEvent(std::make_shared<InputEventParameter>(input));
             break;
 
         default:

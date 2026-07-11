@@ -32,7 +32,6 @@ public:
     Map(int64_t id, const string& name, shared_ptr<IConstructionParameter> params);
     ~Map();
 
-    bool GetNoMonsterFloor(Vector2Int* outPosition);
     void AddEntityToCell(int x, int y, shared_ptr<Entity> entity);
     void RemoveEntityFromCell(int x, int y, shared_ptr<Entity> entity);
 

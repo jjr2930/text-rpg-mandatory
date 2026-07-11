@@ -150,7 +150,7 @@ void VirtualDisplay::RenderIngame()
             continue;
         }
 
-        if (r->GetToPrint() == ' ')
+        if (nextBuffer[pos.y][pos.x] == 'P')
         {
             continue;
         }

@@ -20,3 +20,8 @@ void Component::SetIsStarted(bool value)
 {
     isStarted = value;
 }
+
+shared_ptr<Entity> Component::GetEntity() const
+{
+    return entity;
+}

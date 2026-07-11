@@ -8,6 +8,7 @@
 
 Entrance::Entrance(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
+    , active(false)
 {
     myPosition = entity->GetComponent<Position>();
 }
@@ -23,6 +24,30 @@ void Entrance::Update()
    auto [player, playerPosition] = components[0];
    if(MathUtility::IsOverlap(myPosition->GetPosition(), playerPosition->GetPosition(), 0))
    {
-       Logger::LogInfo("Player has entered the entrance!");
+       if (active)
+       {
+           Logger::LogInfo("Player entered the entrance!");
+           active = false;
+       }
    }
+   else
+   {
+       if(!active)
+       {
+           Logger::LogInfo("Player exited the entrance!");
+           active = true;
+       }
+   }
+}
+
+void Entrance::HandleEvent(shared_ptr<EventParameter> message)
+{
+    switch (message->eventType)
+    {
+        case EventType::OnMapClearRequested:
+            ObjectManager::GetInstance().DestroyEntity(entity);
+            break;
+        default:
+            break;
+    }
 }

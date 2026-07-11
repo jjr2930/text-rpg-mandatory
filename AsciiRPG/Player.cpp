@@ -68,17 +68,17 @@ void Player::TakeDamage(int damage)
     }
 }
 
-void Player::AddItem(shared_ptr<FieldItem> fieldItemm)
+void Player::AddItem(const FieldItem& fieldItemm)
 {
     int foundIdex;
-    if (HasItem(fieldItemm->GetItemName(), &foundIdex))
+    if (HasItem(fieldItemm.GetItemName(), &foundIdex))
     {
-        Logger::LogInfo(format("Player already has item: {0}", fieldItemm->GetItemName()));
-        inventory[foundIdex].AddQuantity(fieldItemm->GetQuantity());
+        Logger::LogInfo(format("Player already has item: {0}", fieldItemm.GetItemName()));
+        inventory[foundIdex].AddQuantity(fieldItemm.GetQuantity());
     }
     else
     {
-        inventory.emplace_back(fieldItemm->GetItemName(), fieldItemm->GetQuantity());
+        inventory.emplace_back(fieldItemm.GetItemName(), fieldItemm.GetQuantity());
     }
 }
 

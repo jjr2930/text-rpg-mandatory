@@ -83,3 +83,15 @@ void Monster::Update()
         nextAttackTime.AddSeconds(attackDelay);
     }    
 }
+
+void Monster::HandleEvent(shared_ptr<EventParameter> message)
+{
+    switch (message->eventType)
+    {
+        case EventType::OnMapClearRequested:
+            ObjectManager::GetInstance().DestroyEntity(entity);
+            break;
+        default:
+            break;
+    }
+}

@@ -36,7 +36,7 @@ void FieldItem::Update()
 
     if(MathUtility::IsOverlap(myPosition->GetPosition(), position->GetPosition(), 0))
     {
-        player->AddItem(make_shared<FieldItem>(*this));
+        player->AddItem(*this);
 
         ObjectManager::GetInstance().DestroyEntity(entity);
     }

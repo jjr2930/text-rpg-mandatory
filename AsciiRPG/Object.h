@@ -13,6 +13,8 @@ class EventParameter;
 class Object
 {
 public:
+    static int64_t generatedCount;
+
     Object(int64_t id, const std::string& name);
     Object(int64_t id, const std::string& name, shared_ptr<IConstructionParameter> params);
     virtual ~Object();

@@ -1,20 +1,24 @@
-#include <iostream>
+﻿#include <iostream>
 #include "GameManager.h"
 #include "VirtualDisplay.h"
 #include "Logger.h"
+#include "ObjectManager.h"
+#include "GameManagerBridge.h"
+#include "Entity.h"
 
 void main()
 {
-    for (int i = 0; i < 20; ++i)
-    {
-        Logger::LogInfo("Test");
-    }
+    auto bridgeEntity= ObjectManager::GetInstance().CreateEntity();
 
-    GameManager gm;
+    shared_ptr<GameManager> gmPtr = make_shared<GameManager>();
+    shared_ptr<GameManagerBridge::ConstructionParameter> bridgeParam
+        = std::make_shared<GameManagerBridge::ConstructionParameter>(gmPtr);
+
+    bridgeEntity->AddComponent<GameManagerBridge>(bridgeParam);
 
     while (true)
     {
-        gm.Update();
+        gmPtr->Update();
     
         Sleep(16);
     }

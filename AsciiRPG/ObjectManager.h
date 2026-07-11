@@ -101,8 +101,7 @@ public:
 
     shared_ptr<Entity> CreateEntity();
 
-
-    void BroadCastMessage(shared_ptr<EventParameter> message);    
+    void BroadcastEvent(shared_ptr<EventParameter> message);    
     void DestroyObject(shared_ptr<Object> object);
     void DestroyEntity(shared_ptr<Entity> entity);
 

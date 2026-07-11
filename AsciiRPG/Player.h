@@ -31,7 +31,7 @@ public:
 
     void HandleEvent(shared_ptr<EventParameter> message) override;
     void TakeDamage(int damage);
-    void AddItem(shared_ptr<FieldItem> fieldItemm);
+    void AddItem(const FieldItem& fieldItemm);
 
     int GetLevel() const;
     int GetExp() const;

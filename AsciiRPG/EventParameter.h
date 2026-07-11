@@ -1,5 +1,5 @@
-#ifndef MESSAGE_PARAMETER_H
-#define MESSAGE_PARAMETER_H
+#ifndef EVENT_PARAMETER_H
+#define EVENT_PARAMETER_H
 
 #include "Enums.h"
 
@@ -20,4 +20,4 @@ public:
     char inputChar;
 };
 
-#endif // !MESSAGE_PARAMETER_H
+#endif // !EVENT_PARAMETER_H

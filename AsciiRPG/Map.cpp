@@ -62,31 +62,6 @@ Map::~Map()
     cells.clear();
 }
 
-
-bool Map::GetNoMonsterFloor(Vector2Int* outPosition)
-{
-    for (int y = 0; y < height; ++y)
-    {
-        for (int x = 0; x < width; ++x)
-        {
-            MapCell* cell = GetCell(x, y);
-            if (!cell->HasFloor())
-                continue;
-
-            if (!cell->HasMonster()) // floor + other entity
-            {
-                outPosition->x = x;
-                outPosition->y = y;
-
-                return true;
-            }
-        }
-    }
-
-    //invalid value
-    return false;
-}
-
 void Map::AddEntityToCell(int x, int y, shared_ptr<Entity> entity)
 {
     MapCell* cell = GetCell(x, y);

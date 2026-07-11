@@ -39,6 +39,7 @@ public:
     vector<DropItemData>& GetDropItems();
 
     void Update() override;
+    void HandleEvent(shared_ptr<EventParameter> message) override;
 
 private:
     int hp;

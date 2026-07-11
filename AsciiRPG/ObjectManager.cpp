@@ -15,11 +15,13 @@ shared_ptr<Entity> ObjectManager::CreateEntity()
     return entity;
 }
 
-void ObjectManager::BroadCastMessage(shared_ptr<EventParameter> message)
+void ObjectManager::BroadcastEvent(shared_ptr<EventParameter> message)
 {
+    int i = 0; 
     for (auto& pair : createdObjects)
     {
         pair.second->HandleEvent(message);
+        i++;
     }
 }
 

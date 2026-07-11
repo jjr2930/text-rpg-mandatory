@@ -5,8 +5,8 @@ namespace Const
 {
     namespace Map
     {
-        const int DEFAULT_WIDTH = 40;
-        const int DEFAULT_HEIGHT = 20;
+        const int DEFAULT_WIDTH = 10;
+        const int DEFAULT_HEIGHT = 10;
         const int GENERATION_STEP_MIN = 1000;
         const int GENERATION_STEP_MAX = 1500;
     }

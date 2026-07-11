@@ -12,7 +12,6 @@
 Entity::~Entity()
 {
     Logger::LogInfo("Entity destroyed: " + name + " (ID: " + std::to_string(id) + ")");
-
 }
 
 void Entity::Update()
@@ -33,8 +32,18 @@ void Entity::OnDestroy()
     while (components.size() > 0)
     {
         auto component = components.back();
-        component->OnDestroy();
+        
         ObjectManager::GetInstance().DestroyObject(component);
         components.pop_back();
     }
+     
+    //components.clear();
+
+    //while (components.size() > 0)
+    //{
+    //    auto component = components.back();
+    //    component->OnDestroy();
+    //    ObjectManager::GetInstance().DestroyObject(component);
+    //    components.pop_back();
+    //}
 }

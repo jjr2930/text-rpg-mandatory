@@ -1,4 +1,4 @@
-#ifndef ENUMS_H
+﻿#ifndef ENUMS_H
 #define ENUMS_H
 
 enum class MapCellType
@@ -21,6 +21,16 @@ enum class Dicrection
 enum class EventType
 {
     KeyPressed,
+    /// <summary>
+    /// 플레이어가 출구에 들어갔을 때 발생하는 이벤트
+    /// </summary>
+    OnPlayerEnteredExit,
+    /// <summary>
+    /// 맵 지우기 요청 이벤트
+    /// 지우기 요청이라니 뭔가 애매함
+    /// </summary>
+    OnMapClearRequested,
+
 };
 #endif // !ENUMS_H
 

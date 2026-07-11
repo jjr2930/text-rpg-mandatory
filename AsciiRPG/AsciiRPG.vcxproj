@@ -147,6 +147,7 @@
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="CreationUtil.cpp" />
+    <ClCompile Include="GameManagerBridge.cpp" />
     <ClCompile Include="IConstructionParameter.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="InventoryItem.cpp" />
@@ -159,11 +160,14 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="RandomMapGenerator.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector2Int.cpp" />
     <ClCompile Include="VirtualDisplay.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -179,6 +183,7 @@
     <ClInclude Include="Exit.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="CreationUtil.h" />
+    <ClInclude Include="GameManagerBridge.h" />
     <ClInclude Include="IConstructionParameter.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="InventoryItem.h" />
@@ -191,13 +196,16 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="RandomMapGenerator.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SingletonMacro.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Floor.h" />
+    <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector2Int.h" />
     <ClInclude Include="VirtualDisplay.h" />
     <ClInclude Include="Wall.h" />

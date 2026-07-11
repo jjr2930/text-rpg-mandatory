@@ -38,6 +38,8 @@ public:
     //setter
     void SetIsStarted(bool value);
 
+    shared_ptr<Entity> GetEntity() const;
+
 protected:
     bool isStarted = false;
     shared_ptr<Entity> entity;
