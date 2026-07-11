@@ -10,7 +10,10 @@ Entrance::Entrance(int64_t id, const std::string& name, std::shared_ptr<IConstru
     : Component(id, name, params)
     , active(false)
 {
-    myPosition = entity->GetComponent<Position>();
+    if (auto ptr = entity.lock())
+    {
+        myPosition = ptr->GetComponent<Position>();
+    }
 }
 
 void Entrance::Update()
@@ -45,7 +48,10 @@ void Entrance::HandleEvent(shared_ptr<EventParameter> message)
     switch (message->eventType)
     {
         case EventType::OnMapClearRequested:
-            ObjectManager::GetInstance().DestroyEntity(entity);
+            if (auto entityPtr = entity.lock())
+            {
+                ObjectManager::GetInstance().DestroyEntity(entityPtr);
+            }
             break;
         default:
             break;

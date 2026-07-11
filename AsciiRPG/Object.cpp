@@ -13,7 +13,7 @@ Object::Object(int64_t id, const string& name)
 {
     generatedCount++;
 
-    Logger::LogInfo(std::format("Construction! createdCount: {}, name {}, id {}", generatedCount, name, id));
+    //Logger::LogInfo(std::format("Construction! createdCount: {}, name {}, id {}", generatedCount, name, id));
 }
 
 Object::Object(int64_t id, const string & name, shared_ptr<IConstructionParameter> params)
@@ -21,13 +21,13 @@ Object::Object(int64_t id, const string & name, shared_ptr<IConstructionParamete
 {
     generatedCount++;
 
-    Logger::LogInfo(std::format("Construction! createdCount: {}, name {}, id {}", generatedCount, name ,id));
+    //Logger::LogInfo(std::format("Construction! createdCount: {}, name {}, id {}", generatedCount, name ,id));
 }
 
 Object::~Object()
 {
     generatedCount--;
-    Logger::LogInfo(std::format("Destruction! createdCount: {}, name {}, id {}", generatedCount, name ,id));  
+    //Logger::LogInfo(std::format("Destruction! createdCount: {}, name {}, id {}", generatedCount, name ,id));  
 }
 
 int64_t Object::GetId() const

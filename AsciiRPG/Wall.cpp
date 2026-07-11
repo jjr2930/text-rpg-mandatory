@@ -7,7 +7,7 @@ void Wall::HandleEvent(shared_ptr<EventParameter> message)
     switch (message->eventType)
     {
         case EventType::OnMapClearRequested:
-            ObjectManager::GetInstance().DestroyEntity(this->entity);
+            DestroyEntity();
             break;
 
         default:

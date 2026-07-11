@@ -16,7 +16,8 @@ Monster::Monster(int64_t id, const std::string& name, std::shared_ptr<IConstruct
     exp = constructionParams->exp;
     dropItems = constructionParams->dropItems;
     attackDelay = constructionParams->attackDelay;
-    monsterPosition = entity->GetComponent<Position>();
+    if (auto ptr = entity.lock())
+        monsterPosition = ptr->GetComponent<Position>();
 }
 
 void Monster::TakeDamage(int damage)
@@ -31,7 +32,10 @@ void Monster::TakeDamage(int damage)
 
     if (hp <= 0)
     {
-        ObjectManager::GetInstance().DestroyEntity(entity);
+        if (auto ptr = entity.lock())
+        {
+            ObjectManager::GetInstance().DestroyEntity(ptr);
+        }
     }
 }
 
@@ -89,7 +93,7 @@ void Monster::HandleEvent(shared_ptr<EventParameter> message)
     switch (message->eventType)
     {
         case EventType::OnMapClearRequested:
-            ObjectManager::GetInstance().DestroyEntity(entity);
+            DestroyEntity();
             break;
         default:
             break;

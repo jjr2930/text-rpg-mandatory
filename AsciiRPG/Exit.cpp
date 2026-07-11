@@ -10,7 +10,10 @@
 Exit::Exit(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
 {
-    myPosition = entity->GetComponent<Position>();
+    if (auto ptr = entity.lock())
+    {
+        myPosition = ptr->GetComponent<Position>();
+    }
 }
 
 void Exit::Update()
@@ -33,7 +36,10 @@ void Exit::HandleEvent(shared_ptr<EventParameter> message)
     switch (message->eventType)
     {
         case EventType::OnMapClearRequested:
-            ObjectManager::GetInstance().DestroyEntity(entity);
+            if (auto entityPtr = entity.lock())
+            {
+                ObjectManager::GetInstance().DestroyEntity(entityPtr);
+            }   
             break;
 
         default:

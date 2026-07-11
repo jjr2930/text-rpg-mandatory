@@ -11,7 +11,9 @@ Renderer::Renderer(int64_t id, const std::string& name, std::shared_ptr<IConstru
 {
     ConstructionParameter* constructParam = static_cast<ConstructionParameter*>(params.get());
     this->toPrint = constructParam->toPrint;
-    this->position = constructParam->entity->GetComponent<Position>();
+
+    if (auto ptr = entity.lock())
+        this->position = ptr->GetComponent<Position>();
 }
 
 char Renderer::GetToPrint() const

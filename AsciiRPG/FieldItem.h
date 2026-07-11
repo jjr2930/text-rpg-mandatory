@@ -27,6 +27,7 @@ public:
     int GetQuantity() const;
 
     void Update() override;
+    void HandleEvent(shared_ptr<EventParameter> message) override;
 private:
     string itemName;
     int quantity;

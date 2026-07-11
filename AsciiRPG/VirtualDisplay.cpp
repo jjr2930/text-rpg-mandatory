@@ -161,6 +161,12 @@ void VirtualDisplay::RenderIngame()
     //write recently logged messages
     auto logs = Logger::GetInstance().GetRecentLogs();
     int size = logs.size();
+
+    if (size > 10)
+    {
+        Logger::LogError("Recent logs count must be 10");
+    }
+
     for (int i = 0; i < size; ++i)
     {
         const string& log = *next(logs.begin(), i);

@@ -32,11 +32,16 @@ void ObjectManager::DestroyObject(shared_ptr<Object> object)
 
 void ObjectManager::DestroyEntity(shared_ptr<Entity> entity)
 {
-    entity->OnDestroy();
     this->DestroyObject(entity);
     this->createdEntities.erase(entity);
 }
 
-void ObjectManager::Init()
+void ObjectManager::PrintCurrentState()
 {
+    Logger::LogInfo(format("ObjectCount {}", createdObjects.size()));
+
+    for (const auto& pair : createdObjects)
+    {
+        Logger::LogInfo(format("Object ID: {}, Name: {}", pair.first, pair.second->GetName()));
+    }
 }

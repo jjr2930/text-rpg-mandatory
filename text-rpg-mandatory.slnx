@@ -6,9 +6,9 @@
   <Project Path="AsciiRPG/AsciiRPG.vcxproj" Id="e810a6e2-0f43-40ba-884a-51b6731e1cd0" />
   <Project Path="PointerExample/PointerExample.vcxproj" Id="06ad9c0f-440f-4804-97c1-75cf8304280b" />
   <Project Path="Step1/Step1.vcxproj" />
-  <Project Path="Step2/Step2.vcxproj" />
-  <Project Path="Step3/Step3.vcxproj" />
-  <Project Path="Step4/Step4.vcxproj" />
+  <Project Path="Step2/Step2.vcxproj" Id="9823dc5b-df88-44e8-aeb1-e2c7ae94aa6f" />
+  <Project Path="Step3/Step3.vcxproj" Id="0ecee731-d510-4923-b894-6793549164f8" />
+  <Project Path="Step4/Step4.vcxproj" Id="19cf7ae9-5b13-472b-b191-78394bb3511f" />
   <Project Path="Step5/Step5.vcxproj" Id="ce45d914-a8af-466f-aeb3-986c60bc95ca" />
   <Project Path="Step6/Step6.vcxproj" Id="67d114d8-0688-450b-b58e-0f5045281a3c" />
   <Project Path="Step7/Step7.vcxproj" Id="67595cd4-a706-43ac-ab04-f5ae51ed77fb" />

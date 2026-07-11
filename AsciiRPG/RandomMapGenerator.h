@@ -22,7 +22,7 @@ public:
     static constexpr char MONSTER = 'M';
     static constexpr char EMPTY = ' ';
     static constexpr char PLAYER = 'P';
-    const Vector2 NOISE_THRESHOLD_RANGE = Vector2(0.9f, 0.9f); // Perlin Noise 임계값
+    const Vector2 NOISE_THRESHOLD_RANGE = Vector2(0.47f, 0.55f); // Perlin Noise 임계값
     const float NOISE_MAX_THRESHOLD = 0.5f; // Perlin Noise 임계값
     const int MAX_ATTEMPTS = 10000; // 최대 재시도 횟수
     const Vector2Int ITEM_COUNT_RANGE = Vector2Int(3, 10); // 아이템 개수 범위

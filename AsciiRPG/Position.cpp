@@ -41,6 +41,7 @@ void Position::TryMoveYOnly(int deltaY)
     auto positions = ObjectManager::GetInstance().GetObjectsByType<Position>();
     for (auto position : positions)
     {
+        string entityName = position->GetEntity()->GetName();
         if (position->GetId() == this->GetId())
         {
             continue;
@@ -60,13 +61,18 @@ bool Position::CanMoveTo(shared_ptr<Position> position, int newX, int newY)
 {
     if (position->GetX() == newX && position->GetY() == newY)
     {
-        if (position->entity->HasComponent<Wall>())
+        weak_ptr<Entity> entityWeakPtr = position->entity;  
+        if (auto entityPtr = entityWeakPtr.lock())
         {
-            return false;
-        }
-        else if (position->entity->HasComponent<Monster>())
-        {
-            return false;
+            if (entityPtr->HasComponent<Wall>())
+            {
+                return false;
+            }
+
+            if (entityPtr->HasComponent<Monster>())
+            {
+                return false;
+            }
         }
     }
 

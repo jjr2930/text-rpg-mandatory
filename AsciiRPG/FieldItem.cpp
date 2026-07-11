@@ -14,8 +14,9 @@ FieldItem::FieldItem(int64_t id, const std::string& name, std::shared_ptr<IConst
 
     itemName = constructionParams->itemName;
     quantity = constructionParams->quantity;
-
-    myPosition = entity->GetComponent<Position>();
+        
+    if(auto ptr = entity.lock())
+        myPosition = ptr->GetComponent<Position>();
 }
 
 string FieldItem::GetItemName() const
@@ -38,6 +39,21 @@ void FieldItem::Update()
     {
         player->AddItem(*this);
 
-        ObjectManager::GetInstance().DestroyEntity(entity);
+        DestroyEntity();
+    }
+}
+
+void FieldItem::HandleEvent(shared_ptr<EventParameter> message)
+{
+    switch (message->eventType)
+    {
+        case EventType::OnMapClearRequested:
+            if (auto entityPtr = entity.lock())
+            {
+                ObjectManager::GetInstance().DestroyEntity(entityPtr);
+            }
+            break;
+        default:
+            break;
     }
 }

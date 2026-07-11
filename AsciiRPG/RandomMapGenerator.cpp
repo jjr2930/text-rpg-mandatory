@@ -153,7 +153,7 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
             continue; // 다시 임계값 입력으로 돌아감
         }
 
-        Logger::LogInfo("Map Generation Completed (Items: " + std::to_string(totalItemCount) + ", Monsters: " + std::to_string(totalMonsterCount) + ", Attempts: " + std::to_string(attemptCount) + ")\n\n");
+        //Logger::LogInfo("Map Generation Completed (Items: " + std::to_string(totalItemCount) + ", Monsters: " + std::to_string(totalMonsterCount) + ", Attempts: " + std::to_string(attemptCount) + ")\n\n");
 
         break;
     }

@@ -94,7 +94,6 @@ public:
     }
 
     void Update();
-    void OnDestroy();
 private:
     std::vector<std::shared_ptr<Component>> components;
 };

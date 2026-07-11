@@ -2,6 +2,8 @@
 #define COMPONENT_H
 
 #include "Object.h"
+
+
 #include "IConstructionParameter.h"
 
 using namespace std;
@@ -14,19 +16,15 @@ public:
     class ConstructionParamterBase : public IConstructionParameter
     {
     public:
-        ConstructionParamterBase(shared_ptr<Entity> entity)
-        {
-            this->entity = entity;
-        }
-
+        ConstructionParamterBase(shared_ptr<Entity> entity);
     public:
-        shared_ptr<Entity> entity;
+        weak_ptr<Entity> entity;
     };
 
 public:
     using Object::Object;
     Component(int64_t id, const std::string& name, shared_ptr<IConstructionParameter> params);
-    virtual ~Component() = default;
+    virtual ~Component();
 
     virtual void Start() {};
     virtual void Update() {};
@@ -41,8 +39,11 @@ public:
     shared_ptr<Entity> GetEntity() const;
 
 protected:
+    void DestroyEntity();
+
+protected:
     bool isStarted = false;
-    shared_ptr<Entity> entity;
+    weak_ptr<Entity> entity;
 };
 
 #endif // !COMPONENT_H

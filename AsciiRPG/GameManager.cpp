@@ -17,6 +17,7 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <format>
 
 using namespace std;
 
@@ -36,6 +37,8 @@ void GameManager::Update()
     {
         //TODO: 음?? Entity가 없는 경우가 있을 수 있는데 왜 동작하지?
         entity->Update();
+
+        //ObjectManager::GetInstance().PrintCurrentState();
     }
 
     //TODO: 약간 억지 같음
@@ -48,6 +51,8 @@ void GameManager::HandleEvent(shared_ptr<EventParameter> message)
     {
         case EventType::OnPlayerEnteredExit:
             ObjectManager::GetInstance().BroadcastEvent(make_shared<EventParameter>(EventType::OnMapClearRequested));
+
+            //ObjectManager::GetInstance().PrintCurrentState();
 
             CreateNewMap();
             break;

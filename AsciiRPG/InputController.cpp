@@ -12,7 +12,9 @@ InputController::InputController(int64_t id, const std::string& name, std::share
     auto constructParam = static_cast<Component::ConstructionParamterBase*>(params.get());
 
     this->entity = constructParam->entity;
-    this->playerPositionComponent = entity->GetComponent<Position>();
+
+    if (auto ptr = entity.lock())
+        this->playerPositionComponent = ptr->GetComponent<Position>();
 }
 
 void InputController::Update()

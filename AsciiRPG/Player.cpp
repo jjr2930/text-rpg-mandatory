@@ -17,14 +17,15 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     , playerLevel(1)
     , currentDisplayMode(VirtualDisplay::DisplayMode::Ingame)
 {
-    playerPosition = entity->GetComponent<Position>();
-
     auto constructionParams = std::static_pointer_cast<PlayerConstructionParameter>(params);
     maxHp = constructionParams->initHp;
     attack = constructionParams->attack;
     defense = constructionParams->defense;
     currentHp = maxHp;
     inventoryCursorIndex = -1;
+
+    if (auto ptr = entity.lock())
+        playerPosition = ptr->GetComponent<Position>();
 }
 
 void Player::HandleEvent(shared_ptr<EventParameter> message)

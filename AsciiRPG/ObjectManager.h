@@ -104,9 +104,8 @@ public:
     void BroadcastEvent(shared_ptr<EventParameter> message);    
     void DestroyObject(shared_ptr<Object> object);
     void DestroyEntity(shared_ptr<Entity> entity);
+    void PrintCurrentState();
 
-private:
-    void Init();
 private:
     unordered_map<int64_t, shared_ptr<Object>> createdObjects;
     unordered_set<shared_ptr<Entity>> createdEntities;
