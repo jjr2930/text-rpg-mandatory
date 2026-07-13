@@ -10,6 +10,16 @@ class FieldItem;
 
 class Player : public Component
 {
+public: 
+    enum class CurrentInputMode
+    {
+        Ingame,
+        Inventory
+    };
+    static constexpr int INIT_HP = 100;
+    static constexpr int INIT_ATTACK = 10;
+    static constexpr int INIT_DEFENSE = 5;
+
 public:
     class PlayerConstructionParameter : public Component::ConstructionParamterBase
     {
@@ -63,8 +73,9 @@ private:
     int defense;
     int playerLevel;
     int currentExp;
+    int maxExp;
     int inventoryCursorIndex = 0;
 
-    VirtualDisplay::DisplayMode currentDisplayMode;
+    CurrentInputMode currentInputMode;
 };
 

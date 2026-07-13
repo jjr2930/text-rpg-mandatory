@@ -93,6 +93,7 @@ public:
         return false;
     }
 
+    //void ReserveDeleteEveryComponents();
     void Update();
 private:
     std::vector<std::shared_ptr<Component>> components;

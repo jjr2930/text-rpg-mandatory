@@ -99,12 +99,19 @@ public:
         return result;
     }
 
+    /// <summary>
+    /// 이거 왜케 더러워
+    /// </summary>
+    /// <returns></returns>
+    shared_ptr<vector<shared_ptr<Entity>>> GetAllEntities();
+
     shared_ptr<Entity> CreateEntity();
 
     void BroadcastEvent(shared_ptr<EventParameter> message);    
     void DestroyObject(shared_ptr<Object> object);
     void DestroyEntity(shared_ptr<Entity> entity);
     void PrintCurrentState();
+    //void DeleteReservedObjects();
 
 private:
     unordered_map<int64_t, shared_ptr<Object>> createdObjects;

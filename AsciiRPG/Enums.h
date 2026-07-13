@@ -30,6 +30,10 @@ enum class EventType
     /// 지우기 요청이라니 뭔가 애매함
     /// </summary>
     OnMapClearRequested,
+    /// <summary>
+    /// 입구에 도착했을 때 발생하는 이벤트
+    /// </summary>
+    OnPlayerEnteredEntrance,
 
 };
 #endif // !ENUMS_H

@@ -40,6 +40,7 @@ string Object::GetName() const
     return name;
 }
 
+
 void Object::SetName(const std::string& newName)
 {
     name = newName;

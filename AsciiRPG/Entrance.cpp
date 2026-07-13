@@ -29,7 +29,7 @@ void Entrance::Update()
    {
        if (active)
        {
-           Logger::LogInfo("Player entered the entrance!");
+           ObjectManager::GetInstance().BroadcastEvent(make_shared<EventParameter>(EventType::OnPlayerEnteredEntrance));
            active = false;
        }
    }

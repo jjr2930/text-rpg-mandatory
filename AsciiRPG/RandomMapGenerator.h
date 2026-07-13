@@ -11,17 +11,11 @@ using namespace std;
 
 class Player;
 class Entity;
+class Map;
 
 class RandomMapGenerator
 {
 public:
-    static constexpr char WALL = '#';
-    static constexpr char START = 'S';
-    static constexpr char EXIT = 'X';
-    static constexpr char ITEM = '*';
-    static constexpr char MONSTER = 'M';
-    static constexpr char EMPTY = ' ';
-    static constexpr char PLAYER = 'P';
     const Vector2 NOISE_THRESHOLD_RANGE = Vector2(0.47f, 0.55f); // Perlin Noise 임계값
     const float NOISE_MAX_THRESHOLD = 0.5f; // Perlin Noise 임계값
     const int MAX_ATTEMPTS = 10000; // 최대 재시도 횟수
@@ -30,15 +24,15 @@ public:
 
 
 public:
-    void GenerateRandomMap(int width, int height, shared_ptr<Entity> playerEntity = nullptr);
+    void GenerateRandomMap(int width, int height, shared_ptr<Map> outputMap);
 
 private:
-    bool CanReachAllTargets(char**& map, int width, int height, int startX, int startY,
+    bool CanReachAllTargets(shared_ptr<Map> outputMap, int width, int height, int startX, int startY,
         int exitX, int exitY,
         const std::vector<std::pair<int, int>>& itemPositions,
         const std::vector<std::pair<int, int>>& monsterPositions);
 
-    bool CanReachTarget(char** map, int width, int height, int startX, int startY, int targetX, int targetY);
+    //bool CanReachTarget(shared_ptr<Map> outputMap, int width, int height, int startX, int startY, int targetX, int targetY);
 };
 
 #endif // !RANDOM_MAP_GENERATOR_H

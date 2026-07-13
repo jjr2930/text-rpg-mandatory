@@ -7,26 +7,14 @@
 #include "Entity.h"
 #include "Position.h"
 #include "Vector2Int.h"
+#include "Const.h"
+#include "Map.h"
 
 #include <algorithm>
 #include <queue>
 
-void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Entity> playerEntity)
+void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map> outputMap)
 {
-    char** map = new char* [height];
-    for (int i = 0; i < height; i++)
-    {
-        map[i] = new char[width];
-    }
-
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            map[y][x] = EMPTY;
-        }
-    }
-
     PerlinNoise perlinNoise;
     bool loop = true;
     while (loop)
@@ -46,25 +34,19 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
         while (!validMap && attemptCount < MAX_ATTEMPTS)
         {
             attemptCount++;
-            // 맵 초기화
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    map[y][x] = EMPTY;
-                }
-            }
+            
+            outputMap->Clear(); // 맵 초기화
 
             // 테두리 벽 생성
             for (int x = 0; x < width; x++)
             {
-                map[0][x] = WALL;
-                map[height - 1][x] = WALL;
+                outputMap->SetCellData(x, 0, Const::Map::WALL);
+                outputMap->SetCellData(x, height - 1, Const::Map::WALL);
             }
             for (int y = 0; y < height; y++)
             {
-                map[y][0] = WALL;
-                map[y][width - 1] = WALL;
+                outputMap->SetCellData(0, y, Const::Map::WALL);
+                outputMap->SetCellData(width - 1, y, Const::Map::WALL);
             }
 
             float scale = 0.15f; // Noise 스케일 (작을수록 부드러운 패턴)
@@ -80,7 +62,7 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
                     // 임계값을 넘으면 벽 생성
                     if (noiseValue > threshold)
                     {
-                        map[y][x] = WALL;
+                        outputMap->SetCellData(x, y, Const::Map::WALL);
                     }
                 }
             }
@@ -90,8 +72,8 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
             {
                 startX = Random::GetInstance().RandomRange(1, width - 2);
                 startY = Random::GetInstance().RandomRange(1, height - 2);
-            } while (map[startY][startX] != EMPTY);
-            map[startY][startX] = START;
+            } while (outputMap->GetCellData(startX, startY) != Const::Map::EMPTY);
+            outputMap->SetCellData(startX, startY, Const::Map::START);
 
             // 상하 좌우에 유저를 배치할 위치를 찾는다.
 
@@ -103,8 +85,9 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
                 exitY = Random::GetInstance().RandomRange(1, height - 2);
 
                 simpleDistanceWithEntrance = std::abs(exitX - startX) + std::abs(exitY - startY);
-            } while (map[exitY][exitX] != EMPTY && simpleDistanceWithEntrance < 40);
-            map[exitY][exitX] = EXIT;
+            } while (outputMap->GetCellData(exitX, exitY) != Const::Map::EMPTY && simpleDistanceWithEntrance < 40);
+
+            outputMap->SetCellData(exitX, exitY, Const::Map::EXIT);
 
             // 아이템(*) 배치 (3-10개 랜덤)
             int itemCount = Random::GetInstance().RandomRange(ITEM_COUNT_RANGE.x, ITEM_COUNT_RANGE.y);
@@ -117,14 +100,14 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
                 {
                     itemX = Random::GetInstance().RandomRange(1, width - 2);
                     itemY = Random::GetInstance().RandomRange(1, height - 2);
-                } while (map[itemY][itemX] != EMPTY); // 빈 공간에만 배치
+                } while (outputMap->GetCellData(itemX, itemY) != Const::Map::EMPTY); // 빈 공간에만 배치
 
-                map[itemY][itemX] = ITEM;
+                outputMap->SetCellData(itemX, itemY, Const::Map::ITEM);
                 itemPositions.push_back({ itemX, itemY });
             }
 
             // 몬스터(M) 배치 (3-7개 랜덤)
-            int monsterCount = Random::GetInstance().RandomRange(3, 7);
+            int monsterCount = Random::GetInstance().RandomRange(MONSTER_COUNT_RANGE.x, MONSTER_COUNT_RANGE.y);
             std::vector<std::pair<int, int>> monsterPositions;
             for (int i = 0; i < monsterCount; i++)
             {
@@ -133,14 +116,14 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
                 {
                     monsterX = Random::GetInstance().RandomRange(1, width - 2);
                     monsterY = Random::GetInstance().RandomRange(1, height - 2);
-                } while (map[monsterY][monsterX] != EMPTY); // 빈 공간에만 배치
+                } while (outputMap->GetCellData(monsterX, monsterY) != Const::Map::EMPTY); // 빈 공간에만 배치
 
-                map[monsterY][monsterX] = MONSTER;
+                outputMap->SetCellData(monsterX, monsterY, Const::Map::MONSTER);
                 monsterPositions.push_back({ monsterX, monsterY });
             }
 
             // 시작 지점에서 출구, 모든 아이템, 모든 몬스터에 접근 가능한지 확인
-            if (CanReachAllTargets(map, width, height, startX, startY, exitX, exitY, itemPositions, monsterPositions))
+            if (CanReachAllTargets(outputMap, width, height, startX, startY, exitX, exitY, itemPositions, monsterPositions))
             {
                 validMap = true;
                 totalItemCount = itemCount; // 성공한 맵의 아이템 개수 저장
@@ -160,56 +143,42 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
         break;
     }
 
-    // 맵 데이터를 Map 객체에 적용
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            char cellChar = map[y][x];
-            switch (cellChar)
-            {
-                case RandomMapGenerator::WALL:
-                    CreationUtil::CreateWall(Vector2Int(x, y));
-                    break;
+    //// 맵 데이터를 Map 객체에 적용
+    //for (int y = 0; y < height; y++)
+    //{
+    //    for (int x = 0; x < width; x++)
+    //    {
+    //        char cellChar = map[y][x];
+    //        switch (cellChar)
+    //        {
+    //            case Const::Map::WALL:
+    //                CreationUtil::CreateWall(Vector2Int(x, y));
+    //                break;
 
-                case RandomMapGenerator::START:
-                    CreationUtil::CreateEntrance(Vector2Int(x, y));
-                    if (nullptr == playerEntity)
-                    {
-                        CreationUtil::CreatePlayer(Vector2Int(x, y));
-                    }
-                    else
-                    {
-                        playerEntity->GetComponent<Position>()->SetPosition(x, y);
-                    }
-                    break;
+    //            case Const::Map::START:
+    //                CreationUtil::CreateEntrance(Vector2Int(x, y));
+    //                break;
 
-                case RandomMapGenerator::EXIT:
-                    CreationUtil::CreateExit(Vector2Int(x, y));
-                    break;
+    //            case Const::Map::EXIT:
+    //                CreationUtil::CreateExit(Vector2Int(x, y));
+    //                break;
 
-                case RandomMapGenerator::ITEM:
-                    CreationUtil::CreateFieldItem(Vector2Int(x, y), "Potion", 1);
-                    break;
+    //            case Const::Map::ITEM:
+    //                CreationUtil::CreateFieldItem(Vector2Int(x, y), "Potion", 1);
+    //                break;
 
-                case RandomMapGenerator::MONSTER:
-                    CreationUtil::CreateMonster(Vector2Int(x, y));
-                    break;
+    //            case Const::Map::MONSTER:
+    //                CreationUtil::CreateMonster(Vector2Int(x, y));
+    //                break;
 
-                default:
-                    break;
-            }
-        }
-    }
-
-    for (int y = 0; y < height; y++)
-    {
-        delete[] map[y];
-    }
-    delete[] map;
+    //            default:
+    //                break;
+    //        }
+    //    }
+    //}
 }
 
-bool RandomMapGenerator::CanReachAllTargets(char**& map, int width, int height, int startX, int startY, int exitX, int exitY, const std::vector<std::pair<int, int>>& itemPositions, const std::vector<std::pair<int, int>>& monsterPositions)
+bool RandomMapGenerator::CanReachAllTargets(shared_ptr<Map> outputMap, int width, int height, int startX, int startY, int exitX, int exitY, const std::vector<std::pair<int, int>>& itemPositions, const std::vector<std::pair<int, int>>& monsterPositions)
 {
     // 동적 2D 배열로 visited 생성
     bool** visited = new bool*[height];
@@ -274,7 +243,7 @@ bool RandomMapGenerator::CanReachAllTargets(char**& map, int width, int height, 
             if (nx >= 0 && nx < width && ny >= 0 && ny < height)
             {
                 // 방문하지 않았고 벽이 아닌 경우
-                if (!visited[ny][nx] && map[ny][nx] != WALL)
+                if (!visited[ny][nx] && outputMap->GetCellData(nx, ny) != Const::Map::WALL)
                 {
                     visited[ny][nx] = true;
                     q.push({ nx, ny });
@@ -333,80 +302,80 @@ bool RandomMapGenerator::CanReachAllTargets(char**& map, int width, int height, 
     return true;
 
 }
-
-bool RandomMapGenerator::CanReachTarget(char** map, int width, int height, int startX, int startY, int targetX, int targetY)
-{
-    // 동적 2D 배열로 visited 생성
-    bool** visited = new bool*[height];
-    for (int i = 0; i < height; i++)
-    {
-        visited[i] = new bool[width];
-        for (int j = 0; j < width; j++)
-        {
-            visited[i][j] = false;
-        }
-    }
-
-    std::queue<std::pair<int, int>> q;
-
-    q.push({ startX, startY });
-    visited[startY][startX] = true;
-
-    bool exitReached = false;
-
-    // 상하좌우 이동
-    int dx[] = { 0, 0, -1, 1 };
-    int dy[] = { -1, 1, 0, 0 };
-
-    while (!q.empty())
-    {
-        auto [x, y] = q.front();
-        q.pop();
-
-        // 출구에 도달했는지 확인
-        if (x == targetX && y == targetY)
-        {
-            exitReached = true;
-        }
-
-        // 상하좌우 탐색
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            // 맵 범위 체크
-            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
-            {
-                // 방문하지 않았고 벽이 아닌 경우
-                if (!visited[ny][nx] && map[ny][nx] != WALL)
-                {
-                    visited[ny][nx] = true;
-                    q.push({ nx, ny });
-                }
-            }
-        }
-    }
-
-    // 출구, 모든 아이템, 모든 몬스터에 도달 가능한지 확인
-    if (!exitReached)
-    {
-        // visited 메모리 해제
-        for (int i = 0; i < height; i++)
-        {
-            delete[] visited[i];
-        }
-        delete[] visited;
-        return false;
-    }
-
-
-    // visited 메모리 해제
-    for (int i = 0; i < height; i++)
-    {
-        delete[] visited[i];
-    }
-    delete[] visited;
-
-    return true;
-}
+//
+//bool RandomMapGenerator::CanReachTarget(char** map, int width, int height, int startX, int startY, int targetX, int targetY)
+//{
+//    // 동적 2D 배열로 visited 생성
+//    bool** visited = new bool*[height];
+//    for (int i = 0; i < height; i++)
+//    {
+//        visited[i] = new bool[width];
+//        for (int j = 0; j < width; j++)
+//        {
+//            visited[i][j] = false;
+//        }
+//    }
+//
+//    std::queue<std::pair<int, int>> q;
+//
+//    q.push({ startX, startY });
+//    visited[startY][startX] = true;
+//
+//    bool exitReached = false;
+//
+//    // 상하좌우 이동
+//    int dx[] = { 0, 0, -1, 1 };
+//    int dy[] = { -1, 1, 0, 0 };
+//
+//    while (!q.empty())
+//    {
+//        auto [x, y] = q.front();
+//        q.pop();
+//
+//        // 출구에 도달했는지 확인
+//        if (x == targetX && y == targetY)
+//        {
+//            exitReached = true;
+//        }
+//
+//        // 상하좌우 탐색
+//        for (int i = 0; i < 4; i++)
+//        {
+//            int nx = x + dx[i];
+//            int ny = y + dy[i];
+//
+//            // 맵 범위 체크
+//            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+//            {
+//                // 방문하지 않았고 벽이 아닌 경우
+//                if (!visited[ny][nx] && map[ny][nx] != Const::Map::WALL)
+//                {
+//                    visited[ny][nx] = true;
+//                    q.push({ nx, ny });
+//                }
+//            }
+//        }
+//    }
+//
+//    // 출구, 모든 아이템, 모든 몬스터에 도달 가능한지 확인
+//    if (!exitReached)
+//    {
+//        // visited 메모리 해제
+//        for (int i = 0; i < height; i++)
+//        {
+//            delete[] visited[i];
+//        }
+//        delete[] visited;
+//        return false;
+//    }
+//
+//
+//    // visited 메모리 해제
+//    for (int i = 0; i < height; i++)
+//    {
+//        delete[] visited[i];
+//    }
+//    delete[] visited;
+//
+//    return true;
+//}

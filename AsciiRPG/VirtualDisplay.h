@@ -16,12 +16,6 @@ using namespace std;
 
 class VirtualDisplay : public Component
 {
-public: enum class DisplayMode
-{
-    Ingame,
-    Inventory,
-};
-
 public:
     const Vector2Int INGAME_LOG_POSITION = Vector2Int(0, 20);
     
@@ -68,7 +62,6 @@ private:
     char** buffer[2];
     int currentBufferIndex;
     vector<DiffElement> diff;
-    DisplayMode currentDisplayMode;
 
     HANDLE hConsole;
 };

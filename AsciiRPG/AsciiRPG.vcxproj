@@ -142,6 +142,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="DropItemData.cpp" />
+    <ClCompile Include="DungeonObjectTag.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Entrance.cpp" />
     <ClCompile Include="Exit.cpp" />
@@ -152,10 +153,10 @@
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="FieldItem.cpp" />
+    <ClCompile Include="LevelExpTable.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapCell.cpp" />
     <ClCompile Include="MathUtility.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Const.h" />
     <ClInclude Include="DateTime.h" />
     <ClInclude Include="DropItemData.h" />
+    <ClInclude Include="DungeonObjectTag.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Entrance.h" />
     <ClInclude Include="Enums.h" />
@@ -188,9 +190,9 @@
     <ClInclude Include="InputController.h" />
     <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="FieldItem.h" />
+    <ClInclude Include="LevelExpTable.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="MapCell.h" />
     <ClInclude Include="EventParameter.h" />
     <ClInclude Include="MathUtility.h" />
     <ClInclude Include="Monster.h" />

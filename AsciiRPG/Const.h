@@ -5,10 +5,19 @@ namespace Const
 {
     namespace Map
     {
-        const int DEFAULT_WIDTH = 40;
-        const int DEFAULT_HEIGHT = 20;
-        const int GENERATION_STEP_MIN = 1000;
-        const int GENERATION_STEP_MAX = 1500;
+        constexpr int DEFAULT_WIDTH = 40;
+        constexpr int DEFAULT_HEIGHT = 20;
+        constexpr int GENERATION_STEP_MIN = 1000;
+        constexpr int GENERATION_STEP_MAX = 1500;
+        constexpr int DUNGEON_DEPTH = 10;
+
+        constexpr char WALL = '#';
+        constexpr char START = 'S';
+        constexpr char EXIT = 'X';
+        constexpr char ITEM = '*';
+        constexpr char MONSTER = 'M';
+        constexpr char EMPTY = ' ';
+        constexpr char PLAYER = 'P';
     }
 
 }
