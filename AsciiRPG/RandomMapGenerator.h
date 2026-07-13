@@ -37,6 +37,8 @@ private:
         int exitX, int exitY,
         const std::vector<std::pair<int, int>>& itemPositions,
         const std::vector<std::pair<int, int>>& monsterPositions);
+
+    bool CanReachTarget(char** map, int width, int height, int startX, int startY, int targetX, int targetY);
 };
 
 #endif // !RANDOM_MAP_GENERATOR_H

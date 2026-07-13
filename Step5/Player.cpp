@@ -40,7 +40,7 @@ void Player::Damage(int damage, int* realDamage)
     assert(damage >= 0);
     
     *realDamage = damage - defence;
-    *realDamage = (*realDamage <= 0) ? 0 : *realDamage;
+    *realDamage = (*realDamage <= 0) ? 1 : *realDamage;
 
     hp -= *realDamage;
 
@@ -59,7 +59,6 @@ JobType Player::GetJob()
 
 int Player::GetLevel()
 {
-    return level;
 }
 
 int Player::GetHp()

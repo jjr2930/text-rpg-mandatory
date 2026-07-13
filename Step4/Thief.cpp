@@ -7,12 +7,14 @@ using namespace std;
 Thief::Thief(std::string& name, int* stats)
     : Player(name, stats)
 {
+    job = JobType::Thief;
+
     power += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
 
-    cout << "* " << GetJobName() << "濡??꾩쭅?섏??듬땲?? (怨듦꺽??+ " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;
+    cout << "* " << GetJobName() << "로 전직하셨습니다. 힘이 " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " 증가합니다." << endl;
 }
 
 void Thief::Attack()
 {
-    cout << "?④????ъ슜?섏뿬 ?곸쓣 怨듦꺽?⑸땲?? 怨듦꺽?? " << power << endl;
+    cout << GetJobName() << "가 공격합니다. 공격력: " << power << endl;
 }

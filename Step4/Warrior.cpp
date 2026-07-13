@@ -7,6 +7,8 @@ using namespace std;
 Warrior::Warrior(std::string& name, int* stats)
     : Player(name, stats)
 {
+    //player's default job is warrior so not set here
+
     hp += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
     defence += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
 

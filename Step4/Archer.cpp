@@ -7,6 +7,8 @@ using namespace std;
 Archer::Archer(std::string& name, int* stats)
     :Player(name, stats)
 {
+    job = JobType::Archer;
+
     power += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
 
     cout << "* " << GetJobName() << "로 전직하였습니다. (공격력 + " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;

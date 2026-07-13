@@ -9,6 +9,7 @@ using namespace std;
 Thief::Thief(std::string& name, int* stats)
     : Player(name, stats)
 {
+    job = JobType::Thief;
     power += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
 
     cout << "* " << GetJobName() << "濡??꾩쭅?섏??듬땲?? (怨듦꺽??+ " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;

@@ -9,6 +9,8 @@ using namespace std;
 Magician::Magician(std::string& name, int* stats)
     : Player(name, stats)
 {
+    job = JobType::Magician;
+
     mp += Const::SPCECIAL_STAT_INCREASE_AMOUNT;
 
     cout << "* " << GetJobName() << "로 전직하였습니다. (MP + " << Const::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;

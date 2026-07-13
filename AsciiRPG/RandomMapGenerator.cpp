@@ -95,13 +95,15 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Ent
 
             // 상하 좌우에 유저를 배치할 위치를 찾는다.
 
-
+            int simpleDistanceWithEntrance = 0;
             // 출구(X) 배치
             do
             {
                 exitX = Random::GetInstance().RandomRange(1, width - 2);
                 exitY = Random::GetInstance().RandomRange(1, height - 2);
-            } while (map[exitY][exitX] != EMPTY);
+
+                simpleDistanceWithEntrance = std::abs(exitX - startX) + std::abs(exitY - startY);
+            } while (map[exitY][exitX] != EMPTY && simpleDistanceWithEntrance < 40);
             map[exitY][exitX] = EXIT;
 
             // 아이템(*) 배치 (3-10개 랜덤)
@@ -330,4 +332,81 @@ bool RandomMapGenerator::CanReachAllTargets(char**& map, int width, int height, 
 
     return true;
 
+}
+
+bool RandomMapGenerator::CanReachTarget(char** map, int width, int height, int startX, int startY, int targetX, int targetY)
+{
+    // 동적 2D 배열로 visited 생성
+    bool** visited = new bool*[height];
+    for (int i = 0; i < height; i++)
+    {
+        visited[i] = new bool[width];
+        for (int j = 0; j < width; j++)
+        {
+            visited[i][j] = false;
+        }
+    }
+
+    std::queue<std::pair<int, int>> q;
+
+    q.push({ startX, startY });
+    visited[startY][startX] = true;
+
+    bool exitReached = false;
+
+    // 상하좌우 이동
+    int dx[] = { 0, 0, -1, 1 };
+    int dy[] = { -1, 1, 0, 0 };
+
+    while (!q.empty())
+    {
+        auto [x, y] = q.front();
+        q.pop();
+
+        // 출구에 도달했는지 확인
+        if (x == targetX && y == targetY)
+        {
+            exitReached = true;
+        }
+
+        // 상하좌우 탐색
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            // 맵 범위 체크
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height)
+            {
+                // 방문하지 않았고 벽이 아닌 경우
+                if (!visited[ny][nx] && map[ny][nx] != WALL)
+                {
+                    visited[ny][nx] = true;
+                    q.push({ nx, ny });
+                }
+            }
+        }
+    }
+
+    // 출구, 모든 아이템, 모든 몬스터에 도달 가능한지 확인
+    if (!exitReached)
+    {
+        // visited 메모리 해제
+        for (int i = 0; i < height; i++)
+        {
+            delete[] visited[i];
+        }
+        delete[] visited;
+        return false;
+    }
+
+
+    // visited 메모리 해제
+    for (int i = 0; i < height; i++)
+    {
+        delete[] visited[i];
+    }
+    delete[] visited;
+
+    return true;
 }

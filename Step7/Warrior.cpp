@@ -9,6 +9,7 @@ using namespace std;
 Warrior::Warrior(std::string& name, int* stats)
     : Player(name, stats)
 {
+    job = JobType::Warrior;
     hp += Const::PLAYER::SPCECIAL_STAT_INCREASE_AMOUNT;
     defence += Const::PLAYER::SPCECIAL_STAT_INCREASE_AMOUNT;
 

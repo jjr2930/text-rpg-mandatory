@@ -9,6 +9,7 @@ using namespace std;
 Thief::Thief(std::string& name, int* stats)
     : Player(name, stats)
 {
+    job = JobType::Thief;
     power += Const::PLAYER::SPCECIAL_STAT_INCREASE_AMOUNT;
 
     cout << "* " << GetJobName() << "로 전직하였습니다. (공격력 + " << Const::PLAYER::SPCECIAL_STAT_INCREASE_AMOUNT << " )" << endl;
