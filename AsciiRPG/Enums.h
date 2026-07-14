@@ -35,6 +35,7 @@ enum class EventType
     /// </summary>
     OnPlayerEnteredEntrance,
 
+    OnInteractWithObject,   
 };
 
 enum class StatType
@@ -53,6 +54,14 @@ enum class OperatorType
     Subtract,
     Multiply,
     Divide,
+};
+
+enum class AlchemyShopState
+{
+    None = -1,
+    MainMenu = 0,
+    RecipeList,
+
 };
 
 class EnumUtility

@@ -20,6 +20,7 @@ public:
     char GetCellData(int x, int y) const;
     void CollectMapData();
     void Clear();
+    void From(const vector<string>& source);
 
     //void AddEntityToCell(int x, int y, shared_ptr<Entity> entity);
     //void RemoveEntityFromCell(int x, int y, shared_ptr<Entity> entity);

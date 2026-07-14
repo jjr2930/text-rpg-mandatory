@@ -139,6 +139,8 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlchemyShop.cpp" />
+    <ClCompile Include="AlchemyTable.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="DropItemData.cpp" />
@@ -152,6 +154,7 @@
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IConstructionParameter.cpp" />
     <ClCompile Include="InputController.cpp" />
+    <ClCompile Include="InteractableObject.cpp" />
     <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="FieldItem.cpp" />
     <ClCompile Include="ItemTable.cpp" />
@@ -161,6 +164,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MathUtility.cpp" />
     <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Npc.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
@@ -177,6 +181,9 @@
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlchemyData.h" />
+    <ClInclude Include="AlchemyShop.h" />
+    <ClInclude Include="AlchemyTable.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Const.h" />
     <ClInclude Include="DateTime.h" />
@@ -192,6 +199,7 @@
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="IConstructionParameter.h" />
     <ClInclude Include="InputController.h" />
+    <ClInclude Include="InteractableObject.h" />
     <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="FieldItem.h" />
     <ClInclude Include="ItemTable.h" />
@@ -202,6 +210,7 @@
     <ClInclude Include="EventParameter.h" />
     <ClInclude Include="MathUtility.h" />
     <ClInclude Include="Monster.h" />
+    <ClInclude Include="Npc.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="PerlinNoise.h" />

@@ -10,6 +10,7 @@
 #include "Const.h"
 #include "ItemData.h"
 #include "ItemTable.h"
+#include "InteractableObject.h"
 
 #include <format>
 
@@ -156,6 +157,31 @@ void Player::Attack()
     }
 }
 
+void Player::Interact()
+{
+    auto components = ObjectManager::GetInstance().GetComponentsWithTypes<InteractableObject, Position>();
+
+    vector<shared_ptr<InteractableObject>> interactableObjectsInRange;
+    interactableObjectsInRange.reserve(components.size());
+
+    for (auto& [interactableObject, position] : components)
+    {
+        Vector2Int coords = position->GetPosition();
+        if (!MathUtility::IsOverlap(playerPosition->GetPosition(), coords, 1))
+            continue;
+
+        interactableObjectsInRange.emplace_back(interactableObject);
+    }
+
+    if (interactableObjectsInRange.size() == 0)
+    {
+        Logger::LogInfo("No interactable objects in range.");
+        return;
+    }
+
+    auto& interactableObject = interactableObjectsInRange[0];
+}
+
 void Player::AddItems(vector<DropItemData>& dropItems)
 {
     for (auto& dropItem : dropItems)
@@ -251,19 +277,28 @@ void Player::ProcessIngameModeInput(char inputChar)
     switch (inputChar)
     {
         case 'w':
+        case 'W':
             playerPosition->TryMoveYOnly(-1);
             break;
                     
         case 's':
+        case 'S':
             playerPosition->TryMoveYOnly(1);
             break;
 
         case 'a':
+        case 'A':
             playerPosition->TryMoveXOnly(-1);
             break;
 
         case 'd':
+        case 'D':
             playerPosition->TryMoveXOnly(1);
+            break;
+
+        case 'e':
+        case 'E':
+            Interact();
             break;
 
         case ' ':
@@ -271,6 +306,7 @@ void Player::ProcessIngameModeInput(char inputChar)
             break;
 
         case 'i':
+        case 'I':
             currentInputMode = CurrentInputMode::Inventory;
             inventoryCursorIndex = 0;
             break;
@@ -285,14 +321,17 @@ void Player::ProcessInventoryModeInput(char inputChar)
     switch (inputChar)
     {
         case 'w':
+        case 'W':
             inventoryCursorIndex = max(0, inventoryCursorIndex - 1);
             break;
 
         case 's':
+        case 'S':
             inventoryCursorIndex = min((int)inventory.size() - 1, inventoryCursorIndex + 1);
             break;
 
         case 'i':
+        case 'I':
             currentInputMode = CurrentInputMode::Ingame;
             inventoryCursorIndex = -1;
             break;

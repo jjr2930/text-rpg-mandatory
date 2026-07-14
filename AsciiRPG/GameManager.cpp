@@ -27,17 +27,21 @@ GameManager::GameManager()
 {
     CreationUtil::CreatePlayer(Vector2Int(3, 3));
 
-    maps.reserve(Const::Map::DUNGEON_DEPTH);
+    //1 is town map
+    maps.reserve(Const::Map::DUNGEON_DEPTH + 1);
+
+    shared_ptr<Map> townMap = CreationUtil::CreateTownMap();
+    maps.emplace_back(townMap);
 
     RandomMapGenerator rmg;
 
-    for (int i = 0; i < Const::Map::DUNGEON_DEPTH; ++i)
+    for (int i = 1; i < Const::Map::DUNGEON_DEPTH + 1; ++i)
     {
         shared_ptr<Map> newMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
 
         rmg.GenerateRandomMap(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT, newMap);
 
-        maps.push_back(newMap);
+        maps.emplace_back(newMap);
     }
 
     currentMapIndex = 0;
@@ -114,6 +118,10 @@ void GameManager::CreateCurrentMapObjects()
 
                 case Const::Map::MONSTER:
                     CreationUtil::CreateMonster(Vector2Int(x, y));
+                    break;
+
+                case Const::Map::NPC:
+                    CreationUtil::CreateNpc(Vector2Int(x, y));
                     break;
 
                 default:

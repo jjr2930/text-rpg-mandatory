@@ -18,6 +18,7 @@ public:
 
 public:
     const ItemData* GetItemData(int id) const;
+    const string GetItemName(int id) const;
 
     void Init();
 

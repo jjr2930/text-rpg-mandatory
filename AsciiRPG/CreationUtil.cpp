@@ -15,6 +15,8 @@
 #include "DungeonObjectTag.h"
 #include "Const.h"
 #include "Stat.h"
+#include "Map.h"
+#include "Npc.h"
 
 #include <string>
 #include <format>
@@ -191,4 +193,49 @@ shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, int itemKe
     itemDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newItemEntity->GetName()));
 
     return newItemEntity;
+}
+
+shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
+{
+    auto npcEntity = ObjectManager::GetInstance().CreateEntity();
+
+    npcEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, npcEntity));
+    npcEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::NPC, npcEntity));
+    npcEntity->AddComponent<Npc>(std::make_shared<Component::ConstructionParamterBase>(npcEntity));
+    npcEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(npcEntity, Const::Map::NPC));
+
+    return npcEntity;
+}
+
+shared_ptr<Map> CreationUtil::CreateTownMap()
+{
+    //clear
+    vector<string> townMapString;
+    //A alchemy shop
+    //F forge
+
+    townMapString.emplace_back("########################################");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#      ###########################     #");
+    townMapString.emplace_back("#      #    N                    #     #");
+    townMapString.emplace_back("#      #                         #     #");
+    townMapString.emplace_back("#      #           S    X        #     #");
+    townMapString.emplace_back("#      #                         #     #");
+    townMapString.emplace_back("#      #    N                    #     #");
+    townMapString.emplace_back("#      ###########################     #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("#                                      #");
+    townMapString.emplace_back("########################################");
+    
+    shared_ptr<Map> townMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
+    townMap->From(townMapString);
+    return townMap;
 }

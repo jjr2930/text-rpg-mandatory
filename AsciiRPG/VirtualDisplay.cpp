@@ -88,6 +88,10 @@ void VirtualDisplay::WriteString(int indexToWrite, int x, int y, const string& s
         }
     }
 }
+void VirtualDisplay::HandleEvent(shared_ptr<EventParameter> message)
+{
+    
+}
 void VirtualDisplay::ClearBuffer(int index)
 {
     char** bufferToClear = buffer[index];

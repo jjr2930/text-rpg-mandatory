@@ -41,6 +41,7 @@ public:
 private:
     void AddItems(vector<DropItemData>& dropItems);
     void Attack();
+    void Interact();
     void AddExp(int exp);
     bool HasItem(int tableKey, int* index) const;
     void AddItemQuantity(int tableKey, int quantity);
@@ -58,6 +59,7 @@ private:
     int currentExp;
     int maxExp;
     int inventoryCursorIndex = 0;
+    int npcDialogCursorIndex = 0;
 
     CurrentInputMode currentInputMode;
 };

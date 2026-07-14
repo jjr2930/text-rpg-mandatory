@@ -118,6 +118,21 @@ void Map::Clear()
         }
     }
 }
+void Map::From(const vector<string>& source)
+{
+    assert(source.size() <= size.y && "Source map height exceeds Map size.");
+
+    size_t lineSize = source.size();
+    for (size_t i = 0; i < lineSize; ++i)
+    {
+        const string& line = source[i];
+        assert(line.size() <= size.x && "Source map width exceeds Map size.");
+        for (size_t j = 0; j < line.size(); ++j)
+        {
+            SetCellData(static_cast<int>(j), static_cast<int>(i), line[j]);
+        }
+    }
+}
 //
 //void Map::AddEntityToCell(int x, int y, shared_ptr<Entity> entity)
 //{
