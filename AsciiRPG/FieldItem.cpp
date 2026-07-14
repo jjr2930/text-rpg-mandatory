@@ -4,24 +4,35 @@
 #include "Player.h"
 #include "MathUtility.h"
 #include "Entity.h"
+#include "ItemTable.h"
+#include "ItemData.h"
 
 #include <memory>
+#include <cassert>
 
 FieldItem::FieldItem(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     :Component(id, name, params)
 {
     auto constructionParams = static_cast<ConstructionParameter*>(params.get());
 
-    itemName = constructionParams->itemName;
+    tableKey = constructionParams->tableKey ;
     quantity = constructionParams->quantity;
         
     if(auto ptr = entity.lock())
         myPosition = ptr->GetComponent<Position>();
 }
 
-string FieldItem::GetItemName() const
+
+string FieldItem::GetName() const
 {
-    return itemName;
+    auto item = ItemTable::GetInstance().GetItemData(tableKey);
+    assert(item != nullptr && "Item data not found");
+    return item->name;
+}
+
+int FieldItem::GetTableKey() const
+{
+    return tableKey;    
 }
 
 int FieldItem::GetQuantity() const

@@ -22,6 +22,7 @@ public:
     int GetHour() const;
     int GetMinute() const;
     int GetSeconds() const;
+   
     string GetYearMonthDayString() const;
     string GetHourMinuteSecondString() const;
 

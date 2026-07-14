@@ -149,10 +149,12 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="CreationUtil.cpp" />
     <ClCompile Include="GameManagerBridge.cpp" />
+    <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IConstructionParameter.cpp" />
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="FieldItem.cpp" />
+    <ClCompile Include="ItemTable.cpp" />
     <ClCompile Include="LevelExpTable.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,6 +170,7 @@
     <ClCompile Include="RandomMapGenerator.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Stat.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector2Int.cpp" />
     <ClCompile Include="VirtualDisplay.cpp" />
@@ -186,10 +189,13 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="CreationUtil.h" />
     <ClInclude Include="GameManagerBridge.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="IConstructionParameter.h" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="FieldItem.h" />
+    <ClInclude Include="ItemTable.h" />
+    <ClInclude Include="ItemData.h" />
     <ClInclude Include="LevelExpTable.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Map.h" />
@@ -207,6 +213,7 @@
     <ClInclude Include="SingletonMacro.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Floor.h" />
+    <ClInclude Include="Stat.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector2Int.h" />
     <ClInclude Include="VirtualDisplay.h" />

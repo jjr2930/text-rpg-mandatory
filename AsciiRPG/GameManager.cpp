@@ -106,7 +106,10 @@ void GameManager::CreateCurrentMapObjects()
                     break;
 
                 case Const::Map::ITEM:
-                    CreationUtil::CreateFieldItem(Vector2Int(x, y), "Potion", 1);
+                    {
+                        int randomItemKey = Random::GetInstance().RandomRange(1, 2);
+                        CreationUtil::CreateFieldItem(Vector2Int(x, y), randomItemKey, 1);
+                    }
                     break;
 
                 case Const::Map::MONSTER:

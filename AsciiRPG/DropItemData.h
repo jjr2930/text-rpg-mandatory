@@ -8,15 +8,15 @@ using namespace std;
 class DropItemData
 {
 public:
-    DropItemData(const string& itemName, int count)
-        : itemName(itemName), count(count) {}
+    DropItemData(int tableKey, int count)
+        : tableKey(tableKey), count(count) {}
 
 public:
-    string GetItemName() const { return itemName; }
+    int GetTableKey() const { return tableKey; }
     int GetCount() const { return count; }
 
 private:
-    string itemName;
+    int tableKey;
     int count;
 };
 

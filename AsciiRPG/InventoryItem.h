@@ -1,26 +1,31 @@
-#ifndef INVENTORY_ITEM_H
+﻿#ifndef INVENTORY_ITEM_H
 #define INVENTORY_ITEM_H
 
 #include <string>
+
+class ItemData;
 
 using namespace std;
 
 class InventoryItem
 {
 public:
-    InventoryItem(const string& name, int quantity)
-        : name(name)
+    InventoryItem(int tableKey, int quantity)
+        : tableKey(tableKey)
         , quantity(quantity)
     {
     }
 
     //getter
-    const string& GetName() const { return name; }
-    int GetQuantity() const { return quantity; }
-    int AddQuantity(int amount) { quantity += amount; return quantity; }
-
+    int GetTableKey() const; 
+    int GetQuantity() const; 
+    int AddQuantity(int amount);
+    string GetName() const;
+    bool GetIsUsable() const;
+    const ItemData* GetItemDataFromTable() const;
+    
 private:
-    string name;
+    int tableKey;
     int quantity;
 };
 

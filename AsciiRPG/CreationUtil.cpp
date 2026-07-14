@@ -14,6 +14,7 @@
 #include "FieldItem.h"
 #include "DungeonObjectTag.h"
 #include "Const.h"
+#include "Stat.h"
 
 #include <string>
 #include <format>
@@ -37,10 +38,16 @@ shared_ptr<Entity> CreationUtil::CreatePlayer(Vector2Int position)
 
     auto playerInputController = newPlayerEntity->AddComponent<InputController>(std::make_shared<Component::ConstructionParamterBase>(newPlayerEntity));
     playerInputController->SetName(format("{}'s InputController", newPlayerEntity->GetName()));
+    
+    auto playerStat = newPlayerEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(newPlayerEntity, unordered_map<StatType, float>{
+        { StatType::MaxHealth, Const::Stat::Player::INIT_HP },
+        { StatType::CurrentHealth, Const::Stat::Player::INIT_HP },
+        { StatType::Attack, Const::Stat::Player::INIT_ATTACK },
+        { StatType::Defense, Const::Stat::Player::INIT_DEFENSE }
+    }));
+    playerStat->SetName(format("{}'s Stat", newPlayerEntity->GetName()));
 
-    auto playerConstructionParameter = std::make_shared<Player::PlayerConstructionParameter>(newPlayerEntity, Player::INIT_HP, Player::INIT_ATTACK, Player::INIT_DEFENSE);
-
-    auto playerComponent = newPlayerEntity->AddComponent<Player>(playerConstructionParameter);
+    auto playerComponent = newPlayerEntity->AddComponent<Player>( std::make_shared<Component::ConstructionParamterBase>(newPlayerEntity));
     playerComponent->SetName(format("{}'s Player", newPlayerEntity->GetName()));
 
     return newPlayerEntity;
@@ -58,15 +65,22 @@ shared_ptr<Entity> CreationUtil::CreateMonster(Vector2Int position)
     auto monsterRenderer = newMonsterEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::MONSTER, newMonsterEntity));
     monsterRenderer->SetName(format("{}'s Renderer", newMonsterEntity->GetName()));
 
-    auto monsterComponent = newMonsterEntity->AddComponent<Monster>(std::make_shared<Monster::MonsterConstructionParameter>(newMonsterEntity, 10, 5, 2, 10, 1, vector<DropItemData> {
-        { "Gold", 10}, 
-        { "Potion", 1 }
+    auto monsterComponent = newMonsterEntity->AddComponent<Monster>(std::make_shared<Monster::MonsterConstructionParameter>(newMonsterEntity, 10, 10, 2, 10, 1, vector<DropItemData> {
+        { 1, 10}, 
+        { 2, 1 }
     }));
     monsterComponent->SetName(format("{}'s Monster", newMonsterEntity->GetName()));
     
     auto monsterDungeonObjectTag = newMonsterEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newMonsterEntity, Const::Map::MONSTER));
     monsterDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newMonsterEntity->GetName()));
 
+
+    auto monsterStat = newMonsterEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(newMonsterEntity, unordered_map<StatType, float>{
+        { StatType::MaxHealth, 10.0f },
+        { StatType::CurrentHealth, 10.0f },
+        { StatType::Attack, 10.0f },
+        { StatType::Defense, 2.0f }
+    }));
     return newMonsterEntity;
 }
 
@@ -159,7 +173,7 @@ shared_ptr<Entity> CreationUtil::CreateVirtualDisplay()
     return newVirtualDisplayEntity;
 }
 
-shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, const string& itemName, int quantity)
+shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, int itemKey, int quantity)
 {
     auto newItemEntity = ObjectManager::GetInstance().CreateEntity();
     newItemEntity->SetName(format("FieldItem {0} {1}", position.x, position.y));
@@ -170,7 +184,7 @@ shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, const stri
     auto itemRenderer = newItemEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::ITEM, newItemEntity));
     itemRenderer->SetName(format("{}'s Renderer", newItemEntity->GetName()));
 
-    auto itemComponent = newItemEntity->AddComponent<FieldItem>(std::make_shared<FieldItem::ConstructionParameter>(newItemEntity, itemName, quantity));
+    auto itemComponent = newItemEntity->AddComponent<FieldItem>(std::make_shared<FieldItem::ConstructionParameter>(newItemEntity, itemKey, quantity));
     itemComponent->SetName(format("{}'s FieldItem", newItemEntity->GetName()));
 
     auto itemDungeonObjectTag = newItemEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newItemEntity, Const::Map::ITEM));

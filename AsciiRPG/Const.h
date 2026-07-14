@@ -20,6 +20,16 @@ namespace Const
         constexpr char PLAYER = 'P';
     }
 
+    namespace Stat
+    {
+        namespace Player
+        {
+            static constexpr float INIT_HP = 100;
+            static constexpr float INIT_ATTACK = 10;
+            static constexpr float INIT_DEFENSE = 5;
+        }
+    }
+
 }
 
 #endif

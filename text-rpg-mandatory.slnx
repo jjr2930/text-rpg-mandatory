@@ -4,6 +4,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="AsciiRPG/AsciiRPG.vcxproj" Id="e810a6e2-0f43-40ba-884a-51b6731e1cd0" />
+  <Project Path="Challenge/Challenge.vcxproj" Id="56cde574-1d51-41ba-a52b-a55c1e45aff4" />
   <Project Path="PointerExample/PointerExample.vcxproj" Id="06ad9c0f-440f-4804-97c1-75cf8304280b" />
   <Project Path="Step1/Step1.vcxproj" />
   <Project Path="Step2/Step2.vcxproj" Id="9823dc5b-df88-44e8-aeb1-e2c7ae94aa6f" />

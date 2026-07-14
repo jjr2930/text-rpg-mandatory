@@ -36,5 +36,53 @@ enum class EventType
     OnPlayerEnteredEntrance,
 
 };
-#endif // !ENUMS_H
 
+enum class StatType
+{
+    None = -1,
+    MaxHealth,
+    CurrentHealth,
+    Attack,
+    Defense,
+};
+
+enum class OperatorType
+{
+    None = -1,
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+};
+
+class EnumUtility
+{
+public:
+    static const char* ToString(StatType statType)
+    {
+        switch (statType)
+        {
+            case StatType::None: return "None";
+            case StatType::MaxHealth: return "MaxHealth";
+            case StatType::CurrentHealth: return "CurrentHealth";
+            case StatType::Attack: return "Attack";
+            case StatType::Defense: return "Defense";
+            default: return "Unknown";
+        }
+    }
+
+    static const char* ToString(OperatorType operatorType)
+    {
+        switch (operatorType)
+        {
+            case OperatorType::None: return "None";
+            case OperatorType::Add: return "Add";
+            case OperatorType::Subtract: return "Subtract";
+            case OperatorType::Multiply: return "Multiply";
+            case OperatorType::Divide: return "Divide";
+            default: return "Unknown";
+        }
+    }
+};
+
+#endif // !ENUMS_H

@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "Component.h"
 #include "EventParameter.h" 
 #include "DropItemData.h"
@@ -7,6 +9,7 @@
 
 class Position;
 class FieldItem;
+class Stat;
 
 class Player : public Component
 {
@@ -15,25 +18,6 @@ public:
     {
         Ingame,
         Inventory
-    };
-    static constexpr int INIT_HP = 100;
-    static constexpr int INIT_ATTACK = 10;
-    static constexpr int INIT_DEFENSE = 5;
-
-public:
-    class PlayerConstructionParameter : public Component::ConstructionParamterBase
-    {
-    public:
-        PlayerConstructionParameter(shared_ptr<Entity> entity, int initHp, int attack, int defense)
-            : Component::ConstructionParamterBase(entity)
-            , initHp(initHp)
-            , attack(attack)
-            , defense(defense)
-        {}
-
-        int initHp;
-        int attack;
-        int defense;
     };
 public:
     using Component::Component;
@@ -45,7 +29,7 @@ public:
 
     int GetLevel() const;
     int GetExp() const;
-    int GetHp() const;
+    int GetCurrentHelath() const;
     int GetMaxHp() const;
     int GetAttack() const;
     int GetDefense() const;
@@ -58,19 +42,18 @@ private:
     void AddItems(vector<DropItemData>& dropItems);
     void Attack();
     void AddExp(int exp);
-    bool HasItem(const string& itemName, int* index) const;
+    bool HasItem(int tableKey, int* index) const;
+    void AddItemQuantity(int tableKey, int quantity);
 
     void ProcessIngameModeInput(char inputChar);
     void ProcessInventoryModeInput(char inputChar);
 
 private:
     shared_ptr<Position> playerPosition;
+    shared_ptr<Stat> playerStat;
+
     vector<InventoryItem> inventory;
 
-    int maxHp;
-    int currentHp;
-    int attack;
-    int defense;
     int playerLevel;
     int currentExp;
     int maxExp;
@@ -79,3 +62,4 @@ private:
     CurrentInputMode currentInputMode;
 };
 
+#endif
