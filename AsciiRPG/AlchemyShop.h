@@ -10,6 +10,8 @@
 #include <stack>
 
 class EventParameter;
+struct ItemData;
+struct AlchemyData;
 
 using namespace std;
 
@@ -21,7 +23,7 @@ public:
 
     using InteractableObject::InteractableObject;
     AlchemyShop(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
-    virtual vector<string> GetRenderStrings() const;
+    virtual vector<string> GetRenderStrings();
 
     void IncreaseCursorIndex() override;
     void DecreaseCursorIndex() override;
@@ -34,14 +36,19 @@ public:
 private:
     void ProcessMainMenuInput(Virtualkey inputKey);
     void ProcessRecipeListInput(Virtualkey inputKey);
-
+    void ProcessFindRecipeInput(Virtualkey inputKey);
+    void ProcessCraftInput(Virtualkey inputKey);
+    vector<shared_ptr<AlchemyData>> FindRecipesByIngredient(const string& name);
+    void BuildCandidateRecipesList();
 private:
     vector<string> mainMenuOptions;
     Vector2Int recipeDisplayRange;
     stack<AlchemyShopState> stateStack;
+    vector<shared_ptr<AlchemyData>> candidateRecipes;
     int mainMenuCursor;
     int recipeListCursor;
     int findRecipeCursor;
+    int craftCusor;
     string playerInput;
 };
 

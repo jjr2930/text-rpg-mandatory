@@ -2,6 +2,7 @@
 #define ALCHEMY_DATA_H
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -14,19 +15,14 @@ struct AlchemyDataElement
 struct AlchemyData
 {
 public:
-    AlchemyData(int id, int resultItemKey)
-        : id(id), resultItemKey(resultItemKey)
-    {}
+    AlchemyData(int id, int resultItemKey);
+    void AddIngredient(int itemKey, int quantity);
+    vector<string> GetRenderString() const;
 
-    void AddIngredient(int itemKey, int quantity)
-    {
-        ingredients.push_back({ itemKey, quantity });
-    }
 public:
     int id;
     int resultItemKey;
     vector<AlchemyDataElement> ingredients;
-
 };
 
 #endif // !ALCHEMY_DATA_H

@@ -18,6 +18,12 @@ int InventoryItem::AddQuantity(int amount)
     return quantity;
 }
 
+int InventoryItem::SetQuantity(int amount)
+{
+    quantity = amount;
+    return quantity;
+}
+
 string InventoryItem::GetName() const
 {
     //TODO: 느려!

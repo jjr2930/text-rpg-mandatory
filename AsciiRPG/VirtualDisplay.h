@@ -32,7 +32,7 @@ public:
     const Vector2Int INTERACTION_POSITION = Vector2Int(80, 0);
     const string INTERACTION_TITLE = "===== Interaction =====";
 
-    const int WIDTH = 140;
+    const int WIDTH = 120;
     const int HEIGHT = 30;
     const int SLEEP_TIME_MS = 16;
 

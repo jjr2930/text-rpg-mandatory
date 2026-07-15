@@ -35,7 +35,7 @@ namespace Const
     {
         static constexpr int SPECIAL_KEY_PREFIX = -32; // Special key prefix for arrow keys and function keys
         static constexpr int BACKSPACE          = 8;
-        static constexpr int ESC                = 27;
+        static constexpr int ESCAPE                = 27;
         static constexpr int Up                 = 72;   
         static constexpr int Left               = 75;
         static constexpr int Right              = 77;

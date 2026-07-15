@@ -12,7 +12,7 @@ InteractableObjectTags InteractableObject::GetTag()
     return tag;
 }
 
-vector<string> InteractableObject::GetRenderStrings() const
+vector<string> InteractableObject::GetRenderStrings()
 {
     return vector<string>();
 }

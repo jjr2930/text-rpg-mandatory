@@ -26,6 +26,11 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     inventoryCursorIndex = -1;
     maxExp = LevelExpTable::GetInstance().GetExpForLevel(playerLevel + 1);
 
+    //TEST CRAFTING ITEM
+    inventory.emplace_back(10000, 20);
+    inventory.emplace_back(10001, 20);
+    //END
+   
     if (auto ptr = entity.lock())
     {
         playerPosition = ptr->GetComponent<Position>();
@@ -101,6 +106,49 @@ void Player::AddItem(const FieldItem& fieldItemm)
     }
 }
 
+void Player::AddItemQuantity(int tableKey, int quantity)
+{
+    bool found = false;
+    for (auto iter = inventory.begin(); iter != inventory.end(); ++iter)
+    {
+        if (iter->GetTableKey() == tableKey)
+        {
+            found = true;
+            iter->AddQuantity(quantity);
+            if (iter->GetQuantity() <= 0)
+            {
+                Logger::LogInfo(format("Item {0} removed from inventory.", iter->GetName()));
+                inventory.erase(iter);
+            }
+            return;
+        }
+    }
+
+    if (!found)
+    {
+        inventory.emplace_back(tableKey, quantity);
+    }
+
+    inventoryCursorIndex = min(inventoryCursorIndex, (int)inventory.size() - 1);
+}
+
+void Player::SetItemQuantity(int tableKey, int quantity)
+{
+    int foundIndex;
+    if (!HasItem(tableKey, &foundIndex))
+    {
+        Logger::LogInfo(format("Player does not have item: {0}", tableKey));
+        return;
+    }
+    
+    inventory[foundIndex].SetQuantity(quantity);
+
+    if(inventory[foundIndex].GetQuantity() <= 0)
+    {
+        inventory.erase(inventory.begin() + foundIndex);
+    }
+}
+
 int Player::GetLevel() const
 {
     return playerLevel;
@@ -144,6 +192,19 @@ int Player::GetInventoryCursorIndex() const
 const vector<InventoryItem>& Player::GetInventory() const
 {
     return inventory;
+}
+
+bool Player::HasEnoughItem(int tableKey, int quantity) const
+{
+    for (const auto& item : inventory)
+    {
+        if (item.GetTableKey() == tableKey && item.GetQuantity() >= quantity)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void Player::Attack()
@@ -270,25 +331,6 @@ bool Player::HasItem(int tableKey, int* index) const
         }
     }
     return false;
-}
-
-void Player::AddItemQuantity(int tableKey, int quantity)
-{
-    for (auto iter = inventory.begin(); iter != inventory.end(); ++iter)
-    {
-        if (iter->GetTableKey() == tableKey)
-        {
-            iter->AddQuantity(quantity);
-            if (iter->GetQuantity() <= 0)
-            {
-                Logger::LogInfo(format("Item {0} removed from inventory.", iter->GetName()));
-                inventory.erase(iter);
-            }
-            return;
-        }
-    }
-
-    inventoryCursorIndex = min(inventoryCursorIndex, (int)inventory.size() - 1);
 }
 
 void Player::ProcessIngameModeInput(Virtualkey inputKey)

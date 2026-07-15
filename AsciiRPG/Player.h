@@ -28,6 +28,8 @@ public:
     void HandleEvent(shared_ptr<EventParameter> message) override;
     void TakeDamage(int damage);
     void AddItem(const FieldItem& fieldItemm);
+    void AddItemQuantity(int tableKey, int quantity);
+    void SetItemQuantity(int tableKey, int quantity);
 
     int GetLevel() const;
     int GetExp() const;
@@ -37,16 +39,15 @@ public:
     int GetDefense() const;
     int GetInventoryElementCount() const;
     int GetInventoryCursorIndex() const;
-
     const vector<InventoryItem>& GetInventory() const;
+    bool HasEnoughItem(int tableKey, int quantity) const;
 
 private:
+    bool HasItem(int tableKey, int* index) const;
     void AddItems(vector<DropItemData>& dropItems);
     void Attack();
     void Interact();
     void AddExp(int exp);
-    bool HasItem(int tableKey, int* index) const;
-    void AddItemQuantity(int tableKey, int quantity);
 
     void ProcessIngameModeInput(Virtualkey inputKey);
     void ProcessInventoryModeInput(Virtualkey inputKey);

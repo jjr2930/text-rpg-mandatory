@@ -3,7 +3,7 @@
 
 #include <string>
 
-class ItemData;
+struct ItemData;
 
 using namespace std;
 
@@ -15,11 +15,13 @@ public:
         , quantity(quantity)
     {
     }
+    //setter or kindof setter
+    int AddQuantity(int amount);
+    int SetQuantity(int amount);
 
     //getter
     int GetTableKey() const; 
     int GetQuantity() const; 
-    int AddQuantity(int amount);
     string GetName() const;
     bool GetIsUsable() const;
     const ItemData* GetItemDataFromTable() const;

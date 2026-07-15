@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "IConstructionParameter.h"
+#include "Enums.h"
 
 #include <unordered_map>
 

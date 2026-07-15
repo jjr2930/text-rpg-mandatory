@@ -5,6 +5,7 @@
 #include "AlchemyData.h"
 
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -13,12 +14,12 @@ class AlchemyTable
     SINGLETON_WITH_INIT(AlchemyTable)
 public:
     void Init();
-    AlchemyData* GetAlchemyData(int id);
-    vector<AlchemyData>& GetAllAlchemyData();
+    shared_ptr<AlchemyData> GetAlchemyData(int id);
+    vector<shared_ptr<AlchemyData>>& GetAllAlchemyData();
 
 
 private:
-    vector<AlchemyData> alchemyDataList;
+    vector<shared_ptr<AlchemyData>> alchemyDataList;
 };
 
 #endif // !ALCHEMY_TABLE_H

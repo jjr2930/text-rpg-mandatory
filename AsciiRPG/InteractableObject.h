@@ -22,7 +22,7 @@ public:
     InteractableObject(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
     //getter
     InteractableObjectTags GetTag();
-    virtual vector<string> GetRenderStrings() const;
+    virtual vector<string> GetRenderStrings();
 
     //setter
     virtual void IncreaseCursorIndex();

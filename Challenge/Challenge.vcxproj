@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e810a6e2-0f43-40ba-884a-51b6731e1cd0}</ProjectGuid>
-    <RootNamespace>AsciiRPG</RootNamespace>
+    <ProjectGuid>{56cde574-1d51-41ba-a52b-a55c1e45aff4}</ProjectGuid>
+    <RootNamespace>Challenge</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,109 +139,32 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AlchemyData.cpp" />
-    <ClCompile Include="AlchemyShop.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="AlchemyTable.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="DateTime.cpp" />
-    <ClCompile Include="DropItemData.cpp" />
-    <ClCompile Include="DungeonObjectTag.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="Entrance.cpp" />
-    <ClCompile Include="Exit.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="CreationUtil.cpp" />
-    <ClCompile Include="GameManagerBridge.cpp" />
-    <ClCompile Include="GameTime.cpp" />
-    <ClCompile Include="IConstructionParameter.cpp" />
-    <ClCompile Include="InputController.cpp" />
-    <ClCompile Include="InteractableObject.cpp" />
-    <ClCompile Include="InventoryItem.cpp" />
-    <ClCompile Include="FieldItem.cpp" />
-    <ClCompile Include="ItemTable.cpp" />
-    <ClCompile Include="LevelExpTable.cpp" />
-    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="AlchemyWorkshop.cpp" />
+    <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Magician.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MathUtility.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Npc.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Position.cpp" />
-    <ClCompile Include="Random.cpp" />
-    <ClCompile Include="RandomMapGenerator.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Floor.cpp" />
-    <ClCompile Include="Stat.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector2Int.cpp" />
-    <ClCompile Include="VirtualDisplay.cpp" />
-    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="Slime.cpp" />
+    <ClCompile Include="Thief.cpp" />
+    <ClCompile Include="Warrior.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AlchemyData.h" />
-    <ClInclude Include="AlchemyShop.h" />
-    <ClInclude Include="AlchemyTable.h" />
-    <ClInclude Include="Component.h" />
+    <ClInclude Include="AlchemyWorkshop.h" />
+    <ClInclude Include="Archer.h" />
     <ClInclude Include="Const.h" />
-    <ClInclude Include="DateTime.h" />
-    <ClInclude Include="DropItemData.h" />
-    <ClInclude Include="DungeonObjectTag.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Entrance.h" />
     <ClInclude Include="Enums.h" />
-    <ClInclude Include="Exit.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="CreationUtil.h" />
-    <ClInclude Include="GameManagerBridge.h" />
-    <ClInclude Include="GameTime.h" />
-    <ClInclude Include="IConstructionParameter.h" />
-    <ClInclude Include="InputController.h" />
-    <ClInclude Include="InteractableObject.h" />
-    <ClInclude Include="InventoryItem.h" />
-    <ClInclude Include="FieldItem.h" />
-    <ClInclude Include="ItemTable.h" />
-    <ClInclude Include="ItemData.h" />
-    <ClInclude Include="LevelExpTable.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="EventParameter.h" />
-    <ClInclude Include="MathUtility.h" />
+    <ClInclude Include="Item.h" />
+    <ClInclude Include="Magician.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Monster.h" />
-    <ClInclude Include="Npc.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Position.h" />
-    <ClInclude Include="RandomMapGenerator.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SingletonMacro.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="Floor.h" />
-    <ClInclude Include="Stat.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector2Int.h" />
-    <ClInclude Include="VirtualDisplay.h" />
-    <ClInclude Include="Wall.h" />
+    <ClInclude Include="Slime.h" />
+    <ClInclude Include="Thief.h" />
+    <ClInclude Include="Warrior.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

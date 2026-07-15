@@ -1,6 +1,8 @@
 ﻿#ifndef ENUMS_H
 #define ENUMS_H
 
+#include "Const.h"
+
 enum class MapCellType
 {
     Normal,
@@ -68,7 +70,7 @@ enum class AlchemyShopState
     MainMenu = 0,
     RecipeList,
     FindRecipe,
-
+    Craft,
 };
 
 enum class InteractableObjectTags
@@ -94,12 +96,83 @@ enum class Virtualkey
     Left,
     Right,
     Down,
-    Escape
+    Escape,
+    Backspace,
 };
 
 class EnumUtility
 {
 public:
+    static const int ToKeyCode(Virtualkey key)
+    {
+        switch (key)
+        {
+            case Virtualkey::Up: return Const::Key::Up;
+            case Virtualkey::Left: return Const::Key::Left;
+            case Virtualkey::Right: return Const::Key::Right;
+            case Virtualkey::Down: return Const::Key::Down;
+            case Virtualkey::Escape: return Const::Key::ESCAPE;
+            case Virtualkey::Backspace: return Const::Key::BACKSPACE;
+            case Virtualkey::Space: return (int)' ';
+
+            case Virtualkey::A: return (int)'A';
+            case Virtualkey::B: return (int)'B';
+            case Virtualkey::C: return (int)'C';
+            case Virtualkey::D: return (int)'D';
+            case Virtualkey::E: return (int)'E';
+            case Virtualkey::F: return (int)'F';
+            case Virtualkey::G: return (int)'G';
+            case Virtualkey::H: return (int)'H';
+            case Virtualkey::I: return (int)'I';
+            case Virtualkey::J: return (int)'J';
+            case Virtualkey::K: return (int)'K';
+            case Virtualkey::L: return (int)'L';
+            case Virtualkey::M: return (int)'M';
+            case Virtualkey::N: return (int)'N';
+            case Virtualkey::O: return (int)'O';
+            case Virtualkey::P: return (int)'P';
+            case Virtualkey::Q: return (int)'Q';
+            case Virtualkey::R: return (int)'R';
+            case Virtualkey::S: return (int)'S';
+            case Virtualkey::T: return (int)'T';
+            case Virtualkey::U: return (int)'U';
+            case Virtualkey::V: return (int)'V';
+            case Virtualkey::W: return (int)'W';
+            case Virtualkey::X: return (int)'X';
+            case Virtualkey::Y: return (int)'Y';
+            case Virtualkey::Z: return (int)'Z';
+
+            case Virtualkey::a: return (int)'a';
+            case Virtualkey::b: return (int)'b';
+            case Virtualkey::c: return (int)'c';
+            case Virtualkey::d: return (int)'d';
+            case Virtualkey::e: return (int)'e';
+            case Virtualkey::f: return (int)'f';
+            case Virtualkey::g: return (int)'g';
+            case Virtualkey::h: return (int)'h';
+            case Virtualkey::i: return (int)'i';
+            case Virtualkey::j: return (int)'j';
+            case Virtualkey::k: return (int)'k';
+            case Virtualkey::l: return (int)'l';
+            case Virtualkey::m: return (int)'m';
+            case Virtualkey::n: return (int)'n';
+            case Virtualkey::o: return (int)'o';
+            case Virtualkey::p: return (int)'p';
+            case Virtualkey::q: return (int)'q';
+            case Virtualkey::r: return (int)'r';
+            case Virtualkey::s: return (int)'s';
+            case Virtualkey::t: return (int)'t';
+            case Virtualkey::u: return (int)'u';
+            case Virtualkey::v: return (int)'v';
+            case Virtualkey::w: return (int)'w';
+            case Virtualkey::x: return (int)'x';
+            case Virtualkey::y: return (int)'y';
+            case Virtualkey::z: return (int)'z';
+
+            default: return -1; // Return -1 for unsupported keys
+        }
+    }
+
     static const char* ToString(StatType statType)
     {
         switch (statType)

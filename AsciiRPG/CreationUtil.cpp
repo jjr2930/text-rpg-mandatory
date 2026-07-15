@@ -229,7 +229,7 @@ shared_ptr<Map> CreationUtil::CreateTownMap()
     townMapString.emplace_back("#      #                         #     #");
     townMapString.emplace_back("#      #           S    X        #     #");
     townMapString.emplace_back("#      #                         #     #");
-    townMapString.emplace_back("#      #         N               #     #");
+    townMapString.emplace_back("#      #                         #     #");
     townMapString.emplace_back("#      ###########################     #");
     townMapString.emplace_back("#                                      #");
     townMapString.emplace_back("#                                      #");

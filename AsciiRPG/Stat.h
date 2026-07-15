@@ -6,7 +6,7 @@
 
 #include <unordered_map>
 
-class ItemData;
+struct ItemData;
 
 class Stat : public Component
 {
