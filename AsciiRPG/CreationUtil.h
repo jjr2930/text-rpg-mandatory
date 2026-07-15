@@ -23,8 +23,9 @@ namespace CreationUtil
     shared_ptr<Entity> CreateVirtualDisplay();
     shared_ptr<Entity> CreateFieldItem(Vector2Int position, int itemKey, int quantity);
     shared_ptr<Entity> CreateNpc(Vector2Int position);
-
+    shared_ptr<Map> CreateBossRoom();
     shared_ptr<Map> CreateTownMap();
+
 };
 
 #endif

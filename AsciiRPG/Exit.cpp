@@ -27,7 +27,19 @@ void Exit::Update()
    auto [player, playerPosition] = components[0];
    if(MathUtility::IsOverlap(myPosition->GetPosition(), playerPosition->GetPosition(), 0))
    {
-       ObjectManager::GetInstance().BroadcastEvent(make_shared<EventParameter>(EventType::OnPlayerEnteredExit));
+       if (active)
+       {
+           ObjectManager::GetInstance().BroadcastEvent(make_shared<EventParameter>(EventType::OnPlayerEnteredExit));
+           active = false;
+       }
+   }
+   else
+   {
+       if(!active)
+       {
+           Logger::LogInfo("Player exited the Exit!");
+           active = true;
+       }
    }
 }
 

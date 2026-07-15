@@ -66,9 +66,12 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
 
         case EventType::OnStopInteraction:
             {
-                currentInputMode = CurrentInputMode::Ingame;
-                currentInteractableObject->OnDisable();
-                currentInteractableObject = nullptr;
+                if (currentInputMode == CurrentInputMode::Inetraction)
+                {
+                    currentInputMode = CurrentInputMode::Ingame;
+                    currentInteractableObject->OnDisable();
+                    currentInteractableObject = nullptr;
+                }
             }
             break;
 

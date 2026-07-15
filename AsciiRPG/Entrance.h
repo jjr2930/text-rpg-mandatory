@@ -1,4 +1,4 @@
-#ifndef ENTRANCE_H
+﻿#ifndef ENTRANCE_H
 #define ENTRANCE_H
 
 #include "Component.h"
@@ -8,6 +8,10 @@ using namespace std;
 
 class Position;
 
+/*
+* TODO: Entrance와 Exit를 하나로 합칠 수 있다.
+* 연결된 층을 적어주면 Entrance와 Exit를 하나로 합칠 수 있다.
+*/
 class Entrance : public Component
 {
 public:

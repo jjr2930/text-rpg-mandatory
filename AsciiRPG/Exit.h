@@ -17,7 +17,10 @@ public:
     void Update() override;
     void HandleEvent(shared_ptr<EventParameter> message) override;
 private:
-    shared_ptr<Position> myPosition;    
+    shared_ptr<Position> myPosition;
+    bool previousOverlap = false;
+    bool playerEntered = false;
+    bool active = false;
 };
 
 #endif // !EXIT_H

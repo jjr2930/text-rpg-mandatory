@@ -18,7 +18,7 @@ public:
     GameManager();
     void Update();
     void HandleEvent(shared_ptr<EventParameter> message);
-    void CreateCurrentMapObjects();
+    void CreateCurrentMapObjects(bool goingToDown);
     void ChangeMap(int newMapIndex);
 
 private:

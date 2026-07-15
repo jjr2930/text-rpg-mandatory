@@ -210,6 +210,32 @@ shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
     return npcEntity;
 }
 
+shared_ptr<Map> CreationUtil::CreateBossRoom()
+{
+    vector<string> bossRoomString;
+
+    bossRoomString.emplace_back("########################################");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#    S                                 #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                   B                  #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("########################################");
+}
+
 shared_ptr<Map> CreationUtil::CreateTownMap()
 {
     //clear

@@ -20,6 +20,7 @@ public:
 public:
     using Component::Component;
     InteractableObject(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
+    virtual ~InteractableObject();
     //getter
     InteractableObjectTags GetTag();
     virtual vector<string> GetRenderStrings();

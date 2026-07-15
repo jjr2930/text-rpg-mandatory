@@ -1,10 +1,16 @@
 #include "InteractableObject.h"
+#include "Logger.h"
 
 InteractableObject::InteractableObject(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
 {
     auto constructionParams = std::static_pointer_cast<ConstructionParameter>(params);
     tag = constructionParams->tag;
+}
+
+InteractableObject::~InteractableObject()
+{
+    Logger::LogInfo("InteractableObject destroyed: " + GetName() + " (ID: " + std::to_string(GetId()) + ")");
 }
 
 InteractableObjectTags InteractableObject::GetTag()

@@ -45,7 +45,7 @@ GameManager::GameManager()
     }
 
     currentMapIndex = 0;
-    CreateCurrentMapObjects();
+    CreateCurrentMapObjects(true);
 
     auto virtualDisplayEntity = CreationUtil::CreateVirtualDisplay();
     virtualDisplay = virtualDisplayEntity->GetComponent<VirtualDisplay>();
@@ -82,7 +82,7 @@ void GameManager::HandleEvent(shared_ptr<EventParameter> message)
     }
 }
 
-void GameManager::CreateCurrentMapObjects()
+void GameManager::CreateCurrentMapObjects(bool goingToDown)
 {
     for(int y = 0; y < Const::Map::DEFAULT_HEIGHT; ++y)
     {
@@ -98,15 +98,27 @@ void GameManager::CreateCurrentMapObjects()
                 case Const::Map::START:
                     {
                         CreationUtil::CreateEntrance(Vector2Int(x, y));
-                        auto playerComponents = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
-                        auto& [player, playerPosition] = playerComponents[0];
-                        playerPosition->SetPosition(x, y);
-                        Logger::LogInfo(format("Entrance Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
+                        if (goingToDown)
+                        {
+                            auto playerComponents = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
+                            auto& [player, playerPosition] = playerComponents[0];
+                            playerPosition->SetPosition(x, y);
+                            Logger::LogInfo(format("Entrance Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
+                        }
                     }
                     break;
 
                 case Const::Map::EXIT:
-                    CreationUtil::CreateExit(Vector2Int(x, y));
+                    {
+                        CreationUtil::CreateExit(Vector2Int(x, y));
+                        if (!goingToDown)
+                        {
+                            auto playerComponents = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
+                            auto& [player, playerPosition] = playerComponents[0];
+                            playerPosition->SetPosition(x, y);
+                            Logger::LogInfo(format("Exit Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
+                        }
+                    }
                     break;
 
                 case Const::Map::ITEM:
@@ -153,7 +165,9 @@ void GameManager::ChangeMap(int newMapIndex)
 
     ObjectManager::GetInstance().PrintCurrentState();
 
+    int oldIndex = currentMapIndex;
     currentMapIndex = newMapIndex;
-    CreateCurrentMapObjects();
+    CreateCurrentMapObjects(oldIndex < newMapIndex);
+
     Logger::LogInfo(format("change map, index: {}", currentMapIndex));
 }
