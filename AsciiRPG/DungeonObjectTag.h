@@ -4,6 +4,9 @@
 #include "Component.h"
 #include "IConstructionParameter.h"
 
+/// <summary>
+/// TODO: StaticObjectTag
+/// </summary>
 class DungeonObjectTag : public Component
 {
 public:

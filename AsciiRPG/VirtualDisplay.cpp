@@ -7,6 +7,7 @@
 #include "InventoryItem.h"
 #include "EventParameter.h"
 #include "Enums.h"
+#include "InteractableObject.h"
 
 #include <format>
 #include <iostream>
@@ -16,6 +17,8 @@ using namespace std;
 VirtualDisplay::VirtualDisplay(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
     , currentBufferIndex(0)
+    , drawMode(RenderMode::Ingame)
+    , currentInteractableObject(nullptr)
 {
     hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -53,16 +56,17 @@ VirtualDisplay::~VirtualDisplay()
 
 void VirtualDisplay::Render()
 {
-    RenderIngame();
-
-    FindDiff();
-
-    for (auto& d : diff)
+    switch (drawMode)
     {
-        DrawChar(d.position.x, d.position.y, d.character);
+        case RenderMode::None:
+            break;
+        case RenderMode::Ingame:
+            RenderIngame(); 
+            break;
+        default:
+            break;
     }
 
-    currentBufferIndex = (currentBufferIndex + 1) % 2;
 }
 
 void VirtualDisplay::DrawChar(int x, int y, char character)
@@ -90,8 +94,25 @@ void VirtualDisplay::WriteString(int indexToWrite, int x, int y, const string& s
 }
 void VirtualDisplay::HandleEvent(shared_ptr<EventParameter> message)
 {
-    
+    switch (message->eventType)
+    {
+        case EventType::OnStartInteraction:
+            {
+                InteractionStartEventParameter* interactMessage = static_cast<InteractionStartEventParameter*>(message.get());
+                currentInteractableObject = interactMessage->interactableObject;
+            }
+            break;
+
+        case EventType::OnStopInteraction:
+            {
+                currentInteractableObject = nullptr;
+            }
+            break;
+        default:
+            break;
+    }
 }
+
 void VirtualDisplay::ClearBuffer(int index)
 {
     char** bufferToClear = buffer[index];
@@ -211,4 +232,25 @@ void VirtualDisplay::RenderIngame()
                 , format("  {0} x {1}  ", inventory[i].GetName(), inventory[i].GetQuantity()));
         }
     }
+
+    //write interaction
+    WriteString(nextBufferIndex, INTERACTION_POSITION.x, INTERACTION_POSITION.y, INTERACTION_TITLE);
+    if (nullptr != currentInteractableObject)
+    {
+        auto renderStrings = currentInteractableObject->GetRenderStrings();
+        for (int i = 0; i < renderStrings.size(); ++i)
+        {
+            WriteString(nextBufferIndex, INTERACTION_POSITION.x, INTERACTION_POSITION.y + i + 1, renderStrings[i]);
+        }
+    }
+
+    //
+    FindDiff();
+
+    for (auto& d : diff)
+    {
+        DrawChar(d.position.x, d.position.y, d.character);
+    }
+
+    currentBufferIndex = (currentBufferIndex + 1) % 2;
 }

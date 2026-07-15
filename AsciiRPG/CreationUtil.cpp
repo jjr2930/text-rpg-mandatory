@@ -17,6 +17,9 @@
 #include "Stat.h"
 #include "Map.h"
 #include "Npc.h"
+#include "InteractableObject.h"
+#include "Enums.h"
+#include "AlchemyShop.h"
 
 #include <string>
 #include <format>
@@ -201,8 +204,8 @@ shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
 
     npcEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, npcEntity));
     npcEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::NPC, npcEntity));
-    npcEntity->AddComponent<Npc>(std::make_shared<Component::ConstructionParamterBase>(npcEntity));
     npcEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(npcEntity, Const::Map::NPC));
+    npcEntity->AddComponent<AlchemyShop>(std::make_shared<InteractableObject::ConstructionParameter>(npcEntity, InteractableObjectTags::AlchemyShop));
 
     return npcEntity;
 }
@@ -222,11 +225,11 @@ shared_ptr<Map> CreationUtil::CreateTownMap()
     townMapString.emplace_back("#                                      #");
     townMapString.emplace_back("#                                      #");
     townMapString.emplace_back("#      ###########################     #");
-    townMapString.emplace_back("#      #    N                    #     #");
+    townMapString.emplace_back("#      #         N               #     #");
     townMapString.emplace_back("#      #                         #     #");
     townMapString.emplace_back("#      #           S    X        #     #");
     townMapString.emplace_back("#      #                         #     #");
-    townMapString.emplace_back("#      #    N                    #     #");
+    townMapString.emplace_back("#      #         N               #     #");
     townMapString.emplace_back("#      ###########################     #");
     townMapString.emplace_back("#                                      #");
     townMapString.emplace_back("#                                      #");

@@ -8,9 +8,13 @@
 
 #include "Vector2Int.h"
 #include "Component.h"
+#include "Enums.h"
 
 #include <string>
 #include <vector>
+
+class AlchemyShop;
+class InteractableObject;
 
 using namespace std;
 
@@ -25,9 +29,10 @@ public:
     const Vector2Int INVENTORY_POSITION = Vector2Int(50, 10);
     const string INVENTORY_TITLE = "===== Inventory =====";
 
-    const Vector2Int INVENTORY_LOG_POSITION = Vector2Int(50, 0);
+    const Vector2Int INTERACTION_POSITION = Vector2Int(80, 0);
+    const string INTERACTION_TITLE = "===== Interaction =====";
 
-    const int WIDTH = 100;
+    const int WIDTH = 140;
     const int HEIGHT = 30;
     const int SLEEP_TIME_MS = 16;
 
@@ -48,6 +53,7 @@ public:
     ~VirtualDisplay();
 
     void Render();
+    void RenderIngame();
     void DrawChar(int x, int y, char character);
     void WriteString(int indexToWrite, int x, int y, const string& str);
     void HandleEvent(shared_ptr<EventParameter> message) override;
@@ -56,13 +62,14 @@ private:
     void ClearBuffer(int index);
     void Swap();
     bool FindDiff();
-    void RenderIngame();
 
 private:
     //double buffering;
     char** buffer[2];
     int currentBufferIndex;
     vector<DiffElement> diff;
+    RenderMode drawMode;
+    shared_ptr<InteractableObject> currentInteractableObject;
 
     HANDLE hConsole;
 };

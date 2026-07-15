@@ -10,6 +10,7 @@
 class Position;
 class FieldItem;
 class Stat;
+class InteractableObject;
 
 class Player : public Component
 {
@@ -17,7 +18,8 @@ public:
     enum class CurrentInputMode
     {
         Ingame,
-        Inventory
+        Inventory,
+        Inetraction,
     };
 public:
     using Component::Component;
@@ -52,6 +54,7 @@ private:
 private:
     shared_ptr<Position> playerPosition;
     shared_ptr<Stat> playerStat;
+    shared_ptr<InteractableObject> currentInteractableObject;
 
     vector<InventoryItem> inventory;
 

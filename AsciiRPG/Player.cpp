@@ -13,7 +13,7 @@
 #include "InteractableObject.h"
 
 #include <format>
-
+#include <cassert>
 
 using namespace std;
 
@@ -49,9 +49,21 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
                     case CurrentInputMode::Inventory:
                         ProcessInventoryModeInput(inputChar);
                         break;
+
+                    case CurrentInputMode::Inetraction:
+                        //in this case, the input is handled by the current interactable object
+                        break;
                     default:
                         break;
                 }
+            }
+            break;
+
+        case EventType::OnStopInteraction:
+            {
+                currentInputMode = CurrentInputMode::Ingame;
+                currentInteractableObject->OnDisable();
+                currentInteractableObject = nullptr;
             }
             break;
 
@@ -180,6 +192,13 @@ void Player::Interact()
     }
 
     auto& interactableObject = interactableObjectsInRange[0];
+
+    currentInteractableObject = interactableObject;
+    currentInteractableObject->Reset();
+
+    currentInputMode = CurrentInputMode::Inetraction;
+
+    ObjectManager::GetInstance().BroadcastEvent(make_shared<InteractionStartEventParameter>(interactableObject));
 }
 
 void Player::AddItems(vector<DropItemData>& dropItems)
@@ -238,7 +257,7 @@ void Player::AddExp(int exp)
 
 bool Player::HasItem(int tableKey, int* index) const
 {
-    int count = inventory.size();
+    int count = static_cast<int>(inventory.size());
     for (int i = 0; i < count; ++i)
     {
         if (inventory[i].GetTableKey() == tableKey)

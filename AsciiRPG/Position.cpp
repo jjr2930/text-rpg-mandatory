@@ -4,6 +4,7 @@
 #include "Wall.h"
 #include "Monster.h"
 #include "Npc.h"
+#include "InteractableObject.h"
 
 Position::Position(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
@@ -75,7 +76,7 @@ bool Position::CanMoveTo(shared_ptr<Position> position, int newX, int newY)
                 return false;
             }
 
-            if(entityPtr->HasComponent<Npc>())
+            if(entityPtr->HasComponent<InteractableObject>())
             {
                 return false;
             }

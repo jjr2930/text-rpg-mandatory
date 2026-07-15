@@ -34,8 +34,14 @@ enum class EventType
     /// 입구에 도착했을 때 발생하는 이벤트
     /// </summary>
     OnPlayerEnteredEntrance,
-
-    OnInteractWithObject,   
+    /// <summary>
+    /// 어떤 오브젝트와 상호작용을 시작했을 때 발생하는 이벤트
+    /// </summary>
+    OnStartInteraction,   
+    /// <summary>
+    /// 상호작용 끝날때
+    /// </summary>
+    OnStopInteraction,
 };
 
 enum class StatType
@@ -61,7 +67,37 @@ enum class AlchemyShopState
     None = -1,
     MainMenu = 0,
     RecipeList,
+    FindRecipe,
 
+};
+
+enum class InteractableObjectTags
+{
+    None= -1,
+    AlchemyShop = 0,
+};
+
+enum class RenderMode
+{
+    None = -1,
+    Ingame = 0,
+};
+
+enum class Virtualkey
+{
+    None = -1,
+    w,W,
+    a,A,
+    s,S,
+    d,D,
+    i,I,
+    e,E,
+
+    Space,
+    Up,
+    Left,
+    Right,
+    Down,
 };
 
 class EnumUtility
