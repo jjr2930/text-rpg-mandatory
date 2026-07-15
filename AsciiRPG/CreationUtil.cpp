@@ -210,7 +210,7 @@ shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
     return npcEntity;
 }
 
-shared_ptr<Map> CreationUtil::CreateBossRoom()
+shared_ptr<Map> CreationUtil::CreateDragonRoom()
 {
     vector<string> bossRoomString;
 
@@ -223,8 +223,8 @@ shared_ptr<Map> CreationUtil::CreateBossRoom()
     bossRoomString.emplace_back("#                                      #");
     bossRoomString.emplace_back("#                                      #");
     bossRoomString.emplace_back("#                                      #");
-    bossRoomString.emplace_back("#                   B                  #");
     bossRoomString.emplace_back("#                                      #");
+    bossRoomString.emplace_back("#                   D                  #");
     bossRoomString.emplace_back("#                                      #");
     bossRoomString.emplace_back("#                                      #");
     bossRoomString.emplace_back("#                                      #");
@@ -234,6 +234,10 @@ shared_ptr<Map> CreationUtil::CreateBossRoom()
     bossRoomString.emplace_back("#                                      #");
     bossRoomString.emplace_back("#                                      #");
     bossRoomString.emplace_back("########################################");
+    
+    shared_ptr<Map> bossRoomMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
+    bossRoomMap->From(bossRoomString);
+    return bossRoomMap;
 }
 
 shared_ptr<Map> CreationUtil::CreateTownMap()
