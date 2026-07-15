@@ -18,6 +18,26 @@ InputController::InputController(int64_t id, const std::string& name, std::share
 
     if (auto ptr = entity.lock())
         this->playerPositionComponent = ptr->GetComponent<Position>();
+
+    normalKeyMap.insert( 
+        { 
+            { 'w', Virtualkey::w }, { 'W', Virtualkey::W },
+            { 's', Virtualkey::s }, { 'S', Virtualkey::S },
+            { 'a', Virtualkey::a }, { 'A', Virtualkey::A },
+            { 'd', Virtualkey::d }, { 'D', Virtualkey::D },
+            { ' ', Virtualkey::Space },
+            { 'i', Virtualkey::I }, { 'I', Virtualkey::I },
+            { 'e', Virtualkey::E }, { 'E', Virtualkey::E } 
+        });
+
+    specialKeyMap.insert(
+        { 
+            { Const::Key::Up, Virtualkey::Up }, 
+            { Const::Key::Down, Virtualkey::Down }, 
+            { Const::Key::Left, Virtualkey::Left }, 
+            { Const::Key::Right, Virtualkey::Right }, 
+            { Const::Key::ESC, Virtualkey::Escape } 
+        });
 }
 
 void InputController::Update()
@@ -25,31 +45,36 @@ void InputController::Update()
     if (!_kbhit())
         return;
 
+    Virtualkey virtualKey = Virtualkey::None;
+
     //support only one input per frame
     char input = _getch();
-    Logger::LogInfo(std::format("InputController::Update() - Input received: '{}'", (int)input));
     if (input == Const::Key::SPECIAL_KEY_PREFIX)
     {
         //consume the next character for special keys
         input = _getch();
-        Logger::LogInfo(std::format("InputController::Update() - Special key received: '{}'", (int)input));
+        if (specialKeyMap.find(input) == specialKeyMap.end())
+        {
+            Logger::LogInfo(format("Special key {0} is not in the whitelist.", static_cast<int>(input)));
+            return;
+        }
+        else
+        {
+            virtualKey = specialKeyMap[input];
+        }
     }
-    switch (input)
+    else
     {
-        case 'w': case 'W':
-        case 's': case 'S':
-        case 'a': case 'A':
-        case 'd': case 'D':
-        case ' ': 
-        case 'i': case 'I':
-        case 'e': case 'E':
-        case Const::Key::Up:
-        case const:
-        case Const::Key::ESC:
-            ObjectManager::GetInstance().BroadcastEvent(std::make_shared<InputEventParameter>(input));
-            break;
-
-        default:
-            break;
+        if (normalKeyMap.find(input) == normalKeyMap.end())
+        {
+            Logger::LogInfo(format("Normal key {0} is not in the whitelist.", input));
+            return;
+        }
+        else
+        {
+            virtualKey = normalKeyMap[input];
+        }
     }
+
+    ObjectManager::GetInstance().BroadcastEvent(std::make_shared<InputEventParameter>(virtualKey));
 }

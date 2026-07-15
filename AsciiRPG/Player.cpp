@@ -40,14 +40,14 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
         case EventType::KeyPressed:
             {
                 InputEventParameter* inputMessage = static_cast<InputEventParameter*>(message.get());
-                char inputChar = inputMessage->inputChar;
+                Virtualkey inputKey = inputMessage->key;
                 switch (currentInputMode)
                 {
                     case CurrentInputMode::Ingame:
-                        ProcessIngameModeInput(inputChar);
+                        ProcessIngameModeInput(inputKey);
                         break;
                     case CurrentInputMode::Inventory:
-                        ProcessInventoryModeInput(inputChar);
+                        ProcessInventoryModeInput(inputKey);
                         break;
 
                     case CurrentInputMode::Inetraction:
@@ -291,41 +291,41 @@ void Player::AddItemQuantity(int tableKey, int quantity)
     inventoryCursorIndex = min(inventoryCursorIndex, (int)inventory.size() - 1);
 }
 
-void Player::ProcessIngameModeInput(char inputChar)
+void Player::ProcessIngameModeInput(Virtualkey inputKey)
 {
-    switch (inputChar)
+    switch (inputKey)
     {
-        case 'w':
-        case 'W':
+        case Virtualkey::w:
+        case Virtualkey::W:
             playerPosition->TryMoveYOnly(-1);
             break;
                     
-        case 's':
-        case 'S':
+        case Virtualkey::s:
+        case Virtualkey::S:
             playerPosition->TryMoveYOnly(1);
             break;
 
-        case 'a':
-        case 'A':
+        case Virtualkey::a:
+        case Virtualkey::A:
             playerPosition->TryMoveXOnly(-1);
             break;
 
-        case 'd':
-        case 'D':
+        case Virtualkey::d:
+        case Virtualkey::D:
             playerPosition->TryMoveXOnly(1);
             break;
 
-        case 'e':
-        case 'E':
+        case Virtualkey::e:
+        case Virtualkey::E:
             Interact();
             break;
 
-        case ' ':
+        case Virtualkey::Space:
             Attack();
             break;
 
-        case 'i':
-        case 'I':
+        case Virtualkey::i:
+        case Virtualkey::I:
             currentInputMode = CurrentInputMode::Inventory;
             inventoryCursorIndex = 0;
             break;
@@ -335,27 +335,27 @@ void Player::ProcessIngameModeInput(char inputChar)
     }
 }
 
-void Player::ProcessInventoryModeInput(char inputChar)
+void Player::ProcessInventoryModeInput(Virtualkey inputKey)
 {
-    switch (inputChar)
+    switch (inputKey)
     {
-        case 'w':
-        case 'W':
+        case Virtualkey::w:
+        case Virtualkey::W:
             inventoryCursorIndex = max(0, inventoryCursorIndex - 1);
             break;
 
-        case 's':
-        case 'S':
+        case Virtualkey::s:
+        case Virtualkey::S: 
             inventoryCursorIndex = min((int)inventory.size() - 1, inventoryCursorIndex + 1);
             break;
 
-        case 'i':
-        case 'I':
+        case Virtualkey::i:
+        case Virtualkey::I:
             currentInputMode = CurrentInputMode::Ingame;
             inventoryCursorIndex = -1;
             break;
 
-        case ' ':
+        case Virtualkey::Space:
             {
                 if (inventory.size() == 0)
                     break;

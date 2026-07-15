@@ -32,8 +32,8 @@ public:
     void HandleEvent(shared_ptr<EventParameter> message) override;
 
 private:
-    void ProcessMainMenuInput(char inputChar);
-    void ProcessRecipeListInput(char inputChar);
+    void ProcessMainMenuInput(Virtualkey inputKey);
+    void ProcessRecipeListInput(Virtualkey inputKey);
 
 private:
     vector<string> mainMenuOptions;

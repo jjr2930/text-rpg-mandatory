@@ -48,8 +48,8 @@ private:
     bool HasItem(int tableKey, int* index) const;
     void AddItemQuantity(int tableKey, int quantity);
 
-    void ProcessIngameModeInput(char inputChar);
-    void ProcessInventoryModeInput(char inputChar);
+    void ProcessIngameModeInput(Virtualkey inputKey);
+    void ProcessInventoryModeInput(Virtualkey inputKey);
 
 private:
     shared_ptr<Position> playerPosition;

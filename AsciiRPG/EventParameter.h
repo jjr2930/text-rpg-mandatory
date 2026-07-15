@@ -14,13 +14,13 @@ public:
 class InputEventParameter : public EventParameter
 {
 public:
-    InputEventParameter(char inputChar)
-        : inputChar(inputChar)
+    InputEventParameter(Virtualkey key)
+        : key(key)
     {
         this->eventType = EventType::KeyPressed;
     }
 
-    char inputChar;
+    Virtualkey key;
 };
 
 class InteractionStartEventParameter : public EventParameter

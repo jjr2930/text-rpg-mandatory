@@ -202,11 +202,11 @@ void AlchemyShop::HandleEvent(shared_ptr<EventParameter> message)
                 switch (stateStack.top())
                 {
                     case AlchemyShopState::MainMenu:
-                        ProcessMainMenuInput(inputMessage->inputChar);
+                        ProcessMainMenuInput(inputMessage->key);
                         break;
 
                     case AlchemyShopState::RecipeList:
-                        ProcessRecipeListInput(inputMessage->inputChar);
+                        ProcessRecipeListInput(inputMessage->key);
                         break;
 
 
@@ -220,23 +220,23 @@ void AlchemyShop::HandleEvent(shared_ptr<EventParameter> message)
     }
 }
 
-void AlchemyShop::ProcessMainMenuInput(char inputChar)
+void AlchemyShop::ProcessMainMenuInput(Virtualkey inputKey)
 {
-    switch (inputChar)
+    switch (inputKey)
     {
-        case 'w':  case 'W':
+        case Virtualkey::Up: 
             DecreaseCursorIndex();
             break;
 
-        case 's':  case 'S':
+        case Virtualkey::Down:  
             IncreaseCursorIndex();
             break;
 
-        case ' ': // Enter key
+        case Virtualkey::Space: // Enter key
             ConfirmSelection();
             break;
 
-        case Const::Key::ESC: // Escape key
+        case Virtualkey::Escape: // Escape key
             OnCancel();
             break;
 
@@ -245,12 +245,23 @@ void AlchemyShop::ProcessMainMenuInput(char inputChar)
     }
 }
 
-void AlchemyShop::ProcessRecipeListInput(char inputChar)
+void AlchemyShop::ProcessRecipeListInput(Virtualkey inputKey)
 {
-    //switch (inputChar)
-    //{
-    //    case 
-    //    default:
-    //        break;
-    //}
+    switch (inputKey)
+    {
+        case Virtualkey::Up:
+            DecreaseCursorIndex();
+            break;
+
+        case Virtualkey::Left:
+            IncreaseCursorIndex();
+            break;
+
+        case Virtualkey::Escape:
+            OnCancel();
+            break;
+
+        default:
+            break;
+    }
 }
