@@ -56,8 +56,8 @@ vector<DropItemData>& Monster::GetDropItems()
 
 void Monster::Update()
 {
-    auto components = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
-    if (components.size() != 1)
+    auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
+    if (!player || !playerPosition)
     {
         Logger::LogError("There should be exactly one player in the game.");
         return;
@@ -65,7 +65,6 @@ void Monster::Update()
 
     Vector2Int myPosition = monsterPosition->GetPosition();
 
-    auto& [player, playerPosition] = components[0];
     if (!MathUtility::IsOverlap(myPosition, playerPosition->GetPosition(), 1))
     {
         fistOverlap = false;

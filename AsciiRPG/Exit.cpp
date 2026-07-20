@@ -21,10 +21,8 @@ void Exit::Update()
     /*
     * 매우 비효율 적이군
     */
-   auto components = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
-   //i need only one
-
-   auto [player, playerPosition] = components[0];
+   auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
+   
    if(MathUtility::IsOverlap(myPosition->GetPosition(), playerPosition->GetPosition(), 0))
    {
        if (active)

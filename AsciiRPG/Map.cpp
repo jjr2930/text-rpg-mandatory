@@ -96,7 +96,7 @@ void Map::CollectMapData()
 {
     Clear();
 
-    auto pairs = ObjectManager::GetInstance().GetComponentsWithTypes<DungeonObjectTag, Position>();
+    auto pairs = ObjectManager::GetInstance().GetComponentTupleVector<DungeonObjectTag, Position>();
     for (auto& [tag, position] : pairs)
     {
         Vector2Int pos = position->GetPosition();

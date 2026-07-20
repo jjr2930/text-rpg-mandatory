@@ -42,9 +42,7 @@ int FieldItem::GetQuantity() const
 
 void FieldItem::Update()
 {
-    auto players = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
-    //i need only one
-    auto& [player, position] = players[0];
+    auto [player, position] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
 
     if(MathUtility::IsOverlap(myPosition->GetPosition(), position->GetPosition(), 0))
     {

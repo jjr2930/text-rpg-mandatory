@@ -212,7 +212,7 @@ bool Player::HasEnoughItem(int tableKey, int quantity) const
 
 void Player::Attack()
 {
-    auto components = ObjectManager::GetInstance().GetComponentsWithTypes<Monster, Position>();
+    auto components = ObjectManager::GetInstance().GetComponentTupleVector<Monster, Position>();
     Vector2Int position = playerPosition->GetPosition();
     for (auto& [monster, monsterPosition] : components)
     {
@@ -235,7 +235,7 @@ void Player::Attack()
 
 void Player::Interact()
 {
-    auto components = ObjectManager::GetInstance().GetComponentsWithTypes<InteractableObject, Position>();
+    auto components = ObjectManager::GetInstance().GetComponentTupleVector<InteractableObject, Position>();
 
     vector<shared_ptr<InteractableObject>> interactableObjectsInRange;
     interactableObjectsInRange.reserve(components.size());

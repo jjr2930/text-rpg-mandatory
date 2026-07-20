@@ -20,9 +20,8 @@ DragonMovingState::DragonMovingState(double movingDelay)
 
 void DragonMovingState::Start()
 {
-    auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentWithType<Player, Position>();
-
-    auto [dragon, dragonPosition] = ObjectManager::GetInstance().GetComponentWithType<Dragon, Position>();
+    auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
+    auto [dragon, dragonPosition] = ObjectManager::GetInstance().GetComponentTuple<Dragon, Position>();
  
     this->playerPosition = playerPosition;
     this->dragonPosition = dragonPosition;
@@ -64,7 +63,7 @@ void DragonMovingState::PathfindToPlayer()
 {
     //very ineffective, but it is logically simple.
 
-    auto tags = ObjectManager::GetInstance().GetComponentsWithTypes<DungeonObjectTag, Position>();
+    auto tags = ObjectManager::GetInstance().GetComponentTupleVector<DungeonObjectTag, Position>();
 
     char map[Const::Map::DEFAULT_HEIGHT][Const::Map::DEFAULT_WIDTH]
         = { Const::Map::EMPTY };

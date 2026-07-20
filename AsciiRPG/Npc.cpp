@@ -24,7 +24,7 @@ void Npc::Update()
 {
     assert(npcPosition != nullptr && "Npc position is null");
 
-    auto found = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
+    auto found = ObjectManager::GetInstance().GetComponentsWithTypes2<Player, Position>();
     if (found.size() != 1)
     {
         Logger::LogError(format("player count : {}" , found.size()));

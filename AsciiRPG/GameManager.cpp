@@ -103,8 +103,7 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
                         CreationUtil::CreateEntrance(Vector2Int(x, y));
                         if (goingToDown)
                         {
-                            auto playerComponents = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
-                            auto& [player, playerPosition] = playerComponents[0];
+                            auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
                             playerPosition->SetPosition(x, y);
                             Logger::LogInfo(format("Entrance Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
                         }
@@ -116,8 +115,7 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
                         CreationUtil::CreateExit(Vector2Int(x, y));
                         if (!goingToDown)
                         {
-                            auto playerComponents = ObjectManager::GetInstance().GetComponentsWithTypes<Player, Position>();
-                            auto& [player, playerPosition] = playerComponents[0];
+                            auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
                             playerPosition->SetPosition(x, y);
                             Logger::LogInfo(format("Exit Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
                         }
