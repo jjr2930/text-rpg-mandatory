@@ -24,15 +24,8 @@ void Npc::Update()
 {
     assert(npcPosition != nullptr && "Npc position is null");
 
-    auto found = ObjectManager::GetInstance().GetComponentsWithTypes2<Player, Position>();
-    if (found.size() != 1)
-    {
-        Logger::LogError(format("player count : {}" , found.size()));
-        return;
-    }
-
-    auto& [player, position] = found[0];
-
+    auto [player, position] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
+    
     if(MathUtility::IsOverlap(npcPosition->GetPosition(), position->GetPosition(), 1))
     {
         if (lastOverlapEntityId != player->GetId())
