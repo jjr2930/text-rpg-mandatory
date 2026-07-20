@@ -20,6 +20,7 @@
 #include "InteractableObject.h"
 #include "Enums.h"
 #include "AlchemyShop.h"
+#include "Dragon.h"
 
 #include <string>
 #include <format>
@@ -208,6 +209,24 @@ shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
     npcEntity->AddComponent<AlchemyShop>(std::make_shared<InteractableObject::ConstructionParameter>(npcEntity, InteractableObjectTags::AlchemyShop));
 
     return npcEntity;
+}
+
+shared_ptr<Entity> CreationUtil::CreateDragon(Vector2Int position)
+{
+    auto dragonEntity = ObjectManager::GetInstance().CreateEntity();
+    auto dragonPosition = dragonEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, dragonEntity));
+    dragonPosition->SetName(format("{}'s Position", dragonEntity->GetName()));
+
+    auto dragonRenderer = dragonEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::DRAGON, dragonEntity));
+    dragonRenderer->SetName(format("{}'s Renderer", dragonEntity->GetName()));
+
+    auto dragonComponent = dragonEntity->AddComponent<Dragon>(std::make_shared<Component::ConstructionParamterBase>(dragonEntity));
+    dragonComponent->SetName(format("{}'s Dragon", dragonEntity->GetName()));
+
+    auto dragonDungeonObjectTag = dragonEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(dragonEntity, Const::Map::DRAGON));
+    dragonDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", dragonEntity->GetName()));
+
+    return dragonEntity;
 }
 
 shared_ptr<Map> CreationUtil::CreateDragonRoom()

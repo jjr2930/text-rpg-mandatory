@@ -5,11 +5,13 @@ using namespace std;
 
 SINGLETON_INITIALIZER(GameTime);
 
-/// <summary>
-/// 초로 변환된 게임 시간을 반환합니다.
-/// </summary>
-/// <returns></returns>
-double GameTime::GetTime() const
+
+double GameTime::GetTime()
+{
+    return GetInstance().OnGetTime();
+}
+
+double GameTime::OnGetTime() const
 {
     auto now = chrono::high_resolution_clock::now();
 

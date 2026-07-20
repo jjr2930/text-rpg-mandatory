@@ -12,9 +12,10 @@ public :
     SINGLETON_WITH_INIT(GameTime)
 
 public:
-    double GetTime() const;
+    static double GetTime();
 
 private:
+    double OnGetTime() const;
     void Init();
 
 private:

@@ -33,16 +33,19 @@ GameManager::GameManager()
     shared_ptr<Map> townMap = CreationUtil::CreateTownMap();
     maps.emplace_back(townMap);
 
-    RandomMapGenerator rmg;
+    //RandomMapGenerator rmg;
 
-    for (int i = 1; i < Const::Map::DUNGEON_DEPTH + 1; ++i)
-    {
-        shared_ptr<Map> newMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
+    //for (int i = 1; i < Const::Map::DUNGEON_DEPTH + 1; ++i)
+    //{
+    //    shared_ptr<Map> newMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
 
-        rmg.GenerateRandomMap(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT, newMap);
+    //    rmg.GenerateRandomMap(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT, newMap);
 
-        maps.emplace_back(newMap);
-    }
+    //    maps.emplace_back(newMap);
+    //}
+
+    shared_ptr<Map> dragonRoom = CreationUtil::CreateDragonRoom();
+    maps.emplace_back(dragonRoom);
 
     currentMapIndex = 0;
     CreateCurrentMapObjects(true);
@@ -134,6 +137,10 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
 
                 case Const::Map::NPC:
                     CreationUtil::CreateNpc(Vector2Int(x, y));
+                    break;
+
+                case Const::Map::DRAGON:
+                    CreationUtil::CreateDragon(Vector2Int(x, y));
                     break;
 
                 default:

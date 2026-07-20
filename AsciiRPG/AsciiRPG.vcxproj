@@ -156,6 +156,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DragonAttackState.cpp" />
+    <ClCompile Include="DragonIdleState.cpp" />
+    <ClCompile Include="DragonMovingState.cpp" />
+    <ClCompile Include="DragonStateMachine.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="Dragon.cpp" />
@@ -193,6 +197,7 @@
     <ClCompile Include="Stat.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector2Int.cpp" />
     <ClCompile Include="VirtualDisplay.cpp" />
@@ -202,6 +207,10 @@
     <ClInclude Include="AlchemyData.h" />
     <ClInclude Include="AlchemyShop.h" />
     <ClInclude Include="AlchemyTable.h" />
+    <ClInclude Include="DragonAttackState.h" />
+    <ClInclude Include="DragonIdleState.h" />
+    <ClInclude Include="DragonMovingState.h" />
+    <ClInclude Include="DragonStateMachine.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Const.h" />
     <ClInclude Include="DateTime.h" />
@@ -228,6 +237,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="EventParameter.h" />
     <ClInclude Include="MathUtility.h" />
+    <ClInclude Include="MinMax.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Npc.h" />
     <ClInclude Include="Object.h" />
@@ -244,10 +254,14 @@
     <ClInclude Include="Stat.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector2Int.h" />
     <ClInclude Include="VirtualDisplay.h" />
     <ClInclude Include="Wall.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

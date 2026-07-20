@@ -19,6 +19,7 @@ namespace Const
         constexpr char EMPTY = ' ';
         constexpr char PLAYER = 'P';
         constexpr char NPC = 'N';
+        constexpr char DRAGON = 'D';
     }
 
     namespace Stat

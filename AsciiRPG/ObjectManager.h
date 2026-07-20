@@ -99,6 +99,27 @@ public:
         return result;
     }
 
+
+    /*
+    * TODO: GetComponentsWithTypes를 사용하는 부분들 중 첫 번 째 원소만 사용하는 경우는 모두 이 함수로 사용을 변경한다.
+    */
+    template<class T1, class T2,
+        class = enable_if_t<is_base_of<Component, T1>::value>,
+        class = enable_if_t<is_base_of<Component, T2>::value>>
+    tuple<shared_ptr<T1>, shared_ptr<T2>> GetComponentWithType()
+    {
+        for (const auto& entity : createdEntities)
+        {
+            auto component1 = entity->template GetComponent<T1>();
+            auto component2 = entity->template GetComponent<T2>();
+            if (component1 && component2)
+            {
+                return make_tuple(component1, component2);
+            }
+        }
+        return make_tuple(nullptr, nullptr);
+    }
+
     /// <summary>
     /// 이거 왜케 더러워
     /// </summary>
