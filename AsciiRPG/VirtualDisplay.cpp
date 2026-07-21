@@ -179,7 +179,8 @@ void VirtualDisplay::RenderIngame()
             continue;
         }
 
-        nextBuffer[pos.y][pos.x] = r->GetToPrint();
+        char toPrint = r->GetToPrint();
+        nextBuffer[pos.y][pos.x] = toPrint;
     }
 
     //write recently logged messages

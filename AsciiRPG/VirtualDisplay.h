@@ -2,9 +2,22 @@
 #ifndef VIRUTAL_DISPLAY_H
 #define VIRUTAL_DISPLAY_H
 
+////////////////////////////////
+/// START DISABLE WARNING 4005
+////////////////////////////////
+
+#pragma warning(push)
+#pragma warning(disable: 4005) // Disable warning for deprecated functions
+
 #define _HAS_STD_BYTE 0
 #define WIN32_LEAN_AND_MEAN  // 추가
 #include <Windows.h>
+
+////////////////////////////////
+/// END DISABLE WARNING 4005
+////////////////////////////////
+
+#pragma warning(pop)
 
 #include "Vector2Int.h"
 #include "Component.h"

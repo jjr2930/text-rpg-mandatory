@@ -1,0 +1,103 @@
+﻿
+[
+  {
+    "key": 10000,
+    "name": "Slime Gell",
+    "cost": 5
+  },
+  {
+    "key": 10001,
+    "name": "Bone Powder",
+    "cost": 8
+  },
+  {
+    "key": 10002,
+    "name": "Red Herb",
+    "cost": 12
+  },
+  {
+    "key": 10003,
+    "name": "Blue Herb",
+    "cost": 15
+  },
+  {
+    "key": 10004,
+    "name": "Moonwater",
+    "cost": 20
+  },
+  {
+    "key": 10005,
+    "name": "Life Root",
+    "cost": 35
+  },
+  {
+    "key": 10006,
+    "name": "Mana Crystal Shard",
+    "cost": 45
+  },
+  {
+    "key": 10007,
+    "name": "Troll Blood",
+    "cost": 70
+  },
+  {
+    "key": 10008,
+    "name": "Ogre Heart",
+    "cost": 90
+  },
+  {
+    "key": 10009,
+    "name": "Ironbark",
+    "cost": 55
+  },
+  {
+    "key": 10010,
+    "name": "Stone Golem Core",
+    "cost": 110
+  },
+  {
+    "key": 10011,
+    "name": "Wind Feather",
+    "cost": 65
+  },
+  {
+    "key": 10012,
+    "name": "Sylph Essence",
+    "cost": 120
+  },
+  {
+    "key": 10013,
+    "name": "Silverleaf",
+    "cost": 30
+  },
+  {
+    "key": 10014,
+    "name": "Purified Salt",
+    "cost": 18
+  },
+  {
+    "key": 10015,
+    "name": "Sunstone Shard",
+    "cost": 75
+  },
+  {
+    "key": 10016,
+    "name": "Firefly Essence",
+    "cost": 40
+  },
+  {
+    "key": 10017,
+    "name": "Nightshade",
+    "cost": 50
+  },
+  {
+    "key": 10018,
+    "name": "Venom Sac",
+    "cost": 85
+  },
+  {
+    "key": 10019,
+    "name": "Wyvern Fang",
+    "cost": 160
+  }
+]

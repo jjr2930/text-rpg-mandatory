@@ -1,8 +1,6 @@
 ﻿#ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
-#include "SingletonMacro.h"
-
 #include <unordered_map>
 #include <random>
 #include <string>
@@ -11,6 +9,8 @@
 #include <unordered_set>
 #include <tuple>
 
+#include "TemplateDeclare.h"
+#include "SingletonMacro.h"
 #include "Object.h"
 #include "Random.h"
 #include "Component.h"
@@ -22,114 +22,29 @@ class IConstructionParameter;
 class Entity;
 class VirtualDisplay;
 
-template<class T>
-concept ComponentType = std::derived_from<T, Component>;
-
 class ObjectManager
 {
     SINGLETON(ObjectManager)
 
 public:
 
-    template <typename T,
-        typename = enable_if_t<is_base_of<Object, T>::value>>
-    shared_ptr<T> CreateOne()
-    {
-        int64_t randomNumber = Random::GetInstance().RandomRange(INT64_MIN, INT64_MAX);
-        shared_ptr<T> newOne = make_shared<T>(randomNumber, string());
-        createdObjects.insert({ randomNumber, newOne });
+    template <ObjectType T>
+    shared_ptr<T> CreateOne();
 
-        return newOne;
-    }
+    template <ObjectType T>
+    shared_ptr<T> CreateOne(shared_ptr<IConstructionParameter> params);
 
-    template <typename T,
-        typename = enable_if_t<is_base_of<Object, T>::value>>
-    shared_ptr<T> CreateOne(shared_ptr<IConstructionParameter> params)
-    {
-        int64_t randomNumber = Random::GetInstance().RandomRange(INT64_MIN, INT64_MAX);
-        shared_ptr<T> newOne = make_shared<T>(randomNumber, string(), params);
-        createdObjects.insert({ randomNumber, newOne });
+    template <ObjectType T>
+    vector<shared_ptr<T>> GetObjectsByType();
 
-        return newOne;
-    }
-    template <typename T,
-        typename = enable_if_t<is_base_of<Object, T>::value>>
-    vector<shared_ptr<T>> GetObjectsByType() 
-    {
-        vector<shared_ptr<T>> result;
-
-        for (const auto& pair : createdObjects)
-        {
-            if (auto castedObject = dynamic_pointer_cast<T>(pair.second))
-            {
-                result.push_back(castedObject);
-            }
-        }
-
-        return result;
-    }
-
-    template <typename T,
-        typename = enable_if_t<is_base_of<Object, T>::value>>
-    shared_ptr<T> GetObjectByType()
-    {
-        for (const auto& pair : createdObjects)
-        {
-            if (auto castedObject = dynamic_pointer_cast<T>(pair.second))
-            {
-                return castedObject;
-            }
-        }
-
-        return nullptr;
-    }
+    template<ObjectType T>
+    shared_ptr<T> GetObjectByType();
 
     template<ComponentType ... T>
-    vector<tuple<shared_ptr<T> ...>> GetComponentTupleVector()
-    {
-        vector<tuple<shared_ptr<T> ...>> result;
-        for (const auto& entity : createdEntities)
-        {
-            auto componentsTuple = make_tuple(entity->template GetComponent<T>() ...);
-
-            const bool allComponentsExist = apply(
-                [](const auto&... components)
-                {
-                    return (... && (components != nullptr));
-                },
-                componentsTuple
-            );
-
-            if (allComponentsExist)
-            {
-                result.emplace_back(std::move(componentsTuple));
-            }
-        }
-        return result;
-    }
+    vector<tuple<shared_ptr<T> ...>> GetComponentTupleVector();
 
     template<ComponentType ... T>
-    tuple<shared_ptr<T> ...> GetComponentTuple()
-    {
-        for (const auto& entity : createdEntities)
-        {
-            auto componentTuple = make_tuple(entity->template GetComponent<T>() ...);
-            const bool allComponentsExist = apply(
-                [](const auto&... components)
-                {
-                    return (... && (components != nullptr));
-                },
-                componentTuple
-            );
-
-            if (allComponentsExist)
-            {
-                return componentTuple;
-            }
-        }
-        return tuple<shared_ptr<T> ...>();
-    }
-
+    tuple<shared_ptr<T> ...> GetComponentTuple();
 
     /// <summary>
     /// 이거 왜케 더러워
@@ -149,5 +64,7 @@ private:
     unordered_map<int64_t, shared_ptr<Object>> createdObjects;
     unordered_set<shared_ptr<Entity>> createdEntities;
 };
+
+#include "ObjectManager.inl"
 
 #endif // !OBJECTMANAGER_H

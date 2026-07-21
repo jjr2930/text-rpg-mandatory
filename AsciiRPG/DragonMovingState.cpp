@@ -25,6 +25,8 @@ void DragonMovingState::Start()
  
     this->playerPosition = playerPosition;
     this->dragonPosition = dragonPosition;
+
+    movingStartTime = GameTime::GetTime();
 }
 
 void DragonMovingState::Update()
@@ -33,6 +35,7 @@ void DragonMovingState::Update()
     {
         PathfindToPlayer();
         SaveCurrentPlayerPosition();
+        currentPathIndex = 0;
     }
 
     if (IsTimeToMove())
@@ -43,11 +46,27 @@ void DragonMovingState::Update()
 
 bool DragonMovingState::IsArrived() const
 {
+    //이동해서 다시 검색햇는데, 이미 도착해 있는 것일 수 있음
+    if (0 == currentPathToPlayer.size())
+        return true;
+  
     auto nowDragonPosition = dragonPosition->GetPosition();
     auto destination = currentPathToPlayer.back();
 
     int distance = abs(nowDragonPosition.x - destination.x) + abs(nowDragonPosition.y - destination.y);
     return distance == 0;
+}
+
+bool DragonMovingState::IsTimeout() const
+{
+    double now = GameTime::GetTime();
+    if (now - movingStartTime >= Const::Stat::DRAGON::MOVING_TIMEOUT)
+    {
+        Logger::LogInfo("Dragon moving state timeout!");
+        return true;
+    }
+
+    return false;
 }
 
 bool DragonMovingState::HasPlayerMoved() const
@@ -89,17 +108,19 @@ void DragonMovingState::PathfindToPlayer()
 
     bool found = false;
 
+
     queue<Vector2Int> q;
 
     Vector2Int endPoint = playerPosition->GetPosition();
     Vector2Int startPosition = dragonPosition->GetPosition();
     q.push(startPosition);
+    visited[startPosition.y][startPosition.x] = true;
+
 
     while (q.size() > 0)
     {
         Vector2Int now = q.front();
         q.pop();
-        visited[now.y][now.x] = true;
 
         if (now.x == endPoint.x && now.y == endPoint.y)
         {
@@ -133,6 +154,7 @@ void DragonMovingState::PathfindToPlayer()
             }
 
             q.push(next);
+            visited[next.y][next.x] = true;
             parentMap[next.y][next.x] = now;
         }
     }
@@ -158,14 +180,14 @@ void DragonMovingState::PathfindToPlayer()
         currentPathToPlayer.erase(currentPathToPlayer.end() - 1); // Remove the next step towards the player from the path
     }
 
-    //print path for debug
-    Logger::LogInfo("Dragon path to player:");
-    int pathSize = currentPathToPlayer.size();
-    for (int i = 0; i < pathSize; ++i)
-    {
-        Vector2Int point = currentPathToPlayer[i];
-        Logger::LogInfo(format("Step {}: ({}, {})", i, point.x, point.y));
-    }
+    ////print path for debug
+    //Logger::LogInfo("Dragon path to player:");
+    //int pathSize = currentPathToPlayer.size();
+    //for (int i = 0; i < pathSize; ++i)
+    //{
+    //    Vector2Int point = currentPathToPlayer[i];
+    //    Logger::LogInfo(format("Step {}: ({}, {})", i, point.x, point.y));
+    //}
 }
 
 bool DragonMovingState::IsTimeToMove() const
@@ -192,7 +214,7 @@ void DragonMovingState::MoveNextStepTowardsPlayer()
             nextPoint.y
         );
 
-        Logger::LogInfo(format("Dragon moved to ({}, {})", nextPoint.x, nextPoint.y));
+        //Logger::LogInfo(format("Dragon moved to ({}, {})", nextPoint.x, nextPoint.y));
         currentPathIndex++;
         lastMovingTime = GameTime::GetTime();
     }

@@ -42,6 +42,8 @@ public:
     void SetX(int newX) { x = newX; }
     void SetY(int newY) { y = newY; }
     void SetPosition(int newX, int newY) { x = newX; y = newY; }
+    //TODO: Consider adding a method to set position using Vector2Int
+
 
     //add
     void AddX(int deltaX) { x += deltaX; }

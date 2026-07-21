@@ -158,6 +158,15 @@
     <ClCompile Include="Transition.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="DragonRangeAttack.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonBullet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualPixel.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -325,8 +334,31 @@
     <ClInclude Include="Transition.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="DragonRangeAttack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonBullet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateDeclare.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientTable.json" />
+    <ClInclude Include="VirtualPixel.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="Entity.inl">
+      <Filter>헤더 파일</Filter>
+    </None>
+    <None Include="ObjectManager.inl">
+      <Filter>헤더 파일</Filter>
+    </None>
+    <None Include="ConsumableItemTable.json" />
+    <None Include="AlchemyTable.json" />
+    <None Include="MonsterItemDropTable.json" />
+    <None Include="MonsterTable.json" />
   </ItemGroup>
 </Project>

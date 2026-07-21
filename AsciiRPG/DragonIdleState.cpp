@@ -6,7 +6,9 @@
 
 void DragonIdleState::Start()
 {
-    endIdleTime = GameTime::GetInstance().GetTime() + idleDurationRange.GetRandomValue();
+    double now = GameTime::GetInstance().GetTime();
+    double randomInterval = idleDurationRange.GetRandomValue();
+    endIdleTime = now + randomInterval;
 
     Logger::LogInfo(std::format("Dragon entered idle state. Will end at {}", endIdleTime));
 }

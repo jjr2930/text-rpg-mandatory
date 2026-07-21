@@ -18,7 +18,7 @@ public:
     Dragon(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
     void Start() override;
     void Update() override;
-
+    void HandleEvent(shared_ptr<EventParameter> message) override;
 private:
     shared_ptr<Stat> stat;
     shared_ptr<Position> position;

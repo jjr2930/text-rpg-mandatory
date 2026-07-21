@@ -14,6 +14,7 @@
 #include "EventParameter.h"
 #include "Player.h"
 #include "Logger.h"
+#include "GameTime.h"
 
 #include <memory>
 #include <vector>
@@ -56,6 +57,8 @@ GameManager::GameManager()
 
 void GameManager::Update()
 {
+    GameTime::CalculateDeltaTime();
+
     auto entities = ObjectManager::GetInstance().GetAllEntities();
     for (auto& entity : *entities)
     {

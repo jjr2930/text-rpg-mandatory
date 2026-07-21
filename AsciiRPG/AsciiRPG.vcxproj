@@ -157,8 +157,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="DragonAttackState.cpp" />
+    <ClCompile Include="DragonBullet.cpp" />
     <ClCompile Include="DragonIdleState.cpp" />
     <ClCompile Include="DragonMovingState.cpp" />
+    <ClCompile Include="DragonRangeAttack.cpp" />
     <ClCompile Include="DragonStateMachine.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DateTime.cpp" />
@@ -201,6 +203,7 @@
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector2Int.cpp" />
     <ClCompile Include="VirtualDisplay.cpp" />
+    <ClCompile Include="VirtualPixel.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -208,8 +211,10 @@
     <ClInclude Include="AlchemyShop.h" />
     <ClInclude Include="AlchemyTable.h" />
     <ClInclude Include="DragonAttackState.h" />
+    <ClInclude Include="DragonBullet.h" />
     <ClInclude Include="DragonIdleState.h" />
     <ClInclude Include="DragonMovingState.h" />
+    <ClInclude Include="DragonRangeAttack.h" />
     <ClInclude Include="DragonStateMachine.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Const.h" />
@@ -226,6 +231,7 @@
     <ClInclude Include="GameManagerBridge.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="IConstructionParameter.h" />
+    <ClInclude Include="IngredientTable.json" />
     <ClInclude Include="InputController.h" />
     <ClInclude Include="InteractableObject.h" />
     <ClInclude Include="InventoryItem.h" />
@@ -254,14 +260,22 @@
     <ClInclude Include="Stat.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="TemplateDeclare.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector2Int.h" />
     <ClInclude Include="VirtualDisplay.h" />
+    <ClInclude Include="VirtualPixel.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="AlchemyTable.json" />
+    <None Include="ConsumableItemTable.json" />
     <None Include="cpp.hint" />
+    <None Include="Entity.inl" />
+    <None Include="MonsterItemDropTable.json" />
+    <None Include="MonsterTable.json" />
+    <None Include="ObjectManager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,13 +13,17 @@ public :
 
 public:
     static double GetTime();
-
+    static double GetDeltaTime();
+    static void CalculateDeltaTime();
 private:
     double OnGetTime() const;
     void Init();
 
 private:
     chrono::high_resolution_clock::time_point start;
+    double deltaTime;
+
+    chrono::high_resolution_clock::time_point lastDeltaSpampedTime;
 };
 
 #endif // !GAME_TIME_H

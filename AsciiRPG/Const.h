@@ -20,6 +20,7 @@ namespace Const
         constexpr char PLAYER = 'P';
         constexpr char NPC = 'N';
         constexpr char DRAGON = 'D';
+        constexpr char DRAGON_BULLET = 'B';
     }
 
     namespace Stat
@@ -30,8 +31,21 @@ namespace Const
             static constexpr float INIT_ATTACK = 10;
             static constexpr float INIT_DEFENSE = 5;
         }
-    }
 
+        namespace DRAGON
+        {
+            static constexpr float INIT_HP = 200;
+            static constexpr float INIT_ATTACK = 15;
+            static constexpr float INIT_DEFENSE = 10;
+            static constexpr float MOVING_TIMEOUT = 5.0; // seconds
+        }
+
+        namespace DRAGON_BULLET
+        {
+            static constexpr float SPEED = 3.0;
+        }
+    }
+    
     namespace Key
     {
         static constexpr int SPECIAL_KEY_PREFIX = -32; // Special key prefix for arrow keys and function keys
@@ -41,6 +55,27 @@ namespace Const
         static constexpr int Left               = 75;
         static constexpr int Right              = 77;
         static constexpr int Down               = 80;
+    }
+
+    namespace ConsoleColor
+    {
+        static constexpr int BLACK = 0;
+        static constexpr int BLUE = 1;
+        static constexpr int GREEN = 2;
+        static constexpr int CYAN = 3;
+        static constexpr int RED = 4;
+        static constexpr int MAGENTA = 5;
+        static constexpr int YELLOW = 6;
+        static constexpr int WHITE = 7;
+        static constexpr int DEFAULT = 7;
+        static constexpr int GRAY = 8;
+        static constexpr int BRIGHT_BLUE = 9;
+        static constexpr int BRIGHT_GREEN = 10;
+        static constexpr int BRIGHT_CYAN = 11;
+        static constexpr int BRIGHT_RED = 12;
+        static constexpr int BRIGHT_MAGENTA = 13;
+        static constexpr int BRIGHT_YELLOW = 14;
+        static constexpr int BRIGHT_WHITE = 15;
     }
 }
 

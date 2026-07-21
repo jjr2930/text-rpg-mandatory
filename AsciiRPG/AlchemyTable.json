@@ -1,0 +1,168 @@
+
+[
+  {
+    "key": 2001,
+    "ingridients": [
+      { "key": 10000, "quantity": 2 },
+      { "key": 10002, "quantity": 2 }
+    ]
+  },
+  {
+    "key": 2002,
+    "ingridients": [
+      { "key": 10002, "quantity": 4 },
+      { "key": 10005, "quantity": 2 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2005,
+    "ingridients": [
+      { "key": 10005, "quantity": 3 },
+      { "key": 10007, "quantity": 1 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2006,
+    "ingridients": [
+      { "key": 10003, "quantity": 3 },
+      { "key": 10006, "quantity": 2 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2007,
+    "ingridients": [
+      { "key": 10008, "quantity": 2 },
+      { "key": 10007, "quantity": 1 },
+      { "key": 10001, "quantity": 2 }
+    ]
+  },
+  {
+    "key": 2008,
+    "ingridients": [
+      { "key": 10009, "quantity": 3 },
+      { "key": 10010, "quantity": 1 },
+      { "key": 10001, "quantity": 2 }
+    ]
+  },
+  {
+    "key": 2009,
+    "ingridients": [
+      { "key": 10011, "quantity": 3 },
+      { "key": 10012, "quantity": 1 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2010,
+    "ingridients": [
+      { "key": 10013, "quantity": 1 },
+      { "key": 10014, "quantity": 1 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2012,
+    "ingridients": [
+      { "key": 10001, "quantity": 2 },
+      { "key": 10006, "quantity": 1 },
+      { "key": 10012, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2013,
+    "ingridients": [
+      { "key": 10000, "quantity": 1 },
+      { "key": 10016, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2015,
+    "ingridients": [
+      { "key": 10017, "quantity": 2 },
+      { "key": 10018, "quantity": 2 },
+      { "key": 10000, "quantity": 2 }
+    ]
+  },
+  {
+    "key": 2016,
+    "ingridients": [
+      { "key": 10002, "quantity": 3 },
+      { "key": 10005, "quantity": 1 },
+      { "key": 10000, "quantity": 2 }
+    ]
+  },
+  {
+    "key": 2017,
+    "ingridients": [
+      { "key": 10003, "quantity": 2 },
+      { "key": 10006, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2018,
+    "ingridients": [
+      { "key": 10003, "quantity": 4 },
+      { "key": 10006, "quantity": 2 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2019,
+    "ingridients": [
+      { "key": 10008, "quantity": 3 },
+      { "key": 10007, "quantity": 2 },
+      { "key": 10017, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2020,
+    "ingridients": [
+      { "key": 10009, "quantity": 3 },
+      { "key": 10010, "quantity": 2 },
+      { "key": 10014, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2021,
+    "ingridients": [
+      { "key": 10011, "quantity": 3 },
+      { "key": 10012, "quantity": 2 },
+      { "key": 10013, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2022,
+    "ingridients": [
+      { "key": 10005, "quantity": 4 },
+      { "key": 10007, "quantity": 2 },
+      { "key": 10004, "quantity": 2 }
+    ]
+  },
+  {
+    "key": 2023,
+    "ingridients": [
+      { "key": 10013, "quantity": 3 },
+      { "key": 10014, "quantity": 2 },
+      { "key": 10004, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2024,
+    "ingridients": [
+      { "key": 10015, "quantity": 1 },
+      { "key": 10016, "quantity": 2 },
+      { "key": 10000, "quantity": 1 }
+    ]
+  },
+  {
+    "key": 2025,
+    "ingridients": [
+      { "key": 10019, "quantity": 2 },
+      { "key": 10018, "quantity": 2 },
+      { "key": 10017, "quantity": 2 }
+    ]
+  }
+]

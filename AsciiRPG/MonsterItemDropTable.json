@@ -1,0 +1,110 @@
+﻿
+[
+  {
+    "key": 3001,
+    "name": "Green Slime",
+    "dropItems": [
+      { "key": 10000, "minQuantity": 1, "maxQuantity": 3, "dropChance": 0.85 },
+      { "key": 10002, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.25 }
+    ]
+  },
+  {
+    "key": 3002,
+    "name": "Skeleton Warrior",
+    "dropItems": [
+      { "key": 10001, "minQuantity": 1, "maxQuantity": 3, "dropChance": 0.8 },
+      { "key": 10014, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.2 }
+    ]
+  },
+  {
+    "key": 3003,
+    "name": "Forest Goblin",
+    "dropItems": [
+      { "key": 10002, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.6 },
+      { "key": 10003, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.45 },
+      { "key": 10013, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.2 }
+    ]
+  },
+  {
+    "key": 3004,
+    "name": "Moonlit Wisp",
+    "dropItems": [
+      { "key": 10004, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.65 },
+      { "key": 10006, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.35 },
+      { "key": 10016, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.4 }
+    ]
+  },
+  {
+    "key": 3005,
+    "name": "Cave Troll",
+    "dropItems": [
+      { "key": 10005, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.4 },
+      { "key": 10007, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.65 },
+      { "key": 10001, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.35 }
+    ]
+  },
+  {
+    "key": 3006,
+    "name": "Ogre Brute",
+    "dropItems": [
+      { "key": 10008, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.45 },
+      { "key": 10007, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.35 },
+      { "key": 10009, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.25 }
+    ]
+  },
+  {
+    "key": 3007,
+    "name": "Stone Golem",
+    "dropItems": [
+      { "key": 10010, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.4 },
+      { "key": 10009, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.55 },
+      { "key": 10014, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.3 }
+    ]
+  },
+  {
+    "key": 3008,
+    "name": "Harpy Scout",
+    "dropItems": [
+      { "key": 10011, "minQuantity": 1, "maxQuantity": 3, "dropChance": 0.7 },
+      { "key": 10012, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.2 },
+      { "key": 10013, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.3 }
+    ]
+  },
+  {
+    "key": 3009,
+    "name": "Venomous Spider",
+    "dropItems": [
+      { "key": 10017, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.6 },
+      { "key": 10018, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.45 },
+      { "key": 10000, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.3 }
+    ]
+  },
+  {
+    "key": 3010,
+    "name": "Sun Cult Acolyte",
+    "dropItems": [
+      { "key": 10015, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.3 },
+      { "key": 10016, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.55 },
+      { "key": 10006, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.25 }
+    ]
+  },
+  {
+    "key": 3011,
+    "name": "Sylph Guardian",
+    "dropItems": [
+      { "key": 10012, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.45 },
+      { "key": 10011, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.65 },
+      { "key": 10004, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.25 }
+    ]
+  },
+  {
+    "key": 3012,
+    "name": "Ancient Wyvern",
+    "dropItems": [
+      { "key": 10019, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.55 },
+      { "key": 10018, "minQuantity": 1, "maxQuantity": 2, "dropChance": 0.7 },
+      { "key": 10008, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.25 },
+      { "key": 10015, "minQuantity": 1, "maxQuantity": 1, "dropChance": 0.2 }
+    ]
+  }
+]

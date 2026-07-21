@@ -4,6 +4,7 @@
 #include "Position.h"
 #include "Component.h"
 #include "DragonStateMachine.h"
+#include "EventParameter.h"
 
 Dragon::Dragon(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
@@ -24,4 +25,17 @@ void Dragon::Start()
 void Dragon::Update()
 {
     stateMachine->Update();
+}
+
+void Dragon::HandleEvent(shared_ptr<EventParameter> message)
+{
+    switch (message->eventType)
+    {
+        case EventType::OnMapClearRequested:
+            DestroyEntity();
+            break;
+
+        default:
+            break;
+    }
 }

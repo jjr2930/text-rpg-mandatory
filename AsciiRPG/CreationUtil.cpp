@@ -21,6 +21,7 @@
 #include "Enums.h"
 #include "AlchemyShop.h"
 #include "Dragon.h"
+#include "DragonBullet.h"
 
 #include <string>
 #include <format>
@@ -223,10 +224,27 @@ shared_ptr<Entity> CreationUtil::CreateDragon(Vector2Int position)
     auto dragonComponent = dragonEntity->AddComponent<Dragon>(std::make_shared<Component::ConstructionParamterBase>(dragonEntity));
     dragonComponent->SetName(format("{}'s Dragon", dragonEntity->GetName()));
 
+    auto dragonStat = dragonEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(dragonEntity, unordered_map<StatType, float>{
+        { StatType::MaxHealth, 100.0f },
+        { StatType::CurrentHealth, 100.0f },
+        { StatType::Attack, 20.0f },
+        { StatType::Defense, 5.0f }
+    }));
+
     auto dragonDungeonObjectTag = dragonEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(dragonEntity, Const::Map::DRAGON));
     dragonDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", dragonEntity->GetName()));
 
     return dragonEntity;
+}
+
+shared_ptr<Entity> CreationUtil::CreateDragonBullet(Vector2Int position, Vector2Int targetPosition, int damage)
+{
+    auto bulletEntity = ObjectManager::GetInstance().CreateEntity();
+    auto bulletPosition = bulletEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, bulletEntity));
+    auto bulletRenderer = bulletEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::DRAGON_BULLET, bulletEntity));
+    auto bulletComponent = bulletEntity->AddComponent<DragonBullet>(std::make_shared<DragonBullet::ConstructionParameter>(bulletEntity, position, targetPosition, Const::Stat::DRAGON_BULLET::SPEED, damage));
+
+    return bulletEntity;
 }
 
 shared_ptr<Map> CreationUtil::CreateDragonRoom()

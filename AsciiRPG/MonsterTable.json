@@ -1,0 +1,134 @@
+[
+  {
+    "key": 3001,
+    "name": "Green Slime",
+    "displayChar": "L",
+    "dropTableKey": 3001,
+    "hp": 12,
+    "attack": 6,
+    "defense": 1,
+    "exp": 8,
+    "attackDelay": 2
+  },
+  {
+    "key": 3002,
+    "name": "Skeleton Warrior",
+    "displayChar": "K",
+    "dropTableKey": 3002,
+    "hp": 20,
+    "attack": 9,
+    "defense": 2,
+    "exp": 14,
+    "attackDelay": 2
+  },
+  {
+    "key": 3003,
+    "name": "Forest Goblin",
+    "displayChar": "G",
+    "dropTableKey": 3003,
+    "hp": 16,
+    "attack": 8,
+    "defense": 1,
+    "exp": 12,
+    "attackDelay": 1
+  },
+  {
+    "key": 3004,
+    "name": "Moonlit Wisp",
+    "displayChar": "W",
+    "dropTableKey": 3004,
+    "hp": 24,
+    "attack": 12,
+    "defense": 3,
+    "exp": 22,
+    "attackDelay": 2
+  },
+  {
+    "key": 3005,
+    "name": "Cave Troll",
+    "displayChar": "T",
+    "dropTableKey": 3005,
+    "hp": 55,
+    "attack": 15,
+    "defense": 4,
+    "exp": 38,
+    "attackDelay": 3
+  },
+  {
+    "key": 3006,
+    "name": "Ogre Brute",
+    "displayChar": "O",
+    "dropTableKey": 3006,
+    "hp": 75,
+    "attack": 18,
+    "defense": 5,
+    "exp": 52,
+    "attackDelay": 3
+  },
+  {
+    "key": 3007,
+    "name": "Stone Golem",
+    "displayChar": "M",
+    "dropTableKey": 3007,
+    "hp": 90,
+    "attack": 16,
+    "defense": 8,
+    "exp": 60,
+    "attackDelay": 4
+  },
+  {
+    "key": 3008,
+    "name": "Harpy Scout",
+    "displayChar": "H",
+    "dropTableKey": 3008,
+    "hp": 42,
+    "attack": 17,
+    "defense": 3,
+    "exp": 44,
+    "attackDelay": 1
+  },
+  {
+    "key": 3009,
+    "name": "Venomous Spider",
+    "displayChar": "I",
+    "dropTableKey": 3009,
+    "hp": 48,
+    "attack": 20,
+    "defense": 3,
+    "exp": 50,
+    "attackDelay": 2
+  },
+  {
+    "key": 3010,
+    "name": "Sun Cult Acolyte",
+    "displayChar": "A",
+    "dropTableKey": 3010,
+    "hp": 70,
+    "attack": 22,
+    "defense": 5,
+    "exp": 72,
+    "attackDelay": 2
+  },
+  {
+    "key": 3011,
+    "name": "Sylph Guardian",
+    "displayChar": "Y",
+    "dropTableKey": 3011,
+    "hp": 85,
+    "attack": 24,
+    "defense": 6,
+    "exp": 85,
+    "attackDelay": 1
+  },
+  {
+    "key": 3012,
+    "name": "Ancient Wyvern",
+    "displayChar": "V",
+    "dropTableKey": 3012,
+    "hp": 260,
+    "attack": 32,
+    "defense": 9,
+    "exp": 300,
+    "attackDelay": 2
+  }
+]

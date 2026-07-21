@@ -6,11 +6,15 @@
 
 #include "State.h"
 #include "Vector2Int.h"
+#include "Const.h"
 
 using namespace std;
 
 class Position;
 
+/// <summary>
+/// TODO: it need timeout
+/// </summary>
 class DragonMovingState :  public State
 {
 public:
@@ -19,12 +23,14 @@ public:
     void Start() override;
     void Update() override;
     bool IsArrived() const;
+    bool IsTimeout() const;
 private:
     bool HasPlayerMoved() const;
     void PathfindToPlayer();
     bool IsTimeToMove() const;
     void SaveCurrentPlayerPosition();
     void MoveNextStepTowardsPlayer();
+   
     
 private :
     shared_ptr<Position> playerPosition;
@@ -35,6 +41,7 @@ private :
     int currentPathIndex = 0;
     double lastMovingTime = 0.0;
     double movingDelay;
+    double movingStartTime;
 };
 
 
