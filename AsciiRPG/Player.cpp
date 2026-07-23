@@ -1,4 +1,7 @@
-﻿#include "Player.h"
+﻿#include <format>
+#include <cassert>
+
+#include "Player.h"
 #include "Position.h"
 #include "Entity.h"
 #include "Monster.h"
@@ -8,12 +11,14 @@
 #include "LevelExpTable.h"
 #include "Stat.h"
 #include "Const.h"
-#include "ItemData.h"
-#include "ItemTable.h"
+#include "ItemBank.h"
 #include "InteractableObject.h"
-
-#include <format>
-#include <cassert>
+#include "MinMax.h"
+#include "IItem.h"
+#include "Enums.h"
+#include "ConsumableItemTable.h"
+#include "AlchemyTable.h"
+#include "Dragon.h"
 
 using namespace std;
 
@@ -25,12 +30,17 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
 {
     inventoryCursorIndex = -1;
     maxExp = LevelExpTable::GetInstance().GetExpForLevel(playerLevel + 1);
-
-    //TEST CRAFTING ITEM
-    inventory.emplace_back(10000, 20);
-    inventory.emplace_back(10001, 20);
-    //END
    
+    //add every alchemy ingredients to the inventory
+    //auto& allAchemyData = AlchemyTable::GetInstance().GetAllAlchemyData();
+    //for (auto& iter : allAchemyData)
+    //{
+    //    for (auto& ingredient : iter->ingredients)
+    //    {
+    //        AddItemQuantity(ingredient.itemKey, ItemType::Ingredient, ingredient.quantity);
+    //    }
+    //}
+
     if (auto ptr = entity.lock())
     {
         playerPosition = ptr->GetComponent<Position>();
@@ -40,6 +50,11 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
 
 void Player::HandleEvent(shared_ptr<EventParameter> message)
 {
+    if (amIDead)
+    {
+        return;
+    }
+
     switch (message->eventType)
     {
         case EventType::KeyPressed:
@@ -91,6 +106,7 @@ void Player::TakeDamage(int damage)
     int currentHealth = static_cast<int>(playerStat->GetStat(StatType::CurrentHealth));
     if (currentHealth <= 0)
     {
+        amIDead = true;
         Logger::LogInfo("Player is dead!");
     }
 }
@@ -105,11 +121,15 @@ void Player::AddItem(const FieldItem& fieldItemm)
     }
     else
     {
-        inventory.emplace_back(fieldItemm.GetTableKey(), fieldItemm.GetQuantity());
+        InventoryItem newInventoryItem(fieldItemm.GetTableKey(), 
+            fieldItemm.GetItemType(), 
+            fieldItemm.GetQuantity());
+
+        inventory.emplace_back(newInventoryItem);
     }
 }
 
-void Player::AddItemQuantity(int tableKey, int quantity)
+void Player::AddItemQuantity(int tableKey, ItemType itemType, int quantity)
 {
     bool found = false;
     for (auto iter = inventory.begin(); iter != inventory.end(); ++iter)
@@ -120,22 +140,30 @@ void Player::AddItemQuantity(int tableKey, int quantity)
             iter->AddQuantity(quantity);
             if (iter->GetQuantity() <= 0)
             {
-                Logger::LogInfo(format("Item {0} removed from inventory.", iter->GetName()));
+                Logger::LogInfo(format("{0} removed", iter->GetName()));
                 inventory.erase(iter);
+            }
+            else
+            {
+                Logger::LogInfo(format("{0} {1}", iter->GetName(), quantity));
             }
             return;
         }
     }
 
-    if (!found)
+    if (!found && quantity > 0)
     {
-        inventory.emplace_back(tableKey, quantity);
+        InventoryItem newItem(tableKey, itemType, quantity);
+        inventory.emplace_back(newItem);
+
+        Logger::LogInfo(format("Item {0} X{1} added to inventory."
+            , newItem.GetName(), newItem.GetQuantity()));
     }
 
     inventoryCursorIndex = min(inventoryCursorIndex, (int)inventory.size() - 1);
 }
 
-void Player::SetItemQuantity(int tableKey, int quantity)
+void Player::SetItemQuantity(int tableKey, ItemType itemType, int quantity)
 {
     int foundIndex;
     if (!HasItem(tableKey, &foundIndex))
@@ -218,17 +246,42 @@ void Player::Attack()
     {
         Vector2Int monsterPos = monsterPosition->GetPosition();
         if (!MathUtility::IsOverlap(position, monsterPos, 1))
-            continue;
-        
-        Logger::LogInfo("ATTACK!!");
+            continue;        
 
-        vector<DropItemData> dropItem = monster->GetDropItems();
+        vector<shared_ptr<MonsterItemDropData>> dropItem = monster->GetDropItems();
         int exp = monster->GetExp();
         monster->TakeDamage(playerStat->GetStat(StatType::Attack));
         if (!monster->IsDead())
             continue;
 
         AddItems(dropItem);
+        AddExp(exp);
+    }
+
+    //TODO: Dragon must be inherite monster class, but for now, we will handle it separately.
+    auto [dragon, dragonPosition] = ObjectManager::GetInstance().GetComponentTuple<Dragon, Position>();
+    if (nullptr == dragon)
+        return;
+
+    Vector2Int drgonPos = dragonPosition->GetPosition();
+    if (!MathUtility::IsOverlap(position, drgonPos, 1))
+        return;
+
+    int exp = dragon->GetExp();
+    dragon->TakeDamage(playerStat->GetStat(StatType::Attack));
+    if (dragon->IsDead())
+    {
+        shared_ptr<MonsterItemDropData> dragonDropItem = make_shared<MonsterItemDropData>();
+        dragonDropItem->key = 10020;
+        dragonDropItem->minQuantity = 1;
+        dragonDropItem->maxQuantity = 1;
+        dragonDropItem->dropChance = 1.0;
+
+        vector<shared_ptr<MonsterItemDropData>> dropItems{
+            dragonDropItem
+        };
+
+        AddItems(dropItems);
         AddExp(exp);
     }
 }
@@ -265,19 +318,22 @@ void Player::Interact()
     ObjectManager::GetInstance().BroadcastEvent(make_shared<InteractionStartEventParameter>(interactableObject));
 }
 
-void Player::AddItems(vector<DropItemData>& dropItems)
+void Player::AddItems(vector<shared_ptr<MonsterItemDropData>>& dropItems)
 {
     for (auto& dropItem : dropItems)
     {
         int index;
-        if (HasItem(dropItem.GetTableKey(), &index))
+        MinMaxInt minMaxQuantity(dropItem->minQuantity, dropItem->maxQuantity);
+        int randomQuantity = minMaxQuantity.GetRandomValue();
+        
+        if (HasItem(dropItem->key, &index))
         {
-            inventory[index].AddQuantity(dropItem.GetCount());
-            Logger::LogInfo(format("{} x{} added", dropItem.GetTableKey(), dropItem.GetCount()));
+            inventory[index].AddQuantity(randomQuantity);
+            Logger::LogInfo(format("{} x{} added", dropItem->key, randomQuantity));
             continue;
         }
 
-        InventoryItem newItem(dropItem.GetTableKey(), dropItem.GetCount());
+        InventoryItem newItem(dropItem->key, ItemType::Ingredient, randomQuantity);
         inventory.emplace_back(newItem);
 
         Logger::LogInfo(format("{} x{} added", 
@@ -416,9 +472,15 @@ void Player::ProcessInventoryModeInput(Virtualkey inputKey)
                 
                 auto itemData = selectedItem.GetItemDataFromTable();
 
-                playerStat->AddBuff(*itemData);
+                if (itemData->itemType != ItemType::Consumable)
+                {
+                    Logger::LogInfo(format("{0} is not a consumable.", selectedItem.GetName()));
+                }
                 
-                AddItemQuantity(selectedItem.GetTableKey(), -1);
+                shared_ptr<ConsumableItemData> consumableData = dynamic_pointer_cast<ConsumableItemData>(itemData);
+                assert(consumableData && "Item data is not of type ConsumableItemData");
+                playerStat->AddBuff(consumableData);
+                AddItemQuantity(consumableData->key, consumableData->itemType, -1);
             }
             break;
         default:

@@ -1,7 +1,10 @@
-﻿#pragma once
+﻿#ifndef MONSTER_H
+#define MONSTER_H
+
 #include "Component.h"
-#include "DropItemData.h"
 #include "DateTime.h"
+#include "MonsterTable.h"
+#include "MonsterItemDropTable.h"
 
 class Position;
 
@@ -11,17 +14,17 @@ public:
     class MonsterConstructionParameter : public Component::ConstructionParamterBase
     {
     public:
-        MonsterConstructionParameter(shared_ptr<Entity> entity, int hp, int attack, int defense, int exp, int attackDelay, const vector<DropItemData>& dropItems)
+        MonsterConstructionParameter(shared_ptr<Entity> entity, int hp, int attack, int defense, int exp, int attackDelay, int dropTableKey)
             : Component::ConstructionParamterBase(entity)
             , hp(hp)
             , attack(attack)
             , defense(defense)
             , exp(exp)
             , attackDelay(attackDelay)
-            , dropItems(dropItems)
+            , dropTableKey(dropTableKey)
         {
         }
-        vector<DropItemData> dropItems;
+        int dropTableKey;
         int hp;
         int attack;
         int defense;
@@ -36,7 +39,7 @@ public:
     void TakeDamage(int damage);
     int GetExp() const;
     bool IsDead() const;
-    vector<DropItemData>& GetDropItems();
+    vector<shared_ptr<MonsterItemDropData>>& GetDropItems();
 
     void Update() override;
     void HandleEvent(shared_ptr<EventParameter> message) override;
@@ -50,8 +53,9 @@ private:
     bool fistOverlap;
     DateTime nextAttackTime;
 
-    vector<DropItemData> dropItems;
+    vector<shared_ptr<MonsterItemDropData>> dropItems;
 
     shared_ptr<Position> monsterPosition;    
 };
 
+#endif

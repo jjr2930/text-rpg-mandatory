@@ -4,8 +4,7 @@
 #include "Player.h"
 #include "MathUtility.h"
 #include "Entity.h"
-#include "ItemTable.h"
-#include "ItemData.h"
+#include "ItemBank.h"
 
 #include <memory>
 #include <cassert>
@@ -15,19 +14,17 @@ FieldItem::FieldItem(int64_t id, const std::string& name, std::shared_ptr<IConst
 {
     auto constructionParams = static_cast<ConstructionParameter*>(params.get());
 
-    tableKey = constructionParams->tableKey ;
+    tableKey = constructionParams->tableKey;
+    itemType = constructionParams->itemType;
     quantity = constructionParams->quantity;
         
     if(auto ptr = entity.lock())
         myPosition = ptr->GetComponent<Position>();
 }
 
-
 string FieldItem::GetName() const
 {
-    auto item = ItemTable::GetInstance().GetItemData(tableKey);
-    assert(item != nullptr && "Item data not found");
-    return item->name;
+    return ItemBank::GetInstance().GetName(tableKey, itemType);
 }
 
 int FieldItem::GetTableKey() const
@@ -38,6 +35,11 @@ int FieldItem::GetTableKey() const
 int FieldItem::GetQuantity() const
 {
     return quantity;
+}
+
+ItemType FieldItem::GetItemType() const
+{
+    return itemType;
 }
 
 void FieldItem::Update()

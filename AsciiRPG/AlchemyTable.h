@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <memory>
+#include <unordered_set>
 
 using namespace std;
 
@@ -13,10 +14,10 @@ class AlchemyTable
 {
     SINGLETON_WITH_INIT(AlchemyTable)
 public:
-    void Init();
     shared_ptr<AlchemyData> GetAlchemyData(int id);
     vector<shared_ptr<AlchemyData>>& GetAllAlchemyData();
-
+private:
+    void Init();
 
 private:
     vector<shared_ptr<AlchemyData>> alchemyDataList;

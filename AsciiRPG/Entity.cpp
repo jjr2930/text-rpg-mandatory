@@ -1,16 +1,9 @@
 #include "Logger.h"
 #include "Entity.h"
 #include "Component.h"
+#include "Enums.h"
 
 #include <format>
-
-//Entity::Entity(int64_t id, const std::string& name)
-//: Object(id, name)
-//{}
-//
-//Entity::Entity(int64_t id, const std::string & name, std::vector<std::shared_ptr<IConstructionParameter>>&params)
-//: Object(id, name)
-//{}
 
 Entity::~Entity()
 {
@@ -24,14 +17,6 @@ Entity::~Entity()
         components.pop_back();
     }
 }
-
-//void Entity::ReserveDeleteEveryComponents()
-//{
-//    for (auto& com : components)
-//    {
-//        ObjectManager::GetInstance().DestroyObject(com);
-//    }
-//}
 
 void Entity::Update()
 {

@@ -1,6 +1,10 @@
 #ifndef CONST_H
 #define CONST_H
 
+#include <unordered_set>
+
+using namespace std;
+
 namespace Const
 {
     namespace Map
@@ -15,7 +19,6 @@ namespace Const
         constexpr char START = 'S';
         constexpr char EXIT = 'X';
         constexpr char ITEM = '*';
-        constexpr char MONSTER = 'M';
         constexpr char EMPTY = ' ';
         constexpr char PLAYER = 'P';
         constexpr char NPC = 'N';
@@ -76,6 +79,13 @@ namespace Const
         static constexpr int BRIGHT_MAGENTA = 13;
         static constexpr int BRIGHT_YELLOW = 14;
         static constexpr int BRIGHT_WHITE = 15;
+    }
+
+    namespace Items
+    {
+        static unordered_set<int> NonConsumableItemKeys = {
+            2006, 2009, 2010, 2013, 2015, 2017, 2018, 2021, 2023, 2024, 2025
+        };
     }
 }
 

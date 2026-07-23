@@ -22,6 +22,8 @@
 #include "AlchemyShop.h"
 #include "Dragon.h"
 #include "DragonBullet.h"
+#include "MonsterTable.h"
+#include "IItem.h"
 
 #include <string>
 #include <format>
@@ -61,33 +63,42 @@ shared_ptr<Entity> CreationUtil::CreatePlayer(Vector2Int position)
     
 }
 
-shared_ptr<Entity> CreationUtil::CreateMonster(Vector2Int position)
+shared_ptr<Entity> CreationUtil::CreateMonster(Vector2Int position, char displayChar)
 {
+    shared_ptr<MonsterData> monsterData = MonsterTable::GetInstance().GetMonsterData(displayChar);
+
     auto newMonsterEntity = ObjectManager::GetInstance().CreateEntity();
-    newMonsterEntity->SetName(format("Monster {0} {1}", position.x, position.y));
+    newMonsterEntity->SetName(monsterData->name);
 
     auto monsterPosition = newMonsterEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, newMonsterEntity));
     monsterPosition->SetName(format("{}'s Position", newMonsterEntity->GetName()));
 
-    auto monsterRenderer = newMonsterEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::MONSTER, newMonsterEntity));
+    auto monsterRenderer = newMonsterEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(displayChar, newMonsterEntity));
     monsterRenderer->SetName(format("{}'s Renderer", newMonsterEntity->GetName()));
 
-    auto monsterComponent = newMonsterEntity->AddComponent<Monster>(std::make_shared<Monster::MonsterConstructionParameter>(newMonsterEntity, 10, 10, 2, 10, 1, vector<DropItemData> {
-        { 1, 10}, 
-        { 2, 1 }
-    }));
-    monsterComponent->SetName(format("{}'s Monster", newMonsterEntity->GetName()));
-    
-    auto monsterDungeonObjectTag = newMonsterEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newMonsterEntity, Const::Map::MONSTER));
+    DungeonTagTypes monsterTagType = EnumUtility::ToDungeonTagTypes(displayChar);
+    auto monsterDungeonObjectTag = newMonsterEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newMonsterEntity, monsterTagType));
+
     monsterDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newMonsterEntity->GetName()));
 
-
     auto monsterStat = newMonsterEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(newMonsterEntity, unordered_map<StatType, float>{
-        { StatType::MaxHealth, 10.0f },
-        { StatType::CurrentHealth, 10.0f },
-        { StatType::Attack, 10.0f },
-        { StatType::Defense, 2.0f }
+        { StatType::MaxHealth, (float)monsterData->hp},
+        { StatType::CurrentHealth, (float)monsterData->hp },
+        { StatType::Attack, (float)monsterData->attack },
+        { StatType::Defense, (float)monsterData->defense }
     }));
+   
+    auto monsterConstructionParameter = std::make_shared<Monster::MonsterConstructionParameter>(newMonsterEntity
+        , (int)monsterData->hp
+        , (int)monsterData->attack
+        , (int)monsterData->defense
+        , (int)monsterData->exp
+        , (int)monsterData->attackDelay
+        , (int)monsterData->dropTableKey);
+
+    auto monsterComponent = newMonsterEntity->AddComponent<Monster>(monsterConstructionParameter);
+    monsterComponent->SetName(format("{}'s Monster", newMonsterEntity->GetName()));
+    
     return newMonsterEntity;
 }
 
@@ -105,7 +116,7 @@ shared_ptr<Entity> CreationUtil::CreateWall(Vector2Int position)
     auto wallComponent = newWallEntity->AddComponent<Wall>(std::make_shared<Component::ConstructionParamterBase>(newWallEntity));
     wallComponent->SetName(format("{}'s Wall", newWallEntity->GetName()));
 
-    auto wallDungeonObjectTag = newWallEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newWallEntity, Const::Map::WALL));
+    auto wallDungeonObjectTag = newWallEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newWallEntity, DungeonTagTypes::Wall));
     wallDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newWallEntity->GetName()));
 
     return newWallEntity; 
@@ -125,7 +136,7 @@ shared_ptr<Entity> CreationUtil::CreateEntrance(Vector2Int position)
     auto entranceComponent = newEntranceEntity->AddComponent<Entrance>(std::make_shared<Component::ConstructionParamterBase>(newEntranceEntity));
     entranceComponent->SetName(format("{}'s Entrance", newEntranceEntity->GetName()));
 
-    auto entranceDungeonObjectTag = newEntranceEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newEntranceEntity, Const::Map::START));
+    auto entranceDungeonObjectTag = newEntranceEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newEntranceEntity, DungeonTagTypes::Entrance));
 
     entranceDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newEntranceEntity->GetName()));   
 
@@ -144,7 +155,7 @@ shared_ptr<Entity> CreationUtil::CreateExit(Vector2Int position)
     auto exitComponent = newExitEntity->AddComponent<Exit>(std::make_shared<Component::ConstructionParamterBase>(newExitEntity));
     exitComponent->SetName(format("{}'s Exit", newExitEntity->GetName()));
 
-    auto exitDungeonObjectTag = newExitEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newExitEntity, Const::Map::EXIT));
+    auto exitDungeonObjectTag = newExitEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newExitEntity, DungeonTagTypes::Exit));
     exitDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newExitEntity->GetName()));
 
     return newExitEntity;
@@ -164,7 +175,7 @@ shared_ptr<Entity> CreationUtil::CreateFloor(Vector2Int position)
     auto floorComponent = newFloorEntity->AddComponent<Floor>(std::make_shared<Component::ConstructionParamterBase>(newFloorEntity));
     floorComponent->SetName(format("{}'s Floor", newFloorEntity->GetName()));
 
-    auto floorDungeonObjectTag = newFloorEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newFloorEntity, Const::Map::EMPTY));
+    auto floorDungeonObjectTag = newFloorEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newFloorEntity, DungeonTagTypes::None));
     floorDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newFloorEntity->GetName()));
 
     return newFloorEntity;
@@ -180,7 +191,7 @@ shared_ptr<Entity> CreationUtil::CreateVirtualDisplay()
     return newVirtualDisplayEntity;
 }
 
-shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, int itemKey, int quantity)
+shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, shared_ptr<IItem> item, int quantity)
 {
     auto newItemEntity = ObjectManager::GetInstance().CreateEntity();
     newItemEntity->SetName(format("FieldItem {0} {1}", position.x, position.y));
@@ -191,10 +202,11 @@ shared_ptr<Entity> CreationUtil::CreateFieldItem(Vector2Int position, int itemKe
     auto itemRenderer = newItemEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::ITEM, newItemEntity));
     itemRenderer->SetName(format("{}'s Renderer", newItemEntity->GetName()));
 
-    auto itemComponent = newItemEntity->AddComponent<FieldItem>(std::make_shared<FieldItem::ConstructionParameter>(newItemEntity, itemKey, quantity));
+    auto itemComponent = newItemEntity->AddComponent<FieldItem>(std::make_shared<FieldItem::ConstructionParameter>(newItemEntity, item->key, item->itemType, quantity));
     itemComponent->SetName(format("{}'s FieldItem", newItemEntity->GetName()));
 
-    auto itemDungeonObjectTag = newItemEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newItemEntity, Const::Map::ITEM));
+    auto itemDungeonObjectTag = newItemEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newItemEntity, DungeonTagTypes::FieldDropItem));
+
     itemDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newItemEntity->GetName()));
 
     return newItemEntity;
@@ -206,7 +218,7 @@ shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
 
     npcEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, npcEntity));
     npcEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::NPC, npcEntity));
-    npcEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(npcEntity, Const::Map::NPC));
+    npcEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(npcEntity, DungeonTagTypes::Alchemist));
     npcEntity->AddComponent<AlchemyShop>(std::make_shared<InteractableObject::ConstructionParameter>(npcEntity, InteractableObjectTags::AlchemyShop));
 
     return npcEntity;
@@ -231,7 +243,7 @@ shared_ptr<Entity> CreationUtil::CreateDragon(Vector2Int position)
         { StatType::Defense, 5.0f }
     }));
 
-    auto dragonDungeonObjectTag = dragonEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(dragonEntity, Const::Map::DRAGON));
+    auto dragonDungeonObjectTag = dragonEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(dragonEntity, DungeonTagTypes::RedDragon));
     dragonDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", dragonEntity->GetName()));
 
     return dragonEntity;

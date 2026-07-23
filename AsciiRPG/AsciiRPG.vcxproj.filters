@@ -116,7 +116,7 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="ItemTable.cpp">
+    <ClCompile Include="ConsumableItemTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Npc.cpp">
@@ -165,6 +165,24 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="VirtualPixel.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterItemDropTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Array2D.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemData.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBank.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -277,16 +295,13 @@
     <ClInclude Include="DungeonObjectTag.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ItemTable.h">
+    <ClInclude Include="ConsumableItemTable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Stat.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameTime.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Npc.h">
@@ -344,6 +359,30 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Users\theoo\Downloads\json.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterItemDropTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Array2D.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IItem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBank.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,4 @@
-#include <queue>
+﻿#include <queue>
 #include <stack>
 #include <format>
 
@@ -15,6 +15,7 @@
 
 DragonMovingState::DragonMovingState(double movingDelay)
     : movingDelay(movingDelay)
+    , movingStartTime(0.0)
 {
 }
 
@@ -90,7 +91,7 @@ void DragonMovingState::PathfindToPlayer()
     for (auto& [tag, position] : tags)
     {
         Vector2Int pos = position->GetPosition();
-        map[pos.y][pos.x] = tag->GetTag();
+        map[pos.y][pos.x] = EnumUtility::ToChar(tag->GetTag());
     }
 
     //set player position;

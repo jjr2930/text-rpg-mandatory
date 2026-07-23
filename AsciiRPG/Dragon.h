@@ -19,6 +19,9 @@ public:
     void Start() override;
     void Update() override;
     void HandleEvent(shared_ptr<EventParameter> message) override;
+    void TakeDamage(int damage); 
+    bool IsDead() const;
+    int GetExp() const;
 private:
     shared_ptr<Stat> stat;
     shared_ptr<Position> position;

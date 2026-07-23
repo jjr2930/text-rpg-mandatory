@@ -10,15 +10,15 @@
 #include <stack>
 
 class EventParameter;
-struct ItemData;
-struct AlchemyData;
+class ConsumableItemData;
+class AlchemyData;
 
 using namespace std;
 
 class AlchemyShop : public InteractableObject
 {
 public:
-    static constexpr int MAX_DISPLAY_RECIPES = 20;
+    static constexpr int DISPLAY_RECIPES_COUNTS_IN_PAGE = 5;
     static constexpr char SHOP_TITLE[] = "=== Alchemy Shop ===";
 
     using InteractableObject::InteractableObject;
@@ -42,13 +42,12 @@ private:
     void BuildCandidateRecipesList();
 private:
     vector<string> mainMenuOptions;
-    Vector2Int recipeDisplayRange;
     stack<AlchemyShopState> stateStack;
     vector<shared_ptr<AlchemyData>> candidateRecipes;
     int mainMenuCursor;
-    int recipeListCursor;
+    int recipeListPageIndex;
     int findRecipeCursor;
-    int craftCusor;
+    int craftCursor;
     string playerInput;
 };
 

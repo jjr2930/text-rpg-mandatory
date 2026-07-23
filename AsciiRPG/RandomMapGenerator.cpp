@@ -9,11 +9,13 @@
 #include "Vector2Int.h"
 #include "Const.h"
 #include "Map.h"
+#include "MonsterTable.h"
+#include "MinMax.h"
 
 #include <algorithm>
 #include <queue>
 
-void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map> outputMap)
+void RandomMapGenerator::GenerateRandomMap(int width, int height, int floor, shared_ptr<Map> outputMap)
 {
     PerlinNoise perlinNoise;
     bool loop = true;
@@ -40,13 +42,13 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map
             // 테두리 벽 생성
             for (int x = 0; x < width; x++)
             {
-                outputMap->SetCellData(x, 0, Const::Map::WALL);
-                outputMap->SetCellData(x, height - 1, Const::Map::WALL);
+                outputMap->SetCellData(x, 0, DungeonTagTypes::Wall);
+                outputMap->SetCellData(x, height - 1, DungeonTagTypes::Wall);
             }
             for (int y = 0; y < height; y++)
             {
-                outputMap->SetCellData(0, y, Const::Map::WALL);
-                outputMap->SetCellData(width - 1, y, Const::Map::WALL);
+                outputMap->SetCellData(0, y, DungeonTagTypes::Wall);
+                outputMap->SetCellData(width - 1, y, DungeonTagTypes::Wall);
             }
 
             float scale = 0.15f; // Noise 스케일 (작을수록 부드러운 패턴)
@@ -62,7 +64,7 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map
                     // 임계값을 넘으면 벽 생성
                     if (noiseValue > threshold)
                     {
-                        outputMap->SetCellData(x, y, Const::Map::WALL);
+                        outputMap->SetCellData(x, y, DungeonTagTypes::Wall);
                     }
                 }
             }
@@ -72,8 +74,8 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map
             {
                 startX = Random::GetInstance().RandomRange(1, width - 2);
                 startY = Random::GetInstance().RandomRange(1, height - 2);
-            } while (outputMap->GetCellData(startX, startY) != Const::Map::EMPTY);
-            outputMap->SetCellData(startX, startY, Const::Map::START);
+            } while (outputMap->GetCellData(startX, startY) != DungeonTagTypes::None);
+            outputMap->SetCellData(startX, startY, DungeonTagTypes::Entrance);
 
             // 상하 좌우에 유저를 배치할 위치를 찾는다.
 
@@ -85,9 +87,9 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map
                 exitY = Random::GetInstance().RandomRange(1, height - 2);
 
                 simpleDistanceWithEntrance = std::abs(exitX - startX) + std::abs(exitY - startY);
-            } while (outputMap->GetCellData(exitX, exitY) != Const::Map::EMPTY && simpleDistanceWithEntrance < 40);
+            } while (outputMap->GetCellData(exitX, exitY) != DungeonTagTypes::None && simpleDistanceWithEntrance < 40);
 
-            outputMap->SetCellData(exitX, exitY, Const::Map::EXIT);
+            outputMap->SetCellData(exitX, exitY, DungeonTagTypes::Exit);
 
             // 아이템(*) 배치 (3-10개 랜덤)
             int itemCount = Random::GetInstance().RandomRange(ITEM_COUNT_RANGE.x, ITEM_COUNT_RANGE.y);
@@ -100,15 +102,19 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map
                 {
                     itemX = Random::GetInstance().RandomRange(1, width - 2);
                     itemY = Random::GetInstance().RandomRange(1, height - 2);
-                } while (outputMap->GetCellData(itemX, itemY) != Const::Map::EMPTY); // 빈 공간에만 배치
+                } while (outputMap->GetCellData(itemX, itemY) != DungeonTagTypes::None); // 빈 공간에만 배치
 
-                outputMap->SetCellData(itemX, itemY, Const::Map::ITEM);
+                outputMap->SetCellData(itemX, itemY, DungeonTagTypes::FieldDropItem);
                 itemPositions.push_back({ itemX, itemY });
             }
 
             // 몬스터(M) 배치 (3-7개 랜덤)
             int monsterCount = Random::GetInstance().RandomRange(MONSTER_COUNT_RANGE.x, MONSTER_COUNT_RANGE.y);
             std::vector<std::pair<int, int>> monsterPositions;
+
+            auto possibleMonsters = MonsterTable::GetInstance().GetMonstersByFloor(floor);
+            MinMaxInt monsterIndexRange(0, static_cast<int>(possibleMonsters.size()) - 1);
+
             for (int i = 0; i < monsterCount; i++)
             {
                 int monsterX, monsterY;
@@ -116,9 +122,12 @@ void RandomMapGenerator::GenerateRandomMap(int width, int height, shared_ptr<Map
                 {
                     monsterX = Random::GetInstance().RandomRange(1, width - 2);
                     monsterY = Random::GetInstance().RandomRange(1, height - 2);
-                } while (outputMap->GetCellData(monsterX, monsterY) != Const::Map::EMPTY); // 빈 공간에만 배치
+                } while (outputMap->GetCellData(monsterX, monsterY) != DungeonTagTypes::None); // 빈 공간에만 배치
 
-                outputMap->SetCellData(monsterX, monsterY, Const::Map::MONSTER);
+                shared_ptr<MonsterData> randomMonster = possibleMonsters[monsterIndexRange.GetRandomValue()];
+
+                DungeonTagTypes tag = EnumUtility::ToDungeonTagTypes(randomMonster->displayChar);
+                outputMap->SetCellData(monsterX, monsterY, tag);
                 monsterPositions.push_back({ monsterX, monsterY });
             }
 
@@ -243,7 +252,7 @@ bool RandomMapGenerator::CanReachAllTargets(shared_ptr<Map> outputMap, int width
             if (nx >= 0 && nx < width && ny >= 0 && ny < height)
             {
                 // 방문하지 않았고 벽이 아닌 경우
-                if (!visited[ny][nx] && outputMap->GetCellData(nx, ny) != Const::Map::WALL)
+                if (!visited[ny][nx] && outputMap->GetCellData(nx, ny) != DungeonTagTypes::Wall)
                 {
                     visited[ny][nx] = true;
                     q.push({ nx, ny });

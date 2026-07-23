@@ -24,6 +24,8 @@ public:
 private:
     shared_ptr<VirtualDisplay> virtualDisplay;
     vector<shared_ptr<Map>> maps;
+    unordered_set<char> validMonsterChars;
+
     int currentMapIndex = 0;
 };
 

@@ -24,7 +24,7 @@ public:
 
 
 public:
-    void GenerateRandomMap(int width, int height, shared_ptr<Map> outputMap);
+    void GenerateRandomMap(int width, int height, int floor, shared_ptr<Map> outputMap);
 
 private:
     bool CanReachAllTargets(shared_ptr<Map> outputMap, int width, int height, int startX, int startY,

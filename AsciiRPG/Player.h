@@ -11,6 +11,7 @@ class Position;
 class FieldItem;
 class Stat;
 class InteractableObject;
+class MonsterItemDropData;
 
 class Player : public Component
 {
@@ -28,8 +29,8 @@ public:
     void HandleEvent(shared_ptr<EventParameter> message) override;
     void TakeDamage(int damage);
     void AddItem(const FieldItem& fieldItemm);
-    void AddItemQuantity(int tableKey, int quantity);
-    void SetItemQuantity(int tableKey, int quantity);
+    void AddItemQuantity(int tableKey, ItemType itemType, int quantity);
+    void SetItemQuantity(int tableKey, ItemType, int quantity);
 
     int GetLevel() const;
     int GetExp() const;
@@ -44,7 +45,7 @@ public:
 
 private:
     bool HasItem(int tableKey, int* index) const;
-    void AddItems(vector<DropItemData>& dropItems);
+    void AddItems(vector<shared_ptr<MonsterItemDropData>>& dropItems);
     void Attack();
     void Interact();
     void AddExp(int exp);
@@ -64,7 +65,7 @@ private:
     int maxExp;
     int inventoryCursorIndex = 0;
     int npcDialogCursorIndex = 0;
-
+    bool amIDead = false;
     CurrentInputMode currentInputMode;
 };
 

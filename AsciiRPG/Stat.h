@@ -6,7 +6,7 @@
 
 #include <unordered_map>
 
-struct ItemData;
+class ConsumableItemData;
 
 class Stat : public Component
 {
@@ -39,7 +39,7 @@ public :
     Stat(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
 
     void AddBuff(StatType statType, OperatorType operatorType, float value, bool isInstant , double duration, double interval);
-    void AddBuff(const ItemData& itemData);
+    void AddBuff(const std::shared_ptr<ConsumableItemData> itemData);
     void AddStat(StatType statType, float value);
 
     //setter

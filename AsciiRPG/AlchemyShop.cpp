@@ -1,10 +1,9 @@
 ﻿#include "AlchemyShop.h"
 #include "AlchemyTable.h"
-#include "ItemTable.h"
+#include "ConsumableItemTable.h"
 #include "Const.h"
 #include "ObjectManager.h"
 #include "EventParameter.h"
-#include "ItemData.h"
 #include "Player.h"
 #include "Logger.h"
 
@@ -16,11 +15,10 @@
 
 AlchemyShop::AlchemyShop(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : InteractableObject(id, name, params)
-    , recipeDisplayRange{ 0, MAX_DISPLAY_RECIPES - 1 }
     , mainMenuCursor(-1)
-    , recipeListCursor(-1)
+    , recipeListPageIndex(0)
     , findRecipeCursor(-1)
-    , craftCusor(-1)
+    , craftCursor(-1)
 {
     stateStack.push(AlchemyShopState::MainMenu);
     mainMenuOptions = { "View Recipes", "Find Recipes", "Craft", "Exit" };
@@ -51,13 +49,17 @@ vector<string> AlchemyShop::GetRenderStrings()
         case AlchemyShopState::RecipeList:
             {
                 auto& alchemyDataList = AlchemyTable::GetInstance().GetAllAlchemyData();
-                for (int i = recipeDisplayRange.x; i <= recipeDisplayRange.y && i < alchemyDataList.size(); i++)
+
+                Vector2Int range = { recipeListPageIndex * DISPLAY_RECIPES_COUNTS_IN_PAGE, recipeListPageIndex * DISPLAY_RECIPES_COUNTS_IN_PAGE + DISPLAY_RECIPES_COUNTS_IN_PAGE - 1 };
+
+                for (int i = range.x; i <= range.y && i < alchemyDataList.size(); i++)
                 {
                     auto renderStrings = alchemyDataList[i]->GetRenderString();
                     for (const auto& line : renderStrings)
                     {
                         result.emplace_back(line);
                     }
+                    result.emplace_back(" ");
                 }
 
                 result.emplace_back("Up : cursor up");
@@ -69,6 +71,12 @@ vector<string> AlchemyShop::GetRenderStrings()
         case AlchemyShopState::FindRecipe:
             {
                 result.emplace_back("Ingredient : " + playerInput);
+                if (playerInput.empty())
+                {
+                    result.emplace_back("Type ingredient name to find recipes.");
+                    break;
+                }
+
                 auto recipes = FindRecipesByIngredient(playerInput);
                 for (auto& recipe : recipes)
                 {
@@ -77,6 +85,7 @@ vector<string> AlchemyShop::GetRenderStrings()
                     {
                         result.emplace_back(line);
                     }
+                    result.emplace_back(" ");
                 }
 
                 result.emplace_back("Up: Cursor up");
@@ -86,10 +95,16 @@ vector<string> AlchemyShop::GetRenderStrings()
 
         case AlchemyShopState::Craft:
             {
+                if (candidateRecipes.size() == 0)
+                {
+                    result.emplace_back(format("Nothing"));
+                    break;
+                }
+
                 for (size_t i = 0; i < candidateRecipes.size(); ++i)
                 {
-                    string itemName = ItemTable::GetInstance().GetItemName(candidateRecipes[i]->resultItemKey);
-                    if (craftCusor == i)
+                    string itemName = ConsumableItemTable::GetInstance().GetItemName(candidateRecipes[i]->resultItemKey);
+                    if (craftCursor == i)
                     {
                         result.emplace_back(format("> {} <", itemName));
                     }
@@ -118,16 +133,11 @@ void AlchemyShop::IncreaseCursorIndex()
         case AlchemyShopState::RecipeList:
             {
                 auto& alchemyDataList = AlchemyTable::GetInstance().GetAllAlchemyData();
-                int recipeListCount = static_cast<int>(alchemyDataList.size());
-                if (recipeListCursor < recipeListCount - 1)
-                {
-                    recipeListCursor++;
-                    if (recipeListCursor > recipeDisplayRange.y)
-                    {
-                        recipeDisplayRange.x++;
-                        recipeDisplayRange.y++;
-                    }
-                }
+                double recipesCount = static_cast<double>(alchemyDataList.size());
+                double countInPage = static_cast<double>(DISPLAY_RECIPES_COUNTS_IN_PAGE);
+                int maxPageCount = static_cast<int>(ceil(recipesCount / countInPage));
+
+                recipeListPageIndex = min(recipeListPageIndex + 1, maxPageCount - 1);
             }
             break;
 
@@ -135,9 +145,9 @@ void AlchemyShop::IncreaseCursorIndex()
             {
                 auto& alchemyDataList = AlchemyTable::GetInstance().GetAllAlchemyData();
                 int craftCount = static_cast<int>(alchemyDataList.size());
-                if (craftCusor < craftCount - 1)
+                if (craftCursor < craftCount - 1)
                 {
-                    craftCusor++;
+                    craftCursor++;
                 }
             }
             break;
@@ -154,24 +164,15 @@ void AlchemyShop::DecreaseCursorIndex()
 
         case AlchemyShopState::RecipeList:
             {
-                auto& alchemyDataList = AlchemyTable::GetInstance().GetAllAlchemyData();
-                if (recipeListCursor > 0)
-                {
-                    recipeListCursor--;
-                    if (recipeListCursor < recipeDisplayRange.x)
-                    {
-                        recipeDisplayRange.x--;
-                        recipeDisplayRange.y--;
-                    }
-                }
+                recipeListPageIndex = max(0, recipeListPageIndex - 1);
             }
             break;
 
         case AlchemyShopState::Craft:
             {
-                if (craftCusor > 0)
+                if (craftCursor > 0)
                 {
-                    craftCusor--;
+                    craftCursor--;
                 }
             }
             break;
@@ -189,7 +190,7 @@ void AlchemyShop::ConfirmSelection()
                 case 0: // View Recipes
                     stateStack.push(AlchemyShopState::RecipeList);
                     Reset();
-                    recipeDisplayRange = { 0, MAX_DISPLAY_RECIPES - 1 };
+                    recipeListPageIndex = 0;
                     break;
                 case 1: // Find Recipes by Ingredients
                     stateStack.push(AlchemyShopState::FindRecipe);
@@ -208,7 +209,7 @@ void AlchemyShop::ConfirmSelection()
 
         case AlchemyShopState::Craft:
             {
-                auto recipe = candidateRecipes[craftCusor];
+                auto recipe = candidateRecipes[craftCursor];
                 
                 //checking possible to craft
                 shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectByType<Player>();
@@ -217,20 +218,22 @@ void AlchemyShop::ConfirmSelection()
                 {
                     if (!player->HasEnoughItem(ingredient.itemKey, ingredient.quantity))
                     {
-                        Logger::LogInfo("Not enough ingredients to craft " + ItemTable::GetInstance().GetItemName(recipe->resultItemKey));
+                        Logger::LogInfo(format("Not enough for {}" , ConsumableItemTable::GetInstance().GetItemName(recipe->resultItemKey)));
                         return;
                     }
                 }
 
-                player->AddItemQuantity(recipe->resultItemKey, 1);
+                player->AddItemQuantity(recipe->resultItemKey, ItemType::Consumable, 1);
 
                 //succeed
                 for (const auto& ingredient : recipe->ingredients)
                 {
-                    player->AddItemQuantity(ingredient.itemKey, -ingredient.quantity);
+                    player->AddItemQuantity(ingredient.itemKey, ItemType::Ingredient, -ingredient.quantity);
                 }
 
                 BuildCandidateRecipesList();
+                craftCursor = max(0, craftCursor);
+                craftCursor = min(craftCursor, static_cast<int>(candidateRecipes.size()) - 1);
             }
             break;
         default:
@@ -270,18 +273,18 @@ void AlchemyShop::OnCancel()
 void AlchemyShop::Reset()
 {
     mainMenuCursor = 0;
-    recipeListCursor = 0;
+    recipeListPageIndex = 0;
     findRecipeCursor = 0;
-    craftCusor = 0;
+    craftCursor = 0;
     playerInput.clear();
 }
 
 void AlchemyShop::OnDisable()
 {
     mainMenuCursor = -1;
-    recipeListCursor = -1;
+    recipeListPageIndex = -1;
     findRecipeCursor = -1;
-    craftCusor = -1;
+    craftCursor = -1;
 }
 
 void AlchemyShop::HandleEvent(shared_ptr<EventParameter> message)
@@ -318,6 +321,8 @@ void AlchemyShop::HandleEvent(shared_ptr<EventParameter> message)
             {
                 DestroyEntity();
             }
+            break;
+
         default:
             break;
     }
@@ -436,7 +441,7 @@ vector<shared_ptr<AlchemyData>> AlchemyShop::FindRecipesByIngredient(const strin
     {
         for (auto& ingredient : data->ingredients)
         {
-            string ingredientName = ItemTable::GetInstance().GetItemName(ingredient.itemKey);
+            string ingredientName = ConsumableItemTable::GetInstance().GetItemName(ingredient.itemKey);
             if (ingredientName.find(name) != string::npos)
             {
                 result.emplace_back(data);

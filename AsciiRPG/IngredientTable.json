@@ -1,5 +1,4 @@
-﻿
-[
+﻿[
   {
     "key": 10000,
     "name": "Slime Gell",
@@ -99,5 +98,10 @@
     "key": 10019,
     "name": "Wyvern Fang",
     "cost": 160
+  },
+  {
+    "key": 10020,
+    "name": "Dragon Heart",
+    "cost": 300
   }
 ]

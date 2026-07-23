@@ -5,6 +5,7 @@
 #include "Position.h"
 #include "Entity.h"
 #include "MathUtility.h"
+#include "MonsterItemDropTable.h"
 
 Monster::Monster(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
@@ -14,8 +15,9 @@ Monster::Monster(int64_t id, const std::string& name, std::shared_ptr<IConstruct
     attack = constructionParams->attack;
     defense = constructionParams->defense;
     exp = constructionParams->exp;
-    dropItems = constructionParams->dropItems;
+    dropItems = MonsterItemDropTable::GetInstance().GetDropItems(constructionParams->dropTableKey);
     attackDelay = constructionParams->attackDelay;
+    
     if (auto ptr = entity.lock())
         monsterPosition = ptr->GetComponent<Position>();
 }
@@ -34,6 +36,7 @@ void Monster::TakeDamage(int damage)
     {
         if (auto ptr = entity.lock())
         {
+            Logger::LogInfo(format("{} is dead!", ptr->GetName()));
             ObjectManager::GetInstance().DestroyEntity(ptr);
         }
     }
@@ -49,7 +52,7 @@ bool Monster::IsDead() const
     return hp <= 0;
 }
 
-vector<DropItemData>& Monster::GetDropItems()
+vector<shared_ptr<MonsterItemDropData>>& Monster::GetDropItems()
 {
     return dropItems;
 }
@@ -80,7 +83,7 @@ void Monster::Update()
 
     else if(DateTime::Now() >= nextAttackTime)
     {
-        Logger::LogError(format("{} attacks player for {} damage", name, attack));
+        Logger::LogError(format("{} attacks({}) you", name, attack));
         player->TakeDamage(attack);
         nextAttackTime = DateTime::Now();
         nextAttackTime.AddSeconds(attackDelay);

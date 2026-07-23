@@ -5,7 +5,6 @@
 #include "Object.h"
 #include "Component.h"
 #include "TemplateDeclare.h"
-
 using namespace std;
 
 class IConstructionParameter;

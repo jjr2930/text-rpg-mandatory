@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "IConstructionParameter.h"
+#include "Enums.h"
 
 /// <summary>
 /// TODO: StaticObjectTag
@@ -13,22 +14,22 @@ public:
     class ConstructionParameter : public Component::ConstructionParamterBase
     {
     public:
-        ConstructionParameter(shared_ptr<Entity> entity, char tag)
+        ConstructionParameter(shared_ptr<Entity> entity, DungeonTagTypes tag)
             : Component::ConstructionParamterBase(entity)
             , tag(tag)
         {}
 
-        char tag;
+        DungeonTagTypes tag;
     };
 
 public:
     using Component::Component;
     DungeonObjectTag(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
 
-    char GetTag() const { return tag; }
+    DungeonTagTypes GetTag() const { return tag; }
 
 private:
-    char tag;
+    DungeonTagTypes tag;
 };
 
 #endif // !DUNGEON_OBJECT_TAG

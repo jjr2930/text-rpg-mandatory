@@ -1,5 +1,7 @@
 ﻿#include "InventoryItem.h"
-#include "ItemTable.h"
+#include "IngredientTable.h"
+#include "ItemBank.h"
+
 #include <cassert>
 
 int InventoryItem::GetTableKey() const
@@ -27,27 +29,19 @@ int InventoryItem::SetQuantity(int amount)
 string InventoryItem::GetName() const
 {
     //TODO: 느려!
-    const ItemData* itemData = ItemTable::GetInstance().GetItemData(tableKey);
-    
-    assert(itemData && "Item data not found");
-
-    return itemData->name;
+    return ItemBank::GetInstance().GetName(tableKey, itemType);
 }
 
 bool InventoryItem::GetIsUsable() const
 {
-    const ItemData* itemData = ItemTable::GetInstance().GetItemData(tableKey);
+    const auto foundItem = ItemBank::GetInstance().GetItem(tableKey, itemType);
     
-    assert(itemData && "Item data not found");
+    assert(foundItem && "Item data not found");
 
-    return itemData->isUsable;
+    return foundItem->isUsable;
 }
 
-const ItemData* InventoryItem::GetItemDataFromTable() const
+const shared_ptr<IItem> InventoryItem::GetItemDataFromTable() const
 {
-    const ItemData* itemData = ItemTable::GetInstance().GetItemData(tableKey);
-    
-    assert(itemData && "Item data not found");
-
-    return itemData;
+    return ItemBank::GetInstance().GetItem(tableKey, itemType);
 }

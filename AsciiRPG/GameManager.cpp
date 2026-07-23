@@ -15,6 +15,8 @@
 #include "Player.h"
 #include "Logger.h"
 #include "GameTime.h"
+#include "MonsterTable.h"
+#include "ItemBank.h"
 
 #include <memory>
 #include <vector>
@@ -26,6 +28,7 @@ using namespace std;
 GameManager::GameManager()
     : currentMapIndex(0)
 {
+
     CreationUtil::CreatePlayer(Vector2Int(3, 3));
 
     //1 is town map
@@ -34,16 +37,16 @@ GameManager::GameManager()
     shared_ptr<Map> townMap = CreationUtil::CreateTownMap();
     maps.emplace_back(townMap);
 
-    //RandomMapGenerator rmg;
+    RandomMapGenerator rmg;
 
-    //for (int i = 1; i < Const::Map::DUNGEON_DEPTH + 1; ++i)
-    //{
-    //    shared_ptr<Map> newMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
+    for (int i = 1; i < Const::Map::DUNGEON_DEPTH + 1; ++i)
+    {
+        shared_ptr<Map> newMap = make_shared<Map>(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT);
 
-    //    rmg.GenerateRandomMap(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT, newMap);
+        rmg.GenerateRandomMap(Const::Map::DEFAULT_WIDTH, Const::Map::DEFAULT_HEIGHT, i, newMap);
 
-    //    maps.emplace_back(newMap);
-    //}
+        maps.emplace_back(newMap);
+    }
 
     shared_ptr<Map> dragonRoom = CreationUtil::CreateDragonRoom();
     maps.emplace_back(dragonRoom);
@@ -94,7 +97,8 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
     {
         for(int x = 0; x < Const::Map::DEFAULT_WIDTH; ++x)
         {
-            char cellChar = maps[currentMapIndex]->GetCellData(x, y);
+            DungeonTagTypes cellType = maps[currentMapIndex]->GetCellData(x, y);
+            char cellChar = EnumUtility::ToChar(cellType);
             switch (cellChar)
             {
                 case Const::Map::WALL:
@@ -108,7 +112,7 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
                         {
                             auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
                             playerPosition->SetPosition(x, y);
-                            Logger::LogInfo(format("Entrance Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
+                            //Logger::LogInfo(format("Entrance Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
                         }
                     }
                     break;
@@ -120,20 +124,17 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
                         {
                             auto [player, playerPosition] = ObjectManager::GetInstance().GetComponentTuple<Player, Position>();
                             playerPosition->SetPosition(x, y);
-                            Logger::LogInfo(format("Exit Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
+                            //Logger::LogInfo(format("Exit Position : ({}, {}), Player position set to ({}, {})", x, y, x, y));
                         }
                     }
                     break;
 
                 case Const::Map::ITEM:
                     {
-                        int randomItemKey = Random::GetInstance().RandomRange(1, 2);
-                        CreationUtil::CreateFieldItem(Vector2Int(x, y), randomItemKey, 1);
+                        shared_ptr<IItem> randomItem = ItemBank::GetInstance().GetRandomItem();
+                        int quantity = Random::GetInstance().RandomRange(1, 10);
+                        CreationUtil::CreateFieldItem(Vector2Int(x, y), randomItem, quantity);
                     }
-                    break;
-
-                case Const::Map::MONSTER:
-                    CreationUtil::CreateMonster(Vector2Int(x, y));
                     break;
 
                 case Const::Map::NPC:
@@ -145,6 +146,10 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
                     break;
 
                 default:
+                    if (MonsterTable::GetInstance().IsExist(cellChar))
+                    {
+                        CreationUtil::CreateMonster(Vector2Int(x, y), cellChar);
+                    }   
                     break;
             }
         }
@@ -171,7 +176,7 @@ void GameManager::ChangeMap(int newMapIndex)
 
     ObjectManager::GetInstance().BroadcastEvent(make_shared<EventParameter>(EventType::OnMapClearRequested));
 
-    ObjectManager::GetInstance().PrintCurrentState();
+    //ObjectManager::GetInstance().PrintCurrentState();
 
     int oldIndex = currentMapIndex;
     currentMapIndex = newMapIndex;

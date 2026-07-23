@@ -100,6 +100,37 @@ enum class Virtualkey
     Backspace,
 };
 
+enum class DungeonTagTypes
+{
+    None = -1,
+    Wall,
+    Entrance,
+    Exit,
+    Player,
+    Alchemist,
+    FieldDropItem,
+    GreenSlime,
+    SekeletonWarrior,
+    ForestGolblin,
+    MoonlitWisp,
+    CaveTroll,
+    OgreBrute,
+    StoneGolem,
+    HarpyScout,
+    VenomousSpider,
+    SunCultAcolyte,
+    SylphGuardian,
+    AncientWyvertn,
+    RedDragon,  //boss
+};
+
+enum class ItemType
+{
+    None = -1,
+    Consumable,
+    Ingredient,
+};
+
 class EnumUtility
 {
 public:
@@ -173,6 +204,11 @@ public:
         }
     }
 
+    /// <summary>
+    /// TODO: char* -> string
+    /// </summary>
+    /// <param name="statType"></param>
+    /// <returns></returns>
     static const char* ToString(StatType statType)
     {
         switch (statType)
@@ -186,6 +222,11 @@ public:
         }
     }
 
+    /// <summary>
+    /// TODO: char* -> string
+    /// </summary>
+    /// <param name="operatorType"></param>
+    /// <returns></returns>
     static const char* ToString(OperatorType operatorType)
     {
         switch (operatorType)
@@ -198,6 +239,79 @@ public:
             default: return "Unknown";
         }
     }
+
+    static const char ToChar(DungeonTagTypes tag)
+    {
+        switch (tag)
+        {
+            case DungeonTagTypes::None:             return ' ';
+            case DungeonTagTypes::Wall:             return '#';
+            case DungeonTagTypes::Entrance:         return 'S';
+            case DungeonTagTypes::Exit:             return 'X';
+            case DungeonTagTypes::Player:           return 'P';
+            case DungeonTagTypes::Alchemist:        return 'N';
+            case DungeonTagTypes::FieldDropItem:    return '*';
+            case DungeonTagTypes::GreenSlime:       return 'L';
+            case DungeonTagTypes::SekeletonWarrior: return 'K';
+            case DungeonTagTypes::ForestGolblin:    return 'G';
+            case DungeonTagTypes::MoonlitWisp:      return 'W';
+            case DungeonTagTypes::CaveTroll:        return 'T';
+            case DungeonTagTypes::OgreBrute:        return 'O';
+            case DungeonTagTypes::StoneGolem:       return 'M';
+            case DungeonTagTypes::HarpyScout:       return 'H';
+            case DungeonTagTypes::VenomousSpider:   return 'I';
+            case DungeonTagTypes::SunCultAcolyte:   return 'A';
+            case DungeonTagTypes::SylphGuardian:    return 'Y';
+            case DungeonTagTypes::AncientWyvertn:   return 'V';
+            case DungeonTagTypes::RedDragon:        return 'D';
+            default: return '?';
+        }
+    }
+
+    static const DungeonTagTypes ToDungeonTagTypes(char c)
+    {
+        switch (c)
+        {
+            case ' ': return DungeonTagTypes::None;
+            case '#': return DungeonTagTypes::Wall;
+            case 'S': return DungeonTagTypes::Entrance;
+            case 'X': return DungeonTagTypes::Exit;
+            case 'P': return DungeonTagTypes::Player;
+            case 'N': return DungeonTagTypes::Alchemist;
+            case '*': return DungeonTagTypes::FieldDropItem;
+            case 'L': return DungeonTagTypes::GreenSlime;
+            case 'K': return DungeonTagTypes::SekeletonWarrior;
+            case 'G': return DungeonTagTypes::ForestGolblin;
+            case 'W': return DungeonTagTypes::MoonlitWisp;
+            case 'T': return DungeonTagTypes::CaveTroll;
+            case 'O': return DungeonTagTypes::OgreBrute;
+            case 'M': return DungeonTagTypes::StoneGolem;
+            case 'H': return DungeonTagTypes::HarpyScout;
+            case 'I': return DungeonTagTypes::VenomousSpider;
+            case 'A': return DungeonTagTypes::SunCultAcolyte;
+            case 'Y': return DungeonTagTypes::SylphGuardian;
+            case 'V': return DungeonTagTypes::AncientWyvertn;
+            case 'D': return DungeonTagTypes::RedDragon; //boss
+            default: return DungeonTagTypes::None; // Unknown character
+        }
+    }
 };
+
+#include "json.hpp"
+NLOHMANN_JSON_SERIALIZE_ENUM(OperatorType, {
+    {OperatorType::None, "None"},
+    {OperatorType::Add, "Add"},
+    {OperatorType::Subtract, "Subtract"},
+    {OperatorType::Multiply, "Multiply"},
+    {OperatorType::Divide, "Divide"}
+})
+
+NLOHMANN_JSON_SERIALIZE_ENUM(StatType, {
+    {StatType::None, "None"},
+    {StatType::MaxHealth, "MaxHealth"},
+    {StatType::CurrentHealth, "CurrentHealth"},
+    {StatType::Attack, "Attack"},
+    {StatType::Defense, "Defense"}
+})
 
 #endif // !ENUMS_H

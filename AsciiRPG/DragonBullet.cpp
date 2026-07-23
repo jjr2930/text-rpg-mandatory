@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "MathUtility.h"
 #include "Logger.h"
+#include "Wall.h"
+
 DragonBullet::~DragonBullet()
 {
     Logger::LogInfo("Bullet destroyed");
@@ -73,6 +75,17 @@ void DragonBullet::Update()
     {
         DestroyEntity();
         return;
+    }
+
+    auto walls = ObjectManager::GetInstance().GetComponentTupleVector<Wall, Position>();
+    
+    for (auto& [wall, wallPosition] : walls)
+    {
+        if (MathUtility::IsOverlap(screenPosition, wallPosition->GetPosition(), 0))
+        {
+            DestroyEntity();
+            return;
+        }
     }
 
     if(MathUtility::IsOverlap(screenPosition, playerPosition->GetPosition(), 0))

@@ -1,9 +1,10 @@
 #include "Stat.h"
 #include "Logger.h"
 #include "GameTime.h"
-#include "ItemData.h"
-#include <format>
+#include "ItemBank.h"
+#include "ConsumableItemTable.h"
 
+#include <format>
 #include <cassert>
 #include <algorithm>
 
@@ -30,9 +31,16 @@ void Stat::AddBuff(StatType statType, OperatorType operatorType, float value, bo
     }
 }
 
-void Stat::AddBuff(const ItemData& itemData)
+void Stat::AddBuff(const std::shared_ptr<ConsumableItemData> itemData)
 {
-    AddBuff(itemData.statType, itemData.operatorType, itemData.amount, itemData.isInstant, itemData.duration, itemData.interval);
+    AddBuff(
+        itemData->statType,
+        itemData->operatorType, 
+        itemData->amount,
+        itemData->isInstant, 
+        itemData->duration, 
+        itemData->interval
+    );
 }
 
 void Stat::AddStat(StatType statType, float value)
