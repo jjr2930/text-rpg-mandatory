@@ -34,8 +34,8 @@ public:
 
     int GetLevel() const;
     int GetExp() const;
-    int GetCurrentHelath() const;
-    int GetMaxHp() const;
+    int GetCurrentHealth() const;
+    int GetMaxHealth() const;
     int GetAttack() const;
     int GetDefense() const;
     int GetInventoryElementCount() const;
@@ -45,7 +45,7 @@ public:
 
 private:
     bool HasItem(int tableKey, int* index) const;
-    void AddItems(vector<shared_ptr<MonsterItemDropData>>& dropItems);
+    void AddItems(shared_ptr<MonsterItemDropData> dropItem);
     void Attack();
     void Interact();
     void AddExp(int exp);
@@ -61,7 +61,6 @@ private:
     vector<InventoryItem> inventory;
 
     int playerLevel;
-    int currentExp;
     int maxExp;
     int inventoryCursorIndex = 0;
     int npcDialogCursorIndex = 0;

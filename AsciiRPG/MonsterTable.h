@@ -18,9 +18,9 @@ public:
     int dropTableKey;
     int minFloor;
     int maxFloor;
-    int hp;
-    int attack;
-    int defense;
+    float hp;
+    float attack;
+    float defense;
     int exp;
     double attackDelay;
 };

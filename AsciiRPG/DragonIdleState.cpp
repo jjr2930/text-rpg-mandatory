@@ -6,7 +6,7 @@
 
 void DragonIdleState::Start()
 {
-    double now = GameTime::GetInstance().GetTime();
+    double now = GameTime::GetInstance().GetNow();
     double randomInterval = idleDurationRange.GetRandomValue();
     endIdleTime = now + randomInterval;
 

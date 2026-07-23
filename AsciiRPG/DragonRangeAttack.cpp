@@ -30,14 +30,14 @@ void DragonRangeAttack::Start()
 
 void DragonRangeAttack::Update()
 {
-    if(GameTime::GetTime() - lastAttackTime >= attackDelay)
+    if(GameTime::GetNow() - lastAttackTime >= attackDelay)
     {
         // Perform attack logic here
         // TODO: bullet damage should be based on dragon's attack stat or from monster table data
         auto bullet = CreationUtil::CreateDragonBullet(dragonPosition->GetPosition(), playerPosition->GetPosition(), 10);
 
         currentAttackCount++;
-        lastAttackTime = GameTime::GetTime();
+        lastAttackTime = GameTime::GetNow();
     }
 }
 

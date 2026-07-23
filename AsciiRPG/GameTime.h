@@ -12,7 +12,7 @@ public :
     SINGLETON_WITH_INIT(GameTime)
 
 public:
-    static double GetTime();
+    static double GetNow();
     static double GetDeltaTime();
     static void CalculateDeltaTime();
 private:

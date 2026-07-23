@@ -44,6 +44,9 @@ public:
     vector<tuple<shared_ptr<T> ...>> GetComponentTupleVector();
 
     template<ComponentType ... T>
+    vector<tuple<shared_ptr<Entity>, shared_ptr<T> ...>> GetComponentWithEntityTuppleVector();
+
+    template<ComponentType ... T>
     tuple<shared_ptr<T> ...> GetComponentTuple();
 
     /// <summary>

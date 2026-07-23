@@ -6,7 +6,7 @@ using namespace std;
 SINGLETON_INITIALIZER(GameTime);
 
 
-double GameTime::GetTime()
+double GameTime::GetNow()
 {
     return GetInstance().OnGetTime();
 }

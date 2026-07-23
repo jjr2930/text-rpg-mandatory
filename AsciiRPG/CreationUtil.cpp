@@ -24,6 +24,7 @@
 #include "DragonBullet.h"
 #include "MonsterTable.h"
 #include "IItem.h"
+#include "NormalMonster.h"
 
 #include <string>
 #include <format>
@@ -52,7 +53,8 @@ shared_ptr<Entity> CreationUtil::CreatePlayer(Vector2Int position)
         { StatType::MaxHealth, Const::Stat::Player::INIT_HP },
         { StatType::CurrentHealth, Const::Stat::Player::INIT_HP },
         { StatType::Attack, Const::Stat::Player::INIT_ATTACK },
-        { StatType::Defense, Const::Stat::Player::INIT_DEFENSE }
+        { StatType::Defense, Const::Stat::Player::INIT_DEFENSE },
+        { StatType::Exp, 0 },
     }));
     playerStat->SetName(format("{}'s Stat", newPlayerEntity->GetName()));
 
@@ -61,45 +63,6 @@ shared_ptr<Entity> CreationUtil::CreatePlayer(Vector2Int position)
 
     return newPlayerEntity;
     
-}
-
-shared_ptr<Entity> CreationUtil::CreateMonster(Vector2Int position, char displayChar)
-{
-    shared_ptr<MonsterData> monsterData = MonsterTable::GetInstance().GetMonsterData(displayChar);
-
-    auto newMonsterEntity = ObjectManager::GetInstance().CreateEntity();
-    newMonsterEntity->SetName(monsterData->name);
-
-    auto monsterPosition = newMonsterEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, newMonsterEntity));
-    monsterPosition->SetName(format("{}'s Position", newMonsterEntity->GetName()));
-
-    auto monsterRenderer = newMonsterEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(displayChar, newMonsterEntity));
-    monsterRenderer->SetName(format("{}'s Renderer", newMonsterEntity->GetName()));
-
-    DungeonTagTypes monsterTagType = EnumUtility::ToDungeonTagTypes(displayChar);
-    auto monsterDungeonObjectTag = newMonsterEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(newMonsterEntity, monsterTagType));
-
-    monsterDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", newMonsterEntity->GetName()));
-
-    auto monsterStat = newMonsterEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(newMonsterEntity, unordered_map<StatType, float>{
-        { StatType::MaxHealth, (float)monsterData->hp},
-        { StatType::CurrentHealth, (float)monsterData->hp },
-        { StatType::Attack, (float)monsterData->attack },
-        { StatType::Defense, (float)monsterData->defense }
-    }));
-   
-    auto monsterConstructionParameter = std::make_shared<Monster::MonsterConstructionParameter>(newMonsterEntity
-        , (int)monsterData->hp
-        , (int)monsterData->attack
-        , (int)monsterData->defense
-        , (int)monsterData->exp
-        , (int)monsterData->attackDelay
-        , (int)monsterData->dropTableKey);
-
-    auto monsterComponent = newMonsterEntity->AddComponent<Monster>(monsterConstructionParameter);
-    monsterComponent->SetName(format("{}'s Monster", newMonsterEntity->GetName()));
-    
-    return newMonsterEntity;
 }
 
 shared_ptr<Entity> CreationUtil::CreateWall(Vector2Int position)
@@ -224,27 +187,50 @@ shared_ptr<Entity> CreationUtil::CreateNpc(Vector2Int position)
     return npcEntity;
 }
 
+shared_ptr<Entity> CreationUtil::CreateMonsterBase(Vector2Int position, char displayChar)
+{
+    auto monsterData = MonsterTable::GetInstance().GetMonsterData(displayChar);
+    auto monsterEntity = ObjectManager::GetInstance().CreateEntity();
+    monsterEntity->SetName(monsterData->name);
+
+    monsterEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, monsterEntity));
+    monsterEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(displayChar, monsterEntity));
+
+    auto tagType = EnumUtility::ToDungeonTagTypes(displayChar);
+    monsterEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(monsterEntity, tagType));
+    monsterEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(monsterEntity
+        , unordered_map<StatType, float>
+            {
+                { StatType::MaxHealth, monsterData->hp },
+                { StatType::CurrentHealth, monsterData->hp },
+                { StatType::Attack, monsterData->attack },
+                { StatType::Defense, monsterData->defense },
+                { StatType::AttackDelay, monsterData->attackDelay },
+                { StatType::Exp, monsterData->exp },
+            }));
+
+    return monsterEntity;
+}
+
+shared_ptr<Entity> CreationUtil::CreateNormalMonster(Vector2Int position, char displayChar)  
+{
+    auto monsterData = MonsterTable::GetInstance().GetMonsterData(displayChar);
+    auto monsterEntity = CreateMonsterBase(position, displayChar);
+
+    shared_ptr<Monster::MonsterConstructionParameter> monsterConstructionParameter
+        = std::make_shared<Monster::MonsterConstructionParameter>(monsterEntity, (int)monsterData->dropTableKey);
+
+    monsterEntity->AddComponent<NormalMonster>(monsterConstructionParameter);
+    return monsterEntity;
+}
+
 shared_ptr<Entity> CreationUtil::CreateDragon(Vector2Int position)
 {
-    auto dragonEntity = ObjectManager::GetInstance().CreateEntity();
-    auto dragonPosition = dragonEntity->AddComponent<Position>(std::make_shared<Position::ConstructParameter>(position.x, position.y, dragonEntity));
-    dragonPosition->SetName(format("{}'s Position", dragonEntity->GetName()));
-
-    auto dragonRenderer = dragonEntity->AddComponent<Renderer>(std::make_shared<Renderer::ConstructionParameter>(Const::Map::DRAGON, dragonEntity));
-    dragonRenderer->SetName(format("{}'s Renderer", dragonEntity->GetName()));
-
+    auto dragonData = MonsterTable::GetInstance().GetMonsterData(Const::Map::DRAGON);
+    auto dragonEntity = CreateMonsterBase(position, Const::Map::DRAGON);
+    
     auto dragonComponent = dragonEntity->AddComponent<Dragon>(std::make_shared<Component::ConstructionParamterBase>(dragonEntity));
     dragonComponent->SetName(format("{}'s Dragon", dragonEntity->GetName()));
-
-    auto dragonStat = dragonEntity->AddComponent<Stat>(std::make_shared<Stat::ConstructionParameter>(dragonEntity, unordered_map<StatType, float>{
-        { StatType::MaxHealth, 100.0f },
-        { StatType::CurrentHealth, 100.0f },
-        { StatType::Attack, 20.0f },
-        { StatType::Defense, 5.0f }
-    }));
-
-    auto dragonDungeonObjectTag = dragonEntity->AddComponent<DungeonObjectTag>(std::make_shared<DungeonObjectTag::ConstructionParameter>(dragonEntity, DungeonTagTypes::RedDragon));
-    dragonDungeonObjectTag->SetName(format("{}'s DungeonObjectTag", dragonEntity->GetName()));
 
     return dragonEntity;
 }

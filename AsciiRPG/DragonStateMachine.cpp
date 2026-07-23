@@ -67,7 +67,7 @@ bool DragonStateMachine::IdleFinished(shared_ptr<State> state) const
     shared_ptr<DragonIdleState> idleState = dynamic_pointer_cast<DragonIdleState>(state);
 
     double idleEndTime = idleState->GetEndIdleTime();
-    double currentTime = GameTime::GetInstance().GetTime();
+    double currentTime = GameTime::GetInstance().GetNow();
 
     return currentTime >= idleEndTime;
 }
