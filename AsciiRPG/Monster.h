@@ -45,17 +45,14 @@ public:
     void HandleEvent(shared_ptr<EventParameter> message) override;
 
 private:
-    int hp;
-    int attack;
-    int defense;
     int exp;
-    int attackDelay;
     bool fistOverlap;
     DateTime nextAttackTime;
 
     vector<shared_ptr<MonsterItemDropData>> dropItems;
 
     shared_ptr<Position> monsterPosition;    
+    shared_ptr<Stat> monsterStat;
 };
 
 #endif
