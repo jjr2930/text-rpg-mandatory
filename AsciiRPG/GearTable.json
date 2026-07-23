@@ -1,0 +1,238 @@
+[
+  {
+    "key": 5001,
+    "name": "Rusty Iron Sword",
+    "cost": 80,
+    "isUsable": false,
+    "slot": "Weapon",
+    "minLevel": 1,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 2.0 }
+    ]
+  },
+  {
+    "key": 5002,
+    "name": "Goblin Shiv",
+    "cost": 180,
+    "isUsable": false,
+    "slot": "Weapon",
+    "minLevel": 3,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 4.0 }
+    ]
+  },
+  {
+    "key": 5003,
+    "name": "Ogre Bone Axe",
+    "cost": 520,
+    "isUsable": false,
+    "slot": "Weapon",
+    "minLevel": 6,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 8.0 }
+    ]
+  },
+  {
+    "key": 5004,
+    "name": "Wyvern Fang Blade",
+    "cost": 1400,
+    "isUsable": false,
+    "slot": "Weapon",
+    "minLevel": 9,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 14.0 }
+    ]
+  },
+  {
+    "key": 5005,
+    "name": "Leather Cap",
+    "cost": 60,
+    "isUsable": false,
+    "slot": "Head",
+    "minLevel": 1,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 1.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 5.0 }
+    ]
+  },
+  {
+    "key": 5006,
+    "name": "Skeleton Helm",
+    "cost": 210,
+    "isUsable": false,
+    "slot": "Head",
+    "minLevel": 3,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 2.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 10.0 }
+    ]
+  },
+  {
+    "key": 5007,
+    "name": "Golem Stone Helm",
+    "cost": 600,
+    "isUsable": false,
+    "slot": "Head",
+    "minLevel": 6,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 4.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 18.0 }
+    ]
+  },
+  {
+    "key": 5008,
+    "name": "Crown of the Ancient",
+    "cost": 1550,
+    "isUsable": false,
+    "slot": "Head",
+    "minLevel": 9,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 6.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 30.0 }
+    ]
+  },
+  {
+    "key": 5009,
+    "name": "Padded Tunic",
+    "cost": 100,
+    "isUsable": false,
+    "slot": "Body",
+    "minLevel": 1,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 2.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 8.0 }
+    ]
+  },
+  {
+    "key": 5010,
+    "name": "Ironbark Armor",
+    "cost": 320,
+    "isUsable": false,
+    "slot": "Body",
+    "minLevel": 4,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 4.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 15.0 }
+    ]
+  },
+  {
+    "key": 5011,
+    "name": "Stone Golem Plate",
+    "cost": 850,
+    "isUsable": false,
+    "slot": "Body",
+    "minLevel": 7,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 7.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 28.0 }
+    ]
+  },
+  {
+    "key": 5012,
+    "name": "Wyvern Scale Armor",
+    "cost": 1900,
+    "isUsable": false,
+    "slot": "Body",
+    "minLevel": 10,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 11.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 45.0 }
+    ]
+  },
+  {
+    "key": 5013,
+    "name": "Worn Leather Boots",
+    "cost": 70,
+    "isUsable": false,
+    "slot": "Feet",
+    "minLevel": 1,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 1.0 }
+    ]
+  },
+  {
+    "key": 5014,
+    "name": "Harpy Feather Boots",
+    "cost": 260,
+    "isUsable": false,
+    "slot": "Feet",
+    "minLevel": 4,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 2.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 6.0 }
+    ]
+  },
+  {
+    "key": 5015,
+    "name": "Sylph Walker Boots",
+    "cost": 720,
+    "isUsable": false,
+    "slot": "Feet",
+    "minLevel": 7,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 3.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 14.0 }
+    ]
+  },
+  {
+    "key": 5016,
+    "name": "Dragonbone Greaves",
+    "cost": 1350,
+    "isUsable": false,
+    "slot": "Feet",
+    "minLevel": 10,
+    "statModifiers": [
+      { "statType": "Defense", "operatorType": "Add", "amount": 5.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 22.0 }
+    ]
+  },
+  {
+    "key": 5017,
+    "name": "Copper Warrior Ring",
+    "cost": 140,
+    "isUsable": false,
+    "slot": "Accessory",
+    "minLevel": 2,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 1.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 5.0 }
+    ]
+  },
+  {
+    "key": 5018,
+    "name": "Moonstone Pendant",
+    "cost": 400,
+    "isUsable": false,
+    "slot": "Accessory",
+    "minLevel": 5,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 3.0 },
+      { "statType": "Defense", "operatorType": "Add", "amount": 2.0 }
+    ]
+  },
+  {
+    "key": 5019,
+    "name": "Sun Cult Talisman",
+    "cost": 900,
+    "isUsable": false,
+    "slot": "Accessory",
+    "minLevel": 8,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 5.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 18.0 }
+    ]
+  },
+  {
+    "key": 5020,
+    "name": "Heart of the Wyvern",
+    "cost": 2200,
+    "isUsable": false,
+    "slot": "Accessory",
+    "minLevel": 10,
+    "statModifiers": [
+      { "statType": "Attack", "operatorType": "Add", "amount": 8.0 },
+      { "statType": "Defense", "operatorType": "Add", "amount": 4.0 },
+      { "statType": "MaxHealth", "operatorType": "Add", "amount": 25.0 }
+    ]
+  }
+]

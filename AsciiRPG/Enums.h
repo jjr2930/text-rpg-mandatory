@@ -131,6 +131,7 @@ enum class ItemType
     None = -1,
     Consumable,
     Ingredient,
+    Gear,
 };
 
 class EnumUtility
@@ -315,5 +316,13 @@ NLOHMANN_JSON_SERIALIZE_ENUM(StatType, {
     {StatType::Attack, "Attack"},
     {StatType::Defense, "Defense"}
 })
+
+NLOHMANN_JSON_SERIALIZE_ENUM(ItemType, {
+    {ItemType::None, "None"},
+    {ItemType::Consumable, "Consumable"},
+    {ItemType::Ingredient, "Ingredient"},
+    {ItemType::Gear, "Gear"}
+})
+
 
 #endif // !ENUMS_H
