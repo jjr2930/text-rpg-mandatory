@@ -53,6 +53,8 @@ enum class StatType
     CurrentHealth,
     Attack,
     Defense,
+    AttackDelay,
+    Exp,
 };
 
 enum class OperatorType

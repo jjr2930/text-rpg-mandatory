@@ -148,7 +148,7 @@ void GameManager::CreateCurrentMapObjects(bool goingToDown)
                 default:
                     if (MonsterTable::GetInstance().IsExist(cellChar))
                     {
-                        CreationUtil::CreateMonster(Vector2Int(x, y), cellChar);
+                        CreationUtil::CreateNormalMonster(Vector2Int(x, y), cellChar);
                     }   
                     break;
             }

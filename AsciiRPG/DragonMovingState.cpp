@@ -27,7 +27,7 @@ void DragonMovingState::Start()
     this->playerPosition = playerPosition;
     this->dragonPosition = dragonPosition;
 
-    movingStartTime = GameTime::GetTime();
+    movingStartTime = GameTime::GetNow();
 }
 
 void DragonMovingState::Update()
@@ -60,7 +60,7 @@ bool DragonMovingState::IsArrived() const
 
 bool DragonMovingState::IsTimeout() const
 {
-    double now = GameTime::GetTime();
+    double now = GameTime::GetNow();
     if (now - movingStartTime >= Const::Stat::DRAGON::MOVING_TIMEOUT)
     {
         Logger::LogInfo("Dragon moving state timeout!");
@@ -193,7 +193,7 @@ void DragonMovingState::PathfindToPlayer()
 
 bool DragonMovingState::IsTimeToMove() const
 {
-    if(GameTime::GetTime() - lastMovingTime >= movingDelay)
+    if(GameTime::GetNow() - lastMovingTime >= movingDelay)
     {
         return true;
     }
@@ -217,6 +217,6 @@ void DragonMovingState::MoveNextStepTowardsPlayer()
 
         //Logger::LogInfo(format("Dragon moved to ({}, {})", nextPoint.x, nextPoint.y));
         currentPathIndex++;
-        lastMovingTime = GameTime::GetTime();
+        lastMovingTime = GameTime::GetNow();
     }
 }

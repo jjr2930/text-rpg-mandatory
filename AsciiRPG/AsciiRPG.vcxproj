@@ -196,6 +196,7 @@
     <ClCompile Include="MathUtility.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterTable.cpp" />
+    <ClCompile Include="NormalMonster.cpp" />
     <ClCompile Include="Npc.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="MinMax.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterTable.h" />
+    <ClInclude Include="NormalMonster.h" />
     <ClInclude Include="Npc.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />

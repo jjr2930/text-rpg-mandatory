@@ -55,7 +55,7 @@ void Stat::SetStat(StatType statType, float value)
 
 void Stat::Update()
 {
-    double nowTime = GameTime::GetInstance().GetTime();
+    double nowTime = GameTime::GetInstance().GetNow();
     for (auto iter = buffs.begin(); iter != buffs.end();)
     {
         if (nowTime - iter->lastAppliedTime >= iter->interval)

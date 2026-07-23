@@ -30,7 +30,7 @@ void DragonAttackState::Start()
 
 void DragonAttackState::Update()
 {
-    double currentTime = GameTime::GetInstance().GetTime();
+    double currentTime = GameTime::GetInstance().GetNow();
     if (currentTime - lastAttackTime >= attackDelay) // Attack interval = 1 second
     {
         player->TakeDamage(static_cast<int>(dragonStat->GetStat(StatType::Attack)));

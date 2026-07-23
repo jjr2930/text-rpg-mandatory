@@ -211,7 +211,7 @@ void VirtualDisplay::RenderIngame()
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y, PLAYER_STATUS_TITLE);
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 1, format("LV : {0}", player->GetLevel()));
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 2, format("EXP : {0}", player->GetExp()));
-    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 3, format("HP : {0}/{1}", player->GetCurrentHelath(), player->GetMaxHp()));
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 3, format("HP : {0}/{1}", player->GetCurrentHealth(), player->GetMaxHealth()));
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 4, format("ATK : {0}", player->GetAttack()));
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 5, format("DEF : {0}", player->GetDefense()));
 

@@ -16,6 +16,12 @@ shared_ptr<T> Entity::AddComponent()
     return component;
 }
 
+/// <summary>
+/// TODO: params do not use shared_ptr, use reference or value copy, because make_shared hide constructor's parameter infomation...
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="params"></param>
+/// <returns></returns>
 template <ComponentType T>
 shared_ptr<T> Entity::AddComponent(std::shared_ptr<IConstructionParameter> params)
 {

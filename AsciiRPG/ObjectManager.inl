@@ -56,6 +56,31 @@ shared_ptr<T> ObjectManager::GetObjectByType()
 }
 
 template<ComponentType ... T>
+vector<tuple<shared_ptr<Entity>, shared_ptr<T> ...>> ObjectManager::GetComponentWithEntityTuppleVector()
+{
+    vector<tuple<shared_ptr<Entity>, shared_ptr<T> ...>> result;
+    for (const auto& entity : createdEntities)
+    {
+        auto componentsTuple = make_tuple(entity, entity->template GetComponent<T>() ...);
+
+        const bool allComponentsExist = apply(
+            [](const auto&... components)
+            {
+                return (... && (components != nullptr));
+            },
+            componentsTuple
+        );
+
+        if (allComponentsExist)
+        {
+            result.emplace_back(std::move(componentsTuple));
+        }
+    }
+    return result;
+}
+
+
+template<ComponentType ... T>
 vector<tuple<shared_ptr<T> ...>> ObjectManager::GetComponentTupleVector()
 {
     vector<tuple<shared_ptr<T> ...>> result;

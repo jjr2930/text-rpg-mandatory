@@ -24,7 +24,6 @@ using namespace std;
 
 Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params)
     : Component(id, name, params)
-    , currentExp(0)
     , playerLevel(1)
     , currentInputMode(CurrentInputMode::Ingame)
 {
@@ -187,15 +186,15 @@ int Player::GetLevel() const
 
 int Player::GetExp() const
 {
-    return currentExp;
+    return static_cast<int>(playerStat->GetStat(StatType::Exp));
 }
 
-int Player::GetCurrentHelath() const
+int Player::GetCurrentHealth() const
 {
     return static_cast<int>(playerStat->GetStat(StatType::CurrentHealth));
 }
 
-int Player::GetMaxHp() const
+int Player::GetMaxHealth() const
 {
     return static_cast<int>(playerStat->GetStat(StatType::MaxHealth));
 }
@@ -212,7 +211,7 @@ int Player::GetDefense() const
 
 int Player::GetInventoryElementCount() const
 {
-    return inventory.size();
+    return (int)inventory.size();
 }
 
 int Player::GetInventoryCursorIndex() const
@@ -240,49 +239,26 @@ bool Player::HasEnoughItem(int tableKey, int quantity) const
 
 void Player::Attack()
 {
-    auto components = ObjectManager::GetInstance().GetComponentTupleVector<Monster, Position>();
-    Vector2Int position = playerPosition->GetPosition();
-    for (auto& [monster, monsterPosition] : components)
+    auto results = ObjectManager::GetInstance().GetComponentWithEntityTuppleVector<Monster, Position>();
+    for (auto& [monsterEntity, monster, monsterPosition] : results)
     {
+        Vector2Int position = playerPosition->GetPosition();
         Vector2Int monsterPos = monsterPosition->GetPosition();
         if (!MathUtility::IsOverlap(position, monsterPos, 1))
-            continue;        
-
-        vector<shared_ptr<MonsterItemDropData>> dropItem = monster->GetDropItems();
-        int exp = monster->GetExp();
-        monster->TakeDamage(playerStat->GetStat(StatType::Attack));
-        if (!monster->IsDead())
             continue;
 
-        AddItems(dropItem);
-        AddExp(exp);
-    }
+        string monsterEntityName = "";
+        Logger::LogInfo(format("player attack {}", monsterEntity->GetName()));
 
-    //TODO: Dragon must be inherite monster class, but for now, we will handle it separately.
-    auto [dragon, dragonPosition] = ObjectManager::GetInstance().GetComponentTuple<Dragon, Position>();
-    if (nullptr == dragon)
-        return;
-
-    Vector2Int drgonPos = dragonPosition->GetPosition();
-    if (!MathUtility::IsOverlap(position, drgonPos, 1))
-        return;
-
-    int exp = dragon->GetExp();
-    dragon->TakeDamage(playerStat->GetStat(StatType::Attack));
-    if (dragon->IsDead())
-    {
-        shared_ptr<MonsterItemDropData> dragonDropItem = make_shared<MonsterItemDropData>();
-        dragonDropItem->key = 10020;
-        dragonDropItem->minQuantity = 1;
-        dragonDropItem->maxQuantity = 1;
-        dragonDropItem->dropChance = 1.0;
-
-        vector<shared_ptr<MonsterItemDropData>> dropItems{
-            dragonDropItem
-        };
-
-        AddItems(dropItems);
-        AddExp(exp);
+        monster->TakeDamage(playerStat->GetStat(StatType::Attack));
+        if (monster->IsDead())
+        {
+            shared_ptr<MonsterItemDropData> dropItem = monster->RollDropTable();
+            int exp = monster->GetExp();
+            AddItems(dropItem);
+            AddExp(exp);
+        }
+        break;
     }
 }
 
@@ -318,39 +294,42 @@ void Player::Interact()
     ObjectManager::GetInstance().BroadcastEvent(make_shared<InteractionStartEventParameter>(interactableObject));
 }
 
-void Player::AddItems(vector<shared_ptr<MonsterItemDropData>>& dropItems)
+void Player::AddItems(shared_ptr<MonsterItemDropData> dropItem)
 {
-    for (auto& dropItem : dropItems)
-    {
-        int index;
-        MinMaxInt minMaxQuantity(dropItem->minQuantity, dropItem->maxQuantity);
-        int randomQuantity = minMaxQuantity.GetRandomValue();
-        
-        if (HasItem(dropItem->key, &index))
-        {
-            inventory[index].AddQuantity(randomQuantity);
-            Logger::LogInfo(format("{} x{} added", dropItem->key, randomQuantity));
-            continue;
-        }
+    if (nullptr == dropItem)
+        return;
 
+    int index;
+    MinMaxInt minMaxQuantity(dropItem->minQuantity, dropItem->maxQuantity);
+    int randomQuantity = minMaxQuantity.GetRandomValue();
+        
+    if (HasItem(dropItem->key, &index))
+    {
+        inventory[index].AddQuantity(randomQuantity);
+        Logger::LogInfo(format("{} x{} added", dropItem->key, randomQuantity));
+    }
+    else
+    {
         InventoryItem newItem(dropItem->key, ItemType::Ingredient, randomQuantity);
         inventory.emplace_back(newItem);
 
-        Logger::LogInfo(format("{} x{} added", 
+        Logger::LogInfo(format("{} x{} added",
             newItem.GetName(), newItem.GetQuantity()));
-    }    
+    }
 }
 
 void Player::AddExp(int exp)
 {
-    this->currentExp += exp;
+    playerStat->AddStat(StatType::Exp, static_cast<float>(exp));
 
     Logger::LogInfo(format("{} exp added", exp));
     
+    float currentExp = playerStat->GetStat(StatType::Exp);
     if (currentExp >= maxExp)
     {
         playerLevel++;
         currentExp -= maxExp;
+        playerStat->SetStat(StatType::Exp, currentExp);
         
         float fInitMaxHp = static_cast<float>(Const::Stat::Player::INIT_HP);
         float fInitAttack = static_cast<float>(Const::Stat::Player::INIT_ATTACK);
@@ -360,9 +339,9 @@ void Player::AddExp(int exp)
         //복리 계산하기 (1+0.1)10−1
         float factor = pow(r, static_cast<float>(playerLevel - 1));
        
-        int nextMaxHealth = static_cast<int>(fInitMaxHp * factor);
-        int nextAttack = static_cast<int>(fInitAttack * factor);
-        int nextDefense = static_cast<int>(fInitDefense * factor);
+        float nextMaxHealth = fInitMaxHp * factor;
+        float nextAttack = fInitAttack * factor;
+        float nextDefense = fInitDefense * factor;
 
         playerStat->SetStat(StatType::MaxHealth, nextMaxHealth);
         playerStat->SetStat(StatType::Attack, nextAttack);

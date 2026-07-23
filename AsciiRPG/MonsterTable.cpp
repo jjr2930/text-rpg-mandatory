@@ -26,7 +26,7 @@ void MonsterTable::Init()
     }
 
     for (auto& element : j)
-    {
+    { 
         MonsterData data;
         data.key = element["key"].get<int>();
         data.name = element["name"].get<string>();
@@ -34,9 +34,9 @@ void MonsterTable::Init()
         data.dropTableKey = element["dropTableKey"].get<int>();
         data.minFloor = element["minFloor"].get<int>();
         data.maxFloor = element["maxFloor"].get<int>();
-        data.hp = element["hp"].get<int>();
-        data.attack = element["attack"].get<int>();
-        data.defense = element["defense"].get<int>();
+        data.hp = element["hp"].get<float>();
+        data.attack = element["attack"].get<float>();
+        data.defense = element["defense"].get<float>();
         data.exp = element["exp"].get<int>();
         data.attackDelay = element["attackDelay"].get<double>();
         monsterDataList.push_back(make_shared<MonsterData>(data));
