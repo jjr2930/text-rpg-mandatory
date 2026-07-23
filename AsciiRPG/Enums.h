@@ -134,6 +134,16 @@ enum class ItemType
     Gear,
 };
 
+enum class GearSlotType
+{
+    None = -1,
+    Weapon,
+    Head,
+    Body,
+    Feet,
+    Accessory
+};
+
 class EnumUtility
 {
 public:
@@ -324,5 +334,12 @@ NLOHMANN_JSON_SERIALIZE_ENUM(ItemType, {
     {ItemType::Gear, "Gear"}
 })
 
-
+NLOHMANN_JSON_SERIALIZE_ENUM(GearSlotType, {
+    {GearSlotType::None, "None"},
+    {GearSlotType::Weapon, "Weapon"},
+    {GearSlotType::Head, "Head" },
+    {GearSlotType::Body, "Body" },
+    {GearSlotType::Feet, "Feet" },
+    {GearSlotType::Accessory, "Accessory" }
+})
 #endif // !ENUMS_H

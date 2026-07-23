@@ -179,6 +179,7 @@
     <ClCompile Include="CreationUtil.cpp" />
     <ClCompile Include="GameManagerBridge.cpp" />
     <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="GearTable.cpp" />
     <ClCompile Include="IConstructionParameter.cpp" />
     <ClCompile Include="IngredientTable.cpp" />
     <ClCompile Include="InputController.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="CreationUtil.h" />
     <ClInclude Include="GameManagerBridge.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="GearTable.h" />
     <ClInclude Include="IConstructionParameter.h" />
     <CopyFileToFolders Include="IngredientTable.json">
       <FileType>Document</FileType>
@@ -304,6 +306,9 @@
     <CopyFileToFolders Include="MonsterTable.json">
       <FileType>Document</FileType>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="GearTable.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
     <None Include="ObjectManager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -311,7 +316,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties AlchemyTable_1json__JsonSchema="..\..\..\Users\theoo\AppData\Local\Microsoft\VisualStudio\18.0_43d89c51\OpenFolder\CMakeSettings_schema.json" />
+      <UserProperties AlchemyTable_1json__JsonSchema="w" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -25,6 +25,7 @@ public:
 
     //getter
     int GetTableKey() const; 
+    ItemType GetItemType() const;
     int GetQuantity() const; 
     string GetName() const;
     bool GetIsUsable() const;

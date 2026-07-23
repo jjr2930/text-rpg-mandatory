@@ -16,7 +16,7 @@ public:
     int key;
     string name;
     bool isUsable;
-    int price;
+    int cost;
 };
 
 #endif // ! IITEM_H

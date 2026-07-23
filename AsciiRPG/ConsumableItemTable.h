@@ -28,7 +28,7 @@ public:
 };
 
 /// <summary>
-/// TODO: Tables has same feature so it should be refactored
+/// TODO: Tables have same feature so it should be refactored
 /// </summary>
 class ConsumableItemTable
 {

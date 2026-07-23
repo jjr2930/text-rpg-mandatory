@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 
+#include "Enums.h"
 #include "SingletonMacro.h"
 
 using namespace std;
@@ -17,6 +18,7 @@ class MonsterItemDropData
 public:
     int key;
     int minQuantity;
+    ItemType itemType;
     int maxQuantity;
     double dropChance;
 };

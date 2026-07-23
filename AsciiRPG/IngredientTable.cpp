@@ -45,7 +45,7 @@ void IngredientTable::Init()
         ingredientData->key = item["key"];
         ingredientData->name = item["name"];
         ingredientData->isUsable = false;
-        ingredientData->price = item["cost"];
+        ingredientData->cost = item["cost"];
         ingredientDataList.emplace_back(ingredientData);
     }
 }

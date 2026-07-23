@@ -188,6 +188,9 @@
     <ClCompile Include="NormalMonster.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GearTable.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -391,6 +394,9 @@
     <ClInclude Include="NormalMonster.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GearTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -407,5 +413,6 @@
     <CopyFileToFolders Include="IngredientTable.json" />
     <CopyFileToFolders Include="MonsterItemDropTable.json" />
     <CopyFileToFolders Include="MonsterTable.json" />
+    <CopyFileToFolders Include="GearTable.json" />
   </ItemGroup>
 </Project>

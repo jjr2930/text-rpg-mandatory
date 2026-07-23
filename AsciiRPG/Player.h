@@ -1,6 +1,8 @@
 ﻿#ifndef PLAYER_H
 #define PLAYER_H
 
+#include <unordered_map>
+
 #include "Component.h"
 #include "EventParameter.h" 
 #include "DropItemData.h"
@@ -12,6 +14,7 @@ class FieldItem;
 class Stat;
 class InteractableObject;
 class MonsterItemDropData;
+class InventoryItem;
 
 class Player : public Component
 {
@@ -31,6 +34,8 @@ public:
     void AddItem(const FieldItem& fieldItemm);
     void AddItemQuantity(int tableKey, ItemType itemType, int quantity);
     void SetItemQuantity(int tableKey, ItemType, int quantity);
+    void RemoveItemFromInventory(int tableKey, ItemType itemType);
+    void EquipItem(int tableKey, ItemType itemType);
 
     int GetLevel() const;
     int GetExp() const;
@@ -41,10 +46,10 @@ public:
     int GetInventoryElementCount() const;
     int GetInventoryCursorIndex() const;
     const vector<InventoryItem>& GetInventory() const;
-    bool HasEnoughItem(int tableKey, int quantity) const;
+    bool HasEnoughItem(int tableKey,ItemType itemType, int quantity) const;
 
 private:
-    bool HasItem(int tableKey, int* index) const;
+    bool HasItem(int tableKey, ItemType itemType, int* index) const;
     void AddItems(shared_ptr<MonsterItemDropData> dropItem);
     void Attack();
     void Interact();
@@ -59,6 +64,7 @@ private:
     shared_ptr<InteractableObject> currentInteractableObject;
 
     vector<InventoryItem> inventory;
+    unordered_map<GearSlotType, InventoryItem> equippedItems;
 
     int playerLevel;
     int maxExp;

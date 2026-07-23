@@ -9,6 +9,11 @@ int InventoryItem::GetTableKey() const
     return tableKey;
 }
 
+ItemType InventoryItem::GetItemType() const
+{
+    return itemType;
+}
+
 int InventoryItem::GetQuantity() const
 {
     return quantity;

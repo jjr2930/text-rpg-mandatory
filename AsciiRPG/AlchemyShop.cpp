@@ -216,7 +216,7 @@ void AlchemyShop::ConfirmSelection()
                 
                 for (const auto& ingredient : recipe->ingredients)
                 {
-                    if (!player->HasEnoughItem(ingredient.itemKey, ingredient.quantity))
+                    if (!player->HasEnoughItem(ingredient.itemKey, ItemType::Ingredient, ingredient.quantity))
                     {
                         Logger::LogInfo(format("Not enough for {}" , ConsumableItemTable::GetInstance().GetItemName(recipe->resultItemKey)));
                         return;

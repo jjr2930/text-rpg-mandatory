@@ -19,6 +19,8 @@
 #include "ConsumableItemTable.h"
 #include "AlchemyTable.h"
 #include "Dragon.h"
+#include "GearTable.h"
+#include "InventoryItem.h"
 
 using namespace std;
 
@@ -113,7 +115,7 @@ void Player::TakeDamage(int damage)
 void Player::AddItem(const FieldItem& fieldItemm)
 {
     int foundIdex;
-    if (HasItem(fieldItemm.GetTableKey(), &foundIdex))
+    if (HasItem(fieldItemm.GetTableKey(), fieldItemm.GetItemType(), &foundIdex))
     {
         Logger::LogInfo(format("Player already has item: {0}", fieldItemm.GetTableKey()));
         inventory[foundIdex].AddQuantity(fieldItemm.GetQuantity());
@@ -165,7 +167,7 @@ void Player::AddItemQuantity(int tableKey, ItemType itemType, int quantity)
 void Player::SetItemQuantity(int tableKey, ItemType itemType, int quantity)
 {
     int foundIndex;
-    if (!HasItem(tableKey, &foundIndex))
+    if (!HasItem(tableKey, itemType, &foundIndex))
     {
         Logger::LogInfo(format("Player does not have item: {0}", tableKey));
         return;
@@ -177,6 +179,35 @@ void Player::SetItemQuantity(int tableKey, ItemType itemType, int quantity)
     {
         inventory.erase(inventory.begin() + foundIndex);
     }
+}
+
+void Player::RemoveItemFromInventory(int tableKey, ItemType itemType)
+{
+    for (auto iter = inventory.begin(); iter != inventory.end(); ++iter)
+    {
+        if (iter->GetTableKey() == tableKey && iter->GetItemType() == itemType)
+        {
+            inventory.erase(iter);
+            break;
+        }
+    }
+}
+
+void Player::EquipItem(int tableKey, ItemType itemType)
+{
+    InventoryItem newItem(tableKey, itemType, 1);
+    shared_ptr<IItem> item = ItemBank::GetInstance().GetItem(tableKey, itemType);
+    shared_ptr<GearData> gearData = dynamic_pointer_cast<GearData>(item);
+    assert(gearData && "Item is not a gear item");
+
+    auto foundedIter = equippedItems.find(gearData->slot);
+    if (foundedIter != equippedItems.end()) 
+    {
+        auto current = foundedIter->second;
+        AddItemQuantity(current.GetTableKey(), current.GetItemType(), current.GetQuantity());
+    }
+    
+    equippedItems.insert_or_assign(gearData->slot, newItem);
 }
 
 int Player::GetLevel() const
@@ -224,11 +255,11 @@ const vector<InventoryItem>& Player::GetInventory() const
     return inventory;
 }
 
-bool Player::HasEnoughItem(int tableKey, int quantity) const
+bool Player::HasEnoughItem(int tableKey, ItemType itemType, int quantity) const
 {
     for (const auto& item : inventory)
     {
-        if (item.GetTableKey() == tableKey && item.GetQuantity() >= quantity)
+        if (item.GetTableKey() == tableKey && item.GetItemType() == itemType && item.GetQuantity() >= quantity)
         {
             return true;
         }
@@ -303,14 +334,14 @@ void Player::AddItems(shared_ptr<MonsterItemDropData> dropItem)
     MinMaxInt minMaxQuantity(dropItem->minQuantity, dropItem->maxQuantity);
     int randomQuantity = minMaxQuantity.GetRandomValue();
         
-    if (HasItem(dropItem->key, &index))
+    if (HasItem(dropItem->key, dropItem->itemType, &index))
     {
         inventory[index].AddQuantity(randomQuantity);
         Logger::LogInfo(format("{} x{} added", dropItem->key, randomQuantity));
     }
     else
     {
-        InventoryItem newItem(dropItem->key, ItemType::Ingredient, randomQuantity);
+        InventoryItem newItem(dropItem->key, dropItem->itemType, randomQuantity);
         inventory.emplace_back(newItem);
 
         Logger::LogInfo(format("{} x{} added",
@@ -354,12 +385,13 @@ void Player::AddExp(int exp)
 
 }
 
-bool Player::HasItem(int tableKey, int* index) const
+bool Player::HasItem(int tableKey, ItemType itemType, int* index) const
 {
     int count = static_cast<int>(inventory.size());
     for (int i = 0; i < count; ++i)
     {
-        if (inventory[i].GetTableKey() == tableKey)
+        if (inventory[i].GetTableKey() == tableKey
+            && inventory[i].GetItemType() == itemType)
         {
             if (index)
             {
@@ -441,25 +473,37 @@ void Player::ProcessInventoryModeInput(Virtualkey inputKey)
                     break;
 
                 InventoryItem& selectedItem = inventory[inventoryCursorIndex];
-                if (!selectedItem.GetIsUsable())
-                {
-                    Logger::LogInfo(format("Item {0} is not usable.", selectedItem.GetName()));
-                    return;
-                }
-
-                Logger::LogInfo(format("Used item: {0} x{1}", selectedItem.GetName(), selectedItem.GetQuantity()));
-                
+                ItemType itemType = selectedItem.GetItemType();
                 auto itemData = selectedItem.GetItemDataFromTable();
 
-                if (itemData->itemType != ItemType::Consumable)
+                switch (itemType)
                 {
-                    Logger::LogInfo(format("{0} is not a consumable.", selectedItem.GetName()));
+                    case ItemType::None:
+                        break;
+                    case ItemType::Consumable:
+                        {
+                            shared_ptr<ConsumableItemData> consumableData = dynamic_pointer_cast<ConsumableItemData>(itemData);
+                            assert(consumableData && "Item data is not of type ConsumableItemData");
+                            playerStat->AddBuff(consumableData);
+                            AddItemQuantity(consumableData->key, consumableData->itemType, -1);
+
+                            Logger::LogInfo(format("Used item: {0} x{1}", selectedItem.GetName(), selectedItem.GetQuantity()));
+                        }
+                        break;
+
+                    case ItemType::Gear:
+                        {
+                            shared_ptr<GearData> gearData = dynamic_pointer_cast<GearData>(itemData);
+                            assert(gearData && "Item data is not of type GearData");
+                            RemoveItemFromInventory(gearData->key, gearData->itemType);
+                            EquipItem(gearData->key, gearData->itemType);
+
+                            Logger::LogInfo(format("Equipped item: {0}", selectedItem.GetName()));
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                
-                shared_ptr<ConsumableItemData> consumableData = dynamic_pointer_cast<ConsumableItemData>(itemData);
-                assert(consumableData && "Item data is not of type ConsumableItemData");
-                playerStat->AddBuff(consumableData);
-                AddItemQuantity(consumableData->key, consumableData->itemType, -1);
             }
             break;
         default:

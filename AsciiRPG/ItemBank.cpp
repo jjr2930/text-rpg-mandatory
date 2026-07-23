@@ -1,6 +1,7 @@
 #include "ItemBank.h"
 #include "ConsumableItemTable.h"
 #include "IngredientTable.h"
+#include "GearTable.h"
 #include "Random.h"
 
 SINGLETON_INITIALIZER(ItemBank)
@@ -13,8 +14,12 @@ shared_ptr<IItem> ItemBank::GetItem(int tableKey, ItemType type) const
             break;
         case ItemType::Consumable:
             return ConsumableItemTable::GetInstance().GetData(tableKey);
+
         case ItemType::Ingredient:
             return IngredientTable::GetInstance().GetData(tableKey);
+
+        case ItemType::Gear:
+            return GearTable::GetInstance().GetData(tableKey);
         default:
             break;
     }
@@ -27,10 +32,16 @@ string ItemBank::GetName(int tableKey, ItemType type) const
     {
         case ItemType::None:
             break;
+
         case ItemType::Consumable:
             return ConsumableItemTable::GetInstance().GetData(tableKey)->name;
+
         case ItemType::Ingredient:
             return IngredientTable::GetInstance().GetData(tableKey)->name;
+
+        case ItemType::Gear:
+            return GearTable::GetInstance().GetData(tableKey)->name;
+
         default:
             break;
     }
@@ -48,6 +59,9 @@ shared_ptr<IItem> ItemBank::GetRandomItem() const
         
         case ItemType::Ingredient:
             return IngredientTable::GetInstance().GetRandomItem();
+
+        case ItemType::Gear:
+            return GearTable::GetInstance().GetRandomItem();
 
         default:
             throw runtime_error(format("Not supported itemType, {}", static_cast<int>(randomType)));

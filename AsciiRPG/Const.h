@@ -86,6 +86,8 @@ namespace Const
         static unordered_set<int> NonConsumableItemKeys = {
             2006, 2009, 2010, 2013, 2015, 2017, 2018, 2021, 2023, 2024, 2025
         };
+
+        static constexpr double GEAR_DROP_CHANCE_MULTIPLIER = 10000; // 20% chance to  drop gear
     }
 }
 

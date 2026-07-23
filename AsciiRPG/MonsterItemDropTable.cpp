@@ -46,9 +46,13 @@ void MonsterItemDropTable::Init()
         {
             shared_ptr<MonsterItemDropData> dropItem = make_shared<MonsterItemDropData>();
             dropItem->key = item["key"].get<int>();
+            dropItem->itemType = item["itemType"].get<ItemType>();
             dropItem->minQuantity = item["minQuantity"].get<int>();
             dropItem->maxQuantity = item["maxQuantity"].get<int>();
             dropItem->dropChance = item["dropChance"].get<double>();
+            if (dropItem->itemType == ItemType::Gear)
+                dropItem->dropChance *= Const::Items::GEAR_DROP_CHANCE_MULTIPLIER;
+
             dropGroup.dropItems.emplace_back(dropItem);
         }
         dropGroups.emplace_back(dropGroup);
