@@ -27,6 +27,7 @@ void Stat::AddBuff(StatType statType, OperatorType operatorType, float value, bo
     }
     else
     {
+        newBuff.startTime = GameTime::GetInstance().GetNow();
         buffs.emplace_back(newBuff);
     }
 }
@@ -112,7 +113,8 @@ void Stat::ProcessBuff(Buff& buff)
     }
 
     //clamp health stat... very wired
-    stats[StatType::CurrentHealth] = std::clamp(stats[StatType::CurrentHealth], 0.0f, stats[StatType::MaxHealth]);
+    float maxHealth = stats[StatType::MaxHealth] + stats[StatType::AddedMaxHealth];
+    stats[StatType::CurrentHealth] = std::clamp(stats[StatType::CurrentHealth], 0.0f, maxHealth);
 
 }
 

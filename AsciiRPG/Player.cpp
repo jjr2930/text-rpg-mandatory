@@ -32,16 +32,6 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     inventoryCursorIndex = -1;
     maxExp = LevelExpTable::GetInstance().GetExpForLevel(playerLevel + 1);
    
-    //add every alchemy ingredients to the inventory
-    //auto& allAchemyData = AlchemyTable::GetInstance().GetAllAlchemyData();
-    //for (auto& iter : allAchemyData)
-    //{
-    //    for (auto& ingredient : iter->ingredients)
-    //    {
-    //        AddItemQuantity(ingredient.itemKey, ItemType::Ingredient, ingredient.quantity);
-    //    }
-    //}
-
     if (auto ptr = entity.lock())
     {
         playerPosition = ptr->GetComponent<Position>();
@@ -200,14 +190,17 @@ void Player::EquipItem(int tableKey, ItemType itemType)
     shared_ptr<GearData> gearData = dynamic_pointer_cast<GearData>(item);
     assert(gearData && "Item is not a gear item");
 
-    auto foundedIter = equippedItems.find(gearData->slot);
-    if (foundedIter != equippedItems.end()) 
+    auto foundedIter = equippedGear.find(gearData->slot);
+    if (foundedIter != equippedGear.end()) 
     {
         auto current = foundedIter->second;
         AddItemQuantity(current.GetTableKey(), current.GetItemType(), current.GetQuantity());
     }
     
-    equippedItems.insert_or_assign(gearData->slot, newItem);
+    equippedGear.insert_or_assign(gearData->slot, newItem);
+
+    float addedMaxHealth = GetAddedStat(StatType::MaxHealth);
+    playerStat->SetStat(StatType::AddedMaxHealth, addedMaxHealth);
 }
 
 int Player::GetLevel() const
@@ -250,9 +243,71 @@ int Player::GetInventoryCursorIndex() const
     return inventoryCursorIndex;
 }
 
+float Player::GetAddedStat(StatType statType) const
+{
+    float totalStat = GetTotalStat(statType);
+    float baseStat = playerStat->GetStat(statType);
+    float addedStat = totalStat - baseStat;
+    return addedStat;
+}
+
+float Player::GetTotalStat(StatType statType) const
+{
+    float result = playerStat->GetStat(statType);
+
+    OperatorType operatorOrder[]
+    {
+        OperatorType::Add,
+        OperatorType::Subtract,
+        OperatorType::Multiply,
+        OperatorType::Divide
+    };
+
+    for (auto& op : operatorOrder)
+    {
+        for (auto& gear : equippedGear)
+        {
+            auto itemData = ItemBank::GetInstance().GetItem(gear.second.GetTableKey(), gear.second.GetItemType());
+            auto gearData = dynamic_pointer_cast<GearData>(itemData);
+            assert(gearData && "Item is not a gear item");
+
+            for (auto& statModifier : gearData->statModifiers)
+            {
+                if (statModifier->statType == statType && statModifier->operatorType == op)
+                {
+                    switch (op)
+                    {
+                        case OperatorType::Add:
+                            result += statModifier->amount;
+                            break;
+                        case OperatorType::Subtract:
+                            result -= statModifier->amount;
+                            break;
+                        case OperatorType::Multiply:
+                            result *= statModifier->amount;
+                            break;
+                        case OperatorType::Divide:
+                            assert(statModifier->amount != 0.0f && "Division by zero in GetStatFromGearWithOperator");
+                            result /= statModifier->amount;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
+
 const vector<InventoryItem>& Player::GetInventory() const
 {
     return inventory;
+}
+
+const unordered_map<GearSlotType, InventoryItem>& Player::GetEquippedGear() const
+{
+    return equippedGear;
 }
 
 bool Player::HasEnoughItem(int tableKey, ItemType itemType, int quantity) const
@@ -370,11 +425,11 @@ void Player::AddExp(int exp)
         //복리 계산하기 (1+0.1)10−1
         float factor = pow(r, static_cast<float>(playerLevel - 1));
        
-        float nextMaxHealth = fInitMaxHp * factor;
+        float nextBaseMaxHealth = fInitMaxHp * factor;
         float nextAttack = fInitAttack * factor;
         float nextDefense = fInitDefense * factor;
 
-        playerStat->SetStat(StatType::MaxHealth, nextMaxHealth);
+        playerStat->SetStat(StatType::MaxHealth, nextBaseMaxHealth);
         playerStat->SetStat(StatType::Attack, nextAttack);
         playerStat->SetStat(StatType::Defense, nextDefense);        
 
@@ -382,7 +437,6 @@ void Player::AddExp(int exp)
         Logger::LogInfo(format("level up!: {0}, maxHp -> {1}, atk -> {2}, def -> {3}",
             playerLevel, playerStat->GetStat(StatType::MaxHealth), playerStat->GetStat(StatType::Attack), playerStat->GetStat(StatType::Defense)));
     }
-
 }
 
 bool Player::HasItem(int tableKey, ItemType itemType, int* index) const

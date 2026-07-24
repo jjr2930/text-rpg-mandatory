@@ -191,6 +191,9 @@
     <ClCompile Include="GearTable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TitleDrawer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -395,6 +398,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GearTable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleDrawer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

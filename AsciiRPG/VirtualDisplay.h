@@ -39,7 +39,10 @@ public:
     const Vector2Int PLAYER_STATUS_POSITION = Vector2Int(50, 0);
     const string PLAYER_STATUS_TITLE = "===== Player Status =====";
 
-    const Vector2Int INVENTORY_POSITION = Vector2Int(50, 10);
+    const Vector2Int GEAR_START_POSITION = Vector2Int(50, 7);
+    const string GEAR_TITLE = "===== Gear =====";
+
+    const Vector2Int INVENTORY_POSITION = Vector2Int(50, 13);
     const string INVENTORY_TITLE = "===== Inventory =====";
 
     const Vector2Int INTERACTION_POSITION = Vector2Int(80, 0);

@@ -87,7 +87,7 @@ namespace Const
             2006, 2009, 2010, 2013, 2015, 2017, 2018, 2021, 2023, 2024, 2025
         };
 
-        static constexpr double GEAR_DROP_CHANCE_MULTIPLIER = 10000; // 20% chance to  drop gear
+        static constexpr double GEAR_DROP_CHANCE_MULTIPLIER = 100.0; // 20% chance to  drop gear
     }
 }
 

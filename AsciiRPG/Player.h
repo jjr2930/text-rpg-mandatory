@@ -45,7 +45,13 @@ public:
     int GetDefense() const;
     int GetInventoryElementCount() const;
     int GetInventoryCursorIndex() const;
+
+    float GetAddedStat(StatType statType) const;
+    float GetTotalStat(StatType statType) const;
+    
     const vector<InventoryItem>& GetInventory() const;
+    const unordered_map<GearSlotType, InventoryItem>& GetEquippedGear() const;
+
     bool HasEnoughItem(int tableKey,ItemType itemType, int quantity) const;
 
 private:
@@ -64,7 +70,7 @@ private:
     shared_ptr<InteractableObject> currentInteractableObject;
 
     vector<InventoryItem> inventory;
-    unordered_map<GearSlotType, InventoryItem> equippedItems;
+    unordered_map<GearSlotType, InventoryItem> equippedGear;
 
     int playerLevel;
     int maxExp;

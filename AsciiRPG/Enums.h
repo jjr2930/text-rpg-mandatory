@@ -55,6 +55,9 @@ enum class StatType
     Defense,
     AttackDelay,
     Exp,
+
+
+    AddedMaxHealth,
 };
 
 enum class OperatorType

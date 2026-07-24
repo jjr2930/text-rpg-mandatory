@@ -5,11 +5,15 @@
 #include "ObjectManager.h"
 #include "GameManagerBridge.h"
 #include "Entity.h"
+#include "TitleDrawer.h"
 
 #include <format>
 
 void main()
 {
+    TitleDrawer titleDrawer;
+    titleDrawer.ProcessTitle();
+
     auto bridgeEntity= ObjectManager::GetInstance().CreateEntity();
     bridgeEntity->SetName("GameManagerBridgeEntity");
 

@@ -8,6 +8,7 @@
 #include "EventParameter.h"
 #include "Enums.h"
 #include "InteractableObject.h"
+#include "GearTable.h"
 
 #include <format>
 #include <iostream>
@@ -209,11 +210,34 @@ void VirtualDisplay::RenderIngame()
     shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectsByType<Player>()[0];
 
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y, PLAYER_STATUS_TITLE);
-    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 1, format("LV : {0}", player->GetLevel()));
-    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 2, format("EXP : {0}", player->GetExp()));
-    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 3, format("HP : {0}/{1}", player->GetCurrentHealth(), player->GetMaxHealth()));
-    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 4, format("ATK : {0}", player->GetAttack()));
-    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 5, format("DEF : {0}", player->GetDefense()));
+    
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 1
+        , format("LV : {0}", player->GetLevel()));
+    
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 2
+        , format("EXP : {0} +{1}", player->GetExp(), player->GetAddedStat(StatType::Exp)));
+    
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 3
+        , format("HP : {0}/({1} +{2})", player->GetCurrentHealth(), player->GetMaxHealth(), player->GetAddedStat(StatType::MaxHealth)));
+    
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 4
+        , format("ATK : {0} +{1}", player->GetAttack(), player->GetAddedStat(StatType::Attack)));
+    
+    WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 5
+        , format("DEF : {0} +{1}", player->GetDefense(), player->GetAddedStat(StatType::Defense)));
+
+    //write gear
+    WriteString(nextBufferIndex, GEAR_START_POSITION.x, GEAR_START_POSITION.y, GEAR_TITLE);
+
+    const auto& equippedGear = player->GetEquippedGear();
+    int gearIndex = 0;
+    for (const auto& [slot, item] : equippedGear)
+    {
+        WriteString(nextBufferIndex, GEAR_START_POSITION.x, GEAR_START_POSITION.y + gearIndex + 1
+            , item.GetName());
+
+        gearIndex++;
+    }
 
     //write inventory
     WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y, INVENTORY_TITLE);

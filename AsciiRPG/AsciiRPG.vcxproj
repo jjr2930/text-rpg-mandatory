@@ -211,6 +211,7 @@
     <ClCompile Include="Stat.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="TitleDrawer.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="Vector2Int.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="TemplateDeclare.h" />
+    <ClInclude Include="TitleDrawer.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector2Int.h" />
