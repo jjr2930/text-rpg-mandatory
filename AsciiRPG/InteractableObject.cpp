@@ -10,7 +10,7 @@ InteractableObject::InteractableObject(int64_t id, const std::string& name, std:
 
 InteractableObject::~InteractableObject()
 {
-    Logger::LogInfo("InteractableObject destroyed: " + GetName() + " (ID: " + std::to_string(GetId()) + ")");
+    //Logger::LogInfo("InteractableObject destroyed: " + GetName() + " (ID: " + std::to_string(GetId()) + ")");
 }
 
 InteractableObjectTags InteractableObject::GetTag()

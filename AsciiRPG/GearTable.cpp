@@ -1,5 +1,7 @@
 #include "GearTable.h"
 #include "json.hpp"
+#include "Random.h"
+
 #include <fstream>
 
 using json = nlohmann::json;
@@ -16,7 +18,18 @@ shared_ptr<GearData> GearTable::GetData(int key) const
 
 shared_ptr<IItem> GearTable::GetRandomItem() const
 {
-    return shared_ptr<IItem>();
+    auto size = gearDataMap.size();
+    int randomNumber = Random::GetInstance().RandomRange(0, static_cast<int>(size) - 1);
+
+    auto iter = gearDataMap.begin();
+    std::advance(iter, randomNumber);
+
+    return iter->second;
+}
+
+unordered_map<int, shared_ptr<GearData>> GearTable::GetAllData()
+{
+    return gearDataMap;
 }
 
 void GearTable::Init()

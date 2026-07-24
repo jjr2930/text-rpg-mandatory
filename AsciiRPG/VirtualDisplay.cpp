@@ -155,6 +155,8 @@ bool VirtualDisplay::FindDiff()
 
 void VirtualDisplay::RenderIngame()
 {
+    shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectsByType<Player>()[0];
+
     vector<shared_ptr<Renderer>> renderer = ObjectManager::GetInstance().GetObjectsByType<Renderer>();
 
     char** currentBuffer = buffer[currentBufferIndex];
@@ -184,6 +186,12 @@ void VirtualDisplay::RenderIngame()
         nextBuffer[pos.y][pos.x] = toPrint;
     }
 
+    //write main game guide
+    if(player->GetCurrentInputMode() == Player::CurrentInputMode::Ingame)
+    {
+        WriteString(nextBufferIndex, INGAME_GUIDE_POSITION.x, INGAME_GUIDE_POSITION.y, "'Arrow':Move, 'I':Inventory, 'E':Interact");
+    }
+
     //write recently logged messages
     auto logs = Logger::GetInstance().GetRecentLogs();
     int size = logs.size();
@@ -207,8 +215,6 @@ void VirtualDisplay::RenderIngame()
     }
 
     //write player status
-    shared_ptr<Player> player = ObjectManager::GetInstance().GetObjectsByType<Player>()[0];
-
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y, PLAYER_STATUS_TITLE);
     
     WriteString(nextBufferIndex, PLAYER_STATUS_POSITION.x, PLAYER_STATUS_POSITION.y + 1
@@ -240,22 +246,13 @@ void VirtualDisplay::RenderIngame()
     }
 
     //write inventory
+    vector<string> inventoryString = player->GetInventoryRenderStrings();
     WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y, INVENTORY_TITLE);
 
-    vector<InventoryItem> inventory = player->GetInventory();
-    size = inventory.size();
+    size = inventoryString.size();
     for (int i = 0; i < size; ++i)
     {
-        if (player->GetInventoryCursorIndex() == i)
-        {
-            WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + i + 1
-                , format("> {0} x {1} <", inventory[i].GetName(), inventory[i].GetQuantity()));
-        }
-        else
-        {
-            WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + i + 1
-                , format("  {0} x {1}  ", inventory[i].GetName(), inventory[i].GetQuantity()));
-        }
+        WriteString(nextBufferIndex, INVENTORY_POSITION.x, INVENTORY_POSITION.y + i + 1, inventoryString[i]);
     }
 
     //write interaction

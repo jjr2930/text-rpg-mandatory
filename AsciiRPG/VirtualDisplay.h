@@ -34,7 +34,8 @@ using namespace std;
 class VirtualDisplay : public Component
 {
 public:
-    const Vector2Int INGAME_LOG_POSITION = Vector2Int(0, 20);
+    const Vector2Int INGAME_GUIDE_POSITION = Vector2Int(0, 20);
+    const Vector2Int INGAME_LOG_POSITION = Vector2Int(0, 21);
     
     const Vector2Int PLAYER_STATUS_POSITION = Vector2Int(50, 0);
     const string PLAYER_STATUS_TITLE = "===== Player Status =====";

@@ -23,8 +23,11 @@ public:
     {
         Ingame,
         Inventory,
-        Inetraction,
+        Interaction,
     };
+
+    constexpr static int DISPLAY_INVENTORY_COUNT_PER_PAGE = 10;
+
 public:
     using Component::Component;
     Player(int64_t id, const std::string& name, std::shared_ptr<IConstructionParameter> params);
@@ -49,10 +52,12 @@ public:
     float GetAddedStat(StatType statType) const;
     float GetTotalStat(StatType statType) const;
     
+    const vector<string> GetInventoryRenderStrings() const;
     const vector<InventoryItem>& GetInventory() const;
     const unordered_map<GearSlotType, InventoryItem>& GetEquippedGear() const;
 
     bool HasEnoughItem(int tableKey,ItemType itemType, int quantity) const;
+    CurrentInputMode GetCurrentInputMode() const;
 
 private:
     bool HasItem(int tableKey, ItemType itemType, int* index) const;
@@ -60,7 +65,8 @@ private:
     void Attack();
     void Interact();
     void AddExp(int exp);
-
+    int GetInventoryMinIndexForCurrentPage() const;
+    int GetInventoryMaxIndexForCurrentPage() const;
     void ProcessIngameModeInput(Virtualkey inputKey);
     void ProcessInventoryModeInput(Virtualkey inputKey);
 
@@ -76,6 +82,8 @@ private:
     int maxExp;
     int inventoryCursorIndex = 0;
     int npcDialogCursorIndex = 0;
+    int inventoryPageIndex = 0;
+
     bool amIDead = false;
     CurrentInputMode currentInputMode;
 };

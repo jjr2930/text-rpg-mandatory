@@ -41,6 +41,8 @@ public:
 public:
     shared_ptr<GearData> GetData(int key) const;
     shared_ptr<IItem> GetRandomItem() const;
+    unordered_map<int, shared_ptr<GearData>> GetAllData();
+
 private:
     void Init();
 private:

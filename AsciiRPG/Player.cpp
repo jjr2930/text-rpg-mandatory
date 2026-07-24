@@ -32,6 +32,9 @@ Player::Player(int64_t id, const std::string& name, std::shared_ptr<IConstructio
     inventoryCursorIndex = -1;
     maxExp = LevelExpTable::GetInstance().GetExpForLevel(playerLevel + 1);
    
+    //auto townportal = ConsumableItemTable::GetInstance().GetData(2012);
+    //AddItemQuantity(townportal->key, townportal->itemType, 10);
+
     if (auto ptr = entity.lock())
     {
         playerPosition = ptr->GetComponent<Position>();
@@ -61,7 +64,7 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
                         ProcessInventoryModeInput(inputKey);
                         break;
 
-                    case CurrentInputMode::Inetraction:
+                    case CurrentInputMode::Interaction:
                         //in this case, the input is handled by the current interactable object
                         break;
                     default:
@@ -72,7 +75,7 @@ void Player::HandleEvent(shared_ptr<EventParameter> message)
 
         case EventType::OnStopInteraction:
             {
-                if (currentInputMode == CurrentInputMode::Inetraction)
+                if (currentInputMode == CurrentInputMode::Interaction)
                 {
                     currentInputMode = CurrentInputMode::Ingame;
                     currentInteractableObject->OnDisable();
@@ -147,7 +150,7 @@ void Player::AddItemQuantity(int tableKey, ItemType itemType, int quantity)
         InventoryItem newItem(tableKey, itemType, quantity);
         inventory.emplace_back(newItem);
 
-        Logger::LogInfo(format("Item {0} X{1} added to inventory."
+        Logger::LogInfo(format("Item {0} X{1} added"
             , newItem.GetName(), newItem.GetQuantity()));
     }
 
@@ -300,6 +303,43 @@ float Player::GetTotalStat(StatType statType) const
     return result;
 }
 
+const vector<string> Player::GetInventoryRenderStrings() const
+{
+    int minIndex = inventoryPageIndex * DISPLAY_INVENTORY_COUNT_PER_PAGE;
+    int maxIndex = minIndex + DISPLAY_INVENTORY_COUNT_PER_PAGE - 1;
+    maxIndex = min(maxIndex, (int)inventory.size() - 1);
+
+    vector<string> renderStrings;
+    for (int i = minIndex; i <= maxIndex; ++i)
+    {
+        const auto& item = inventory[i];
+        string itemName = item.GetName();
+        int quantity = item.GetQuantity();
+
+        if (inventoryCursorIndex == i)
+        {
+            itemName = format(">{0} x{1}<", itemName, quantity);
+        }
+        else
+        {
+            itemName = format(" {0} x{1} ", itemName, quantity);
+        }
+        renderStrings.emplace_back(itemName);
+    }
+
+    if (currentInputMode == CurrentInputMode::Inventory)
+    {
+        int totalPages = (int)ceil((float)inventory.size() / DISPLAY_INVENTORY_COUNT_PER_PAGE);
+        string pageInfo = format("Page {0}/{1}", inventoryPageIndex + 1, totalPages);
+        renderStrings.emplace_back(pageInfo);
+
+        renderStrings.emplace_back("Esc: exit inventory.");
+        renderStrings.emplace_back("Up/Down: move cursor.");
+        renderStrings.emplace_back("Left/Right: change page.");
+    }
+    return renderStrings;
+}
+
 const vector<InventoryItem>& Player::GetInventory() const
 {
     return inventory;
@@ -336,7 +376,7 @@ void Player::Attack()
         string monsterEntityName = "";
         Logger::LogInfo(format("player attack {}", monsterEntity->GetName()));
 
-        monster->TakeDamage(playerStat->GetStat(StatType::Attack));
+        monster->TakeDamage( this->GetTotalStat(StatType::Attack));
         if (monster->IsDead())
         {
             shared_ptr<MonsterItemDropData> dropItem = monster->RollDropTable();
@@ -375,7 +415,7 @@ void Player::Interact()
     currentInteractableObject = interactableObject;
     currentInteractableObject->Reset();
 
-    currentInputMode = CurrentInputMode::Inetraction;
+    currentInputMode = CurrentInputMode::Interaction;
 
     ObjectManager::GetInstance().BroadcastEvent(make_shared<InteractionStartEventParameter>(interactableObject));
 }
@@ -435,8 +475,26 @@ void Player::AddExp(int exp)
 
         maxExp = LevelExpTable::GetInstance().GetExpForLevel(playerLevel + 1);
         Logger::LogInfo(format("level up!: {0}, maxHp -> {1}, atk -> {2}, def -> {3}",
-            playerLevel, playerStat->GetStat(StatType::MaxHealth), playerStat->GetStat(StatType::Attack), playerStat->GetStat(StatType::Defense)));
+            playerLevel, playerStat->GetStat(StatType::MaxHealth), 
+            playerStat->GetStat(StatType::Attack), playerStat->GetStat(StatType::Defense)));
     }
+}
+
+Player::CurrentInputMode Player::GetCurrentInputMode() const
+{
+    return currentInputMode;
+}
+
+int Player::GetInventoryMinIndexForCurrentPage() const
+{
+    return inventoryPageIndex * DISPLAY_INVENTORY_COUNT_PER_PAGE;
+}
+
+int Player::GetInventoryMaxIndexForCurrentPage() const
+{
+    int max = GetInventoryMinIndexForCurrentPage() + DISPLAY_INVENTORY_COUNT_PER_PAGE - 1;
+    max = min(max, (int)inventory.size() - 1);
+    return max;
 }
 
 bool Player::HasItem(int tableKey, ItemType itemType, int* index) const
@@ -461,23 +519,19 @@ void Player::ProcessIngameModeInput(Virtualkey inputKey)
 {
     switch (inputKey)
     {
-        case Virtualkey::w:
-        case Virtualkey::W:
+        case Virtualkey::Up:
             playerPosition->TryMoveYOnly(-1);
             break;
                     
-        case Virtualkey::s:
-        case Virtualkey::S:
+        case Virtualkey::Down:
             playerPosition->TryMoveYOnly(1);
             break;
 
-        case Virtualkey::a:
-        case Virtualkey::A:
+        case Virtualkey::Left:
             playerPosition->TryMoveXOnly(-1);
             break;
 
-        case Virtualkey::d:
-        case Virtualkey::D:
+        case Virtualkey::Right:
             playerPosition->TryMoveXOnly(1);
             break;
 
@@ -503,22 +557,41 @@ void Player::ProcessIngameModeInput(Virtualkey inputKey)
 
 void Player::ProcessInventoryModeInput(Virtualkey inputKey)
 {
+    int minIndex = GetInventoryMinIndexForCurrentPage();
+    int maxIndex = GetInventoryMaxIndexForCurrentPage();
+
     switch (inputKey)
     {
-        case Virtualkey::w:
-        case Virtualkey::W:
-            inventoryCursorIndex = max(0, inventoryCursorIndex - 1);
+        case Virtualkey::Up:
+            inventoryCursorIndex = max(minIndex, inventoryCursorIndex - 1);
             break;
 
-        case Virtualkey::s:
-        case Virtualkey::S: 
-            inventoryCursorIndex = min((int)inventory.size() - 1, inventoryCursorIndex + 1);
+        case Virtualkey::Down:
+            {
+                inventoryCursorIndex = min(maxIndex, inventoryCursorIndex + 1);
+            }
             break;
 
-        case Virtualkey::i:
-        case Virtualkey::I:
-            currentInputMode = CurrentInputMode::Ingame;
-            inventoryCursorIndex = -1;
+        case Virtualkey::Left:
+            {
+                inventoryPageIndex = max(0, inventoryPageIndex - 1);
+                inventoryCursorIndex = GetInventoryMinIndexForCurrentPage();
+            }
+            break;
+
+        case Virtualkey::Right:
+            {
+                int maxPageIndex = (int)ceil((float)inventory.size() / DISPLAY_INVENTORY_COUNT_PER_PAGE) - 1;
+                inventoryPageIndex = min(maxPageIndex, inventoryPageIndex + 1);
+                inventoryCursorIndex = GetInventoryMinIndexForCurrentPage();
+            }
+            break;
+
+        case Virtualkey::Escape:
+            {
+                currentInputMode = CurrentInputMode::Ingame;
+                inventoryCursorIndex = -1;
+            }
             break;
 
         case Virtualkey::Space:
@@ -538,10 +611,25 @@ void Player::ProcessInventoryModeInput(Virtualkey inputKey)
                         {
                             shared_ptr<ConsumableItemData> consumableData = dynamic_pointer_cast<ConsumableItemData>(itemData);
                             assert(consumableData && "Item data is not of type ConsumableItemData");
-                            playerStat->AddBuff(consumableData);
-                            AddItemQuantity(consumableData->key, consumableData->itemType, -1);
+                            //town portal scroll
+                            if(consumableData->key == 2012)
+                            {
+                                shared_ptr<EventParameter> eventParam 
+                                    = make_shared<EventParameter>(EventType::OnUseTownPortalScroll);
+                                
+                                ObjectManager::GetInstance().BroadcastEvent(eventParam);
+                                
+                                AddItemQuantity(consumableData->key, consumableData->itemType, -1);
 
-                            Logger::LogInfo(format("Used item: {0} x{1}", selectedItem.GetName(), selectedItem.GetQuantity()));
+                                Logger::LogInfo("Using townportal scroll");
+                            }
+                            else
+                            {
+                                playerStat->AddBuff(consumableData);
+                                AddItemQuantity(consumableData->key, consumableData->itemType, -1);
+
+                                Logger::LogInfo(format("Used item: {0} x{1}", selectedItem.GetName(), selectedItem.GetQuantity()));
+                            }
                         }
                         break;
 
@@ -549,10 +637,14 @@ void Player::ProcessInventoryModeInput(Virtualkey inputKey)
                         {
                             shared_ptr<GearData> gearData = dynamic_pointer_cast<GearData>(itemData);
                             assert(gearData && "Item data is not of type GearData");
-                            RemoveItemFromInventory(gearData->key, gearData->itemType);
-                            EquipItem(gearData->key, gearData->itemType);
+                            if (gearData->minLevel > playerLevel)
+                            {
+                                Logger::LogInfo(format("Not enough level, required level: {}", gearData->minLevel ));
+                                return;
+                            }
 
-                            Logger::LogInfo(format("Equipped item: {0}", selectedItem.GetName()));
+                            AddItemQuantity(gearData->key, gearData->itemType, -1);
+                            EquipItem(gearData->key, gearData->itemType);
                         }
                         break;
                     default:

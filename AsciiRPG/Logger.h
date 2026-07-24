@@ -13,7 +13,7 @@ class Logger
 {
 public:
     const string LOG_FILE_FORMAT = "log {0}.log";
-    const int RECENTLY_LOGGED_COUNT = 10;
+    const int RECENTLY_LOGGED_COUNT = 9;
 
     SINGLETON_WITH_INIT_AND_RELEASE(Logger);
 

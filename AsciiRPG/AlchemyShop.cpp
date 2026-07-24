@@ -209,6 +209,12 @@ void AlchemyShop::ConfirmSelection()
 
         case AlchemyShopState::Craft:
             {
+                if (candidateRecipes.size() == 0)
+                {
+                    Logger::LogInfo("No recipes to craft.");
+                    return;
+                }
+
                 auto recipe = candidateRecipes[craftCursor];
                 
                 //checking possible to craft

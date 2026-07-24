@@ -86,6 +86,12 @@ void GameManager::HandleEvent(shared_ptr<EventParameter> message)
         case EventType::OnPlayerEnteredEntrance:
             ChangeMap(currentMapIndex - 1);
             break;
+
+        case EventType::OnUseTownPortalScroll:
+            //index 0 is town map
+            ChangeMap(0);
+            break;
+
         default:
             break;
     }

@@ -44,6 +44,7 @@ enum class EventType
     /// 상호작용 끝날때
     /// </summary>
     OnStopInteraction,
+    OnUseTownPortalScroll,
 };
 
 enum class StatType
